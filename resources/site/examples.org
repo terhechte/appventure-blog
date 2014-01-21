@@ -1,0 +1,57 @@
+#+title: Now Running Clojure
+#+tags: jekyll clojure static site generator
+#+OPTIONS: published:no
+
+* Test 1
+
+** Test head 1
+   
+This blog is way to keep track of stuff that I am thinking about or
+working on. I research things that I find interesting, then document
+my findings with a public blog post, which I can refer to
+later. Hopefully other people will find these posts helpful, relevant,
+or interesting quickly. [fn:: This is a long footnote to see how it works]
+   
+   
+** Test head 2
+   
+   This blog is way to keep track of stuff that I am thinking about or
+   working on. I research things that I find interesting, then document
+   my findings with a public blog post, which I can refer to
+   later. Hopefully other people will find these posts helpful, relevant,
+   or interesting.
+   
+** Test head 3
+   
+   Then we start listening, machines on the network will respond...
+   
+     - 192.1.1.1 is at 00:00:00:00:00:00
+     - 192.1.1.2 is at 01:01:01:01:01:01
+     - so on...
+       
+       
+     #+BEGIN_QUOTE
+     Everything should be made as simple as possible,
+     but not any simpler -- Albert Einstein
+     #+END_QUOTE
+     
+     This blog is way to keep track of stuff that I am thinking about or
+     working on. I research things that I find interesting, then document
+     my findings with a public blog post, which I can refer to
+     later. Hopefully other people will find these posts helpful, relevant,
+     or interesting.
+     
+     
+     
+    #+begin_src clojure
+      (ns pcap
+        (:use :reload-all clojure.contrib.command-line)
+        (:import (java.net InetAddress)
+                 (jpcap NetworkInterface JpcapCaptor JpcapSender PacketReceiver)
+                 (jpcap.packet EthernetPacket ARPPacket)))
+
+      (defn mac-byte-to-string [mac-bytes]
+        (let [v  (apply vector 
+                        (map #(Integer/toHexString (bit-and % 0xff)) mac-bytes))]
+          (apply str (interpose ":" v))))
+    #+end_src
