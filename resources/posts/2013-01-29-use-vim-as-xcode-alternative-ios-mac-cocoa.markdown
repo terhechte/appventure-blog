@@ -1,6 +1,7 @@
 ---
 title: Use VIM as an Xcode alternative
 tags: cocoa objective-c ios
+alias: ["/2013/01/index.html"]
 ---
 I really like [Vim](http://www.vim.org). I've been using it for many years now. However, since I do most of my coding in Objective-C, I could oftentimes only use Vim for HTML / Javascript / Python / Script projects. This is because I got so used to the fantastic auto completion in XCode. 
 

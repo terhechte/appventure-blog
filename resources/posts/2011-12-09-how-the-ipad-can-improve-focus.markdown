@@ -1,6 +1,7 @@
 ---
 title: How the iPad can improve focus
 tags: opinion
+alias: ["/2011/12/index.html"]
 ---
 Lately, [more](http://technologizer.com/2011/12/05/how-the-ipad-2-became-my-favorite-computer/) and [more](http://www.zdnet.com/blog/mobile-news/ipad-2-as-a-serious-writing-machine-how-to/5964) people have written about how they were able to replace their Desktop PC or Laptop solely, or to a large extend with an iPad. [Mark O'Connor](http://yieldthought.com/post/12239282034/swapped-my-macbook-for-an-ipad) even uses it for coding in [Vim](http://www.vim.org) all day [^foot2].
 
