@@ -440,8 +440,17 @@ article h2 > span, article h3 > span, article h4 > span, h5 > span {
     display: none;
 }
 
-
-
 .screenshot {
     border: 1px solid gray;
+}
+
+/* Org mode sets left / right tags on tables, which infers with foundation */
+table .left {
+    float: none !important;
+    text-align: left;
+}
+
+table .right {
+    float: none !important;
+    text-align: right;
 }
