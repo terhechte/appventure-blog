@@ -454,3 +454,10 @@ table .right {
     float: none !important;
     text-align: right;
 }
+
+p > code, li > code, a > code {
+    padding: 4px;
+    border-radius: 7px;
+    background-color: lightgray;
+    font-family: Consolas, Courier, monospace !important;
+}
