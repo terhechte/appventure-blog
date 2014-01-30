@@ -2,6 +2,7 @@
 #+tags: emacs
 #+keywords: emacs lisp bulk mailer tutorial email vim vimscript evil
 #+OPTIONS: toc:nil ^:{} 
+#+alias: ["/2014/why-emacs-lisp-is-awesome-for-coding-extensions.html"]
 
 There were serveral reasons why I decided to switch from Vim to Emacs+Evil[fn:: [[https://gitorious.org/evil/pages/Home][Evil is an Emacs extension]] that adds Vim Keybindings to Emacs so that it can be controlled with the same shortcuts as Vim.] almost a year ago. I'd been using Vim full time since somewhere between 2009 and 2010, and I'd solely used it on servers and in terminals at least since 1999. Before 2009, I was an avid TextMate user and it was only when I understood the power of Vim macros and plugins that I made the full switch. Then, around one year ago, I decided to switch again and try Emacs. I don't want to go into the various reasons for this, that's for another post, but I'd like to present one in particular: Emacs Lisp.
 
@@ -198,7 +199,7 @@ So what does it look like in Emacs, when youre doing this, you may ask, here's a
 
 #+CAPTION: Emacs Bulk Mailer Screenshot
 #+ATTR_HTML: :align center :class screenshot
-[[http://appventure.me/cimg/screenshot-bulk-mail-thumb.png][http://appventure.me/cimg/screenshot-bulk-mail.png]]
+[[http://appventure.me/cimg/screenshot-bulk-mail.png][http://appventure.me/cimg/screenshot-bulk-mail-thumb.png]]
 
 **** Final Words
 
