@@ -235,4 +235,25 @@ func cond<T>(a1: @auto_closure () -> Bool, b1: @auto_closure () -> T,
 
 I'm not sure if this would lead to correct results if it would work, but based on my current understanding of the language it should be fine.
 
+*** Update
+
+[[https://news.ycombinator.com/user?id%3Dbjustin][bjustin]] offered [[https://news.ycombinator.com/item?id%3D7865603][this slight modification]] that makes it easy to use unlimited cases. The only downside is that the fallback has to be the first item.
+
+#+BEGIN_SRC Javascript
+func cond<T>(#fallback: T, testsAndExprs: (test: @auto_closure () -> Bool, expr: @auto_closure () -> T)...) -> T {
+    for (t, e) in testsAndExprs {
+        if t() {
+            return e()
+        }
+    }
+    return fallback
+}
+
+// And in use:
+
+// y is assigned "0 == 0, of course"
+let y = cond(fallback: "fallback", (test: false, expr: "not this branch"), (test: 0 == 0, expr: "0 == 0, of course"))
+#+END_SRC
+
+
 
