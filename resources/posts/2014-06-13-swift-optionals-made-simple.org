@@ -1,0 +1,227 @@
+#+title: Swift optionals made simple
+#+tags: swift ios cocoa
+#+keywords: lisp swift optional scala simple optionals switch chaining
+#+OPTIONS: toc:nil ^:{} 
+
+With Swift, Apple introduced several new programming languages features to iOS and Mac developers. One of them are =Optionals=. I've used Optionals before in Scala and I found them a deeply satisfying concept that made me feel much better about the code I wrote.
+
+Somebody asked on Reddit about a simple explanation of Optionals and I quickly wrote one down. I decided later on that I could, maybe, expand a littlebit upon that and wrote this blog post.
+
+I'm trying a simple explanation that glosses over details to make it more approachable.
+
+*** Life without Optionals
+
+In Objective-C, each method that returns a NSObject[fn:: or NSProxy, but you shouldn't really do that] subclass can also choose to return =Nil= instead. Quick Example, imagine we want to split an array in two equally sized partitions.
+
+#+BEGIN_SRC Objective-C
+@implementation Example
++ (NSArray*) partitionArray:(NSArray*)p {
+    // can't partition for non-power-2 array-sizes
+    if (p.count % 2 != 0) return nil;
+    // return an array with the two partitions
+    return @[[p subarrayWithRange: NSMakeRange(0, p.count/2 - 1)]
+             [p subarrayWithRange: NSMakeRange(p.count/2, p.count/2 - 1)]]
+}
+@end
+#+END_SRC
+
+If we can't partition the array, what are we to do, we can only return nil. Everything else would be wrong.
+
+Now in Swift, we can't do such a thing. If we tell the Swift compiler that we're returning an NSArray from a function, we *have* to return an NSArray. Everything else is a compile error. So what you do in Swift instead, if you were to write a function =partitionArray= is to tell the compiler that the function *may* return an NSArray, but that it *may* also return nil. That really depends upon the input values. The return value of your function may be NSArray or nil, it is optional. 
+
+#+BEGIN_SRC Javascript
+// Wrong
+func partitionArray(p: NSArray) -> NSArray {
+    return nil // Compile error
+}
+
+// Right
+func partitionArray(p: NSArray) -> NSArray? {
+    // Works fine, we return Optional.None
+    if p.count % 2 != 0 {
+        return nil
+    }
+    // partition
+    return NSArray(array: [p[0..p.count/2-1], p[p.count/2..p.count-1]])
+}
+#+END_SRC
+
+By extending the =NSArray= type with a =?= we basically told the compiler that the partitionArray function my either return an NSArray, or not. The =?= at the end of a type declares it as an Optional type.
+
+*** Why is this useful?
+
+Let's go back to our initial Objective-C example and see it in use.
+
+#+BEGIN_SRC Objective-C
+NSArray *data = someWebServiceMagic();
+NSArray *storePartitions = [Example partitionArray: data];
+// move user backups to locations
+[user moveData:storePartitions[0][0]];
+#+END_SRC
+
+This works great, you test it in development, production, all is fine. Until one day your magic web service returns a non-power-of-two array. In that case, =storePartitions= will be nil and you will probably move all your users data to /dev/null or wherever.
+
+The issue, of course, is that you never expected the value of =partitionsArray= to ever become nil. Now, maybe you're the cautious kind of guy and you always check whether external data is nil or null. Even then, you just may have had a hectic day and may have forgotten one of those.
+
+With Optionals in Swift, this can't happen to you anymore. Whenever a function *may* return a nil value, the compiler will force you to check for it. You can't just use the value right away. So how does that work?
+
+*** Checking for Optionals
+    
+Swift introduces two ways of unwrapping a value. The first one is the forced unwrap. You do it by adding a =!= to the end of the variable. This works great, but it means that the optional has to have a value. If you try a forced unwrap on an empty optional (i.e. nil) it will cause a runtime error. (Ignore the =as NSArray=, it simply tells the compiler to convert the native Array to an NSArray)
+
+#+BEGIN_SRC Javascript
+partitionArray([1, 2, 3, 4] as NSArray?)![0] // will work fine
+partitionArray([1, 2, 3] as NSArray?)![0] // will crash
+#+END_SRC
+
+So you should only use this if you're really sure that your method, function, or variable will unwrap into a value.
+
+The other way is to unwrap into a let expression. That way, you define a block of code that will only be executed if the Optional contains a value.
+
+#+BEGIN_SRC Javascript
+if let p = partitionArray([1, 2, 3, 4] as NSArray?) {
+    // this code will be called
+}
+
+if let p = partitionArray([1, 2, 3] as NSArray?) {
+    // this code won't be called
+}
+
+#+END_SRC
+
+This works totally fine in all cases. Be it nil or not nil. The inner scope will only be reached if the if let successfully binds the contents of value (the actual NSArray) to the constant p.
+
+*** Inverse Comparison
+    
+Oftentimes, however, you actually just want to do the opposite.
+
+#+BEGIN_SRC Javascript
+if not let p = partitionArray([1, 2, 3] as NSArray?) {
+    // print an error
+   return
+}
+#+END_SRC
+
+This, though, does not work. The let expression can't be negated. Unwrapping it into a variable with ! also doesn't work, because if it is indeed nil, it will crash. So what to do? Thankfully, this case can be identified with a simple equality comparison:
+
+#+BEGIN_SRC Javascript
+if p == nil {
+    return
+}
+#+END_SRC
+
+Now you may say, that that looks an awful lot like how you dealt with nil in Objective-C, and that is the case. Only that this time you'll never forget when to add this check as the compiler will tell you for sure.
+
+Another advantage is that optionals work for every type in Swift, not just objects, so you can also use them for Int, Bool, even Closures:
+
+#+BEGIN_SRC 
+func opt1() -> Bool? {
+   return nil
+}
+func opt2() -> Int? {
+   return nil
+}
+#+END_SRC
+
+*** Additional tips and tricks
+
+**** Optionals for unknown Methods
+Optionals also work for unknown selectors. Say you want to call a method on a Objective-C object, but you didn't know whether it existed or not, you can do that the following way:
+
+#+BEGIN_SRC Javascript
+// 1.
+object.secredMethod?(param)
+// 2.
+if let obj = object.secretMethod(param) {
+   // do things with obj
+}
+#+END_SRC
+
+**** Optionals in Pattern Matching
+     
+The sophisticated Pattern Matching in Swift's =switch= construct[fn:: Inspired by Clojure's core.match, no less!] is also a good alternative to unwrap optionals:
+
+#+BEGIN_SRC Javascript
+var result: String? = secretMethod()
+switch result {
+case .None:
+    println("is nothing")
+case let a:
+    println("is a value")
+}
+#+END_SRC
+
+While this may seem to offer little benefit, the advanced pattern matching syntax in Swift allow you to define far more detailed cases that test for much more than just nil or not nil (i.e. "case let s where s!.hasPrefix("F"):")
+
+**** Objective-C interop
+     
+As already explained above, Objective-C always offers you to use =nil= instead of an actual object. This, of course, means that *every* Cocoa or UIKit method that returns a NSObject subclass will need to be typed as optional in Swift. This means that whenever you interact with UIKit or Cocoa libraries, you will need to unwrap your values:
+
+#+BEGIN_SRC Javascript
+if let u = c.componentsSeperatedByString("a") {
+}
+if let u = c.firstItem() {
+}
+#+END_SRC
+
+**** NSDictionary Interop
+
+This is also necessary for NSDictionary access:
+
+#+BEGIN_SRC Javascript
+let u: NSDictionary = magicMethod()
+u["a-key"].count // u["a-key"] returns an optional, this fails.
+u["a-key"]!.count // this works fine 
+// *Until* a-key does not exist in your NSDictionary, then it will crash.
+// So the better way is
+if let ux = u["a-key"] {
+}
+#+END_SRC
+
+However, there it is much more important to use the =let ux = ...= syntax, until you're really, really sure, that the NSDictionary *will* contain the required key. Sadly, Swift does not support a multi-let if for an easy checking / unwrapping of multiple NSDictionary items
+
+
+**** Optional Chaining
+     
+I just explained that all Cocoa objects return optionals. If you have a nested set of objects, this may result in rather ugly code:
+
+#+BEGIN_SRC Javascript
+
+if let a = m() {
+    if let u = a.la1 {
+      if let o = u.la1 {
+         // and so on
+      }
+  }
+}
+
+#+END_SRC
+
+The alternative of forced unwrapping would lead to a runtime error as soon as any object in the nested set returns to nil. For this specific use case, Swift offers =Optional Chaining=. By adding =?= in between each call / access, Swift will automatically unwrap if there is a value, or stop the chain as soon as any one evaluates to nil.
+
+#+BEGIN_SRC Javascript
+m()?.la1?.la1 // and so on
+#+END_SRC
+
+**** Unwrapping Multiple Dictionary Keys
+
+Say you're receiving data from a json frontend. The data converts to a NSDictionary, and then you want to process it. However, this being json and a mystic webservice, you don't know for sure if the dictionary contains all the keys. So the be really sure, you'd like to test for all keys in the dictionary. It is not immediately clear how to do that, but [[https://twitter.com/_nickmain][@_nickmain on Twitter]] came up with a really good solution for this. He's utilizing the switch statement with a tuple to test for multiple entries.
+
+#+BEGIN_SRC Javascript
+var a: NSDictionary = NSDictionary()
+
+switch (a["a"], a["b"], a["c"]) {
+  // test for the case where we have all
+  case (let xa, let xb, let xc):
+    println("xa \(xa) xb\(xb) xc\(xc)")
+  // Fallback for the case where one did not work
+  default:
+    println("none")
+}
+#+END_SRC
+
+This is still not optimal due to two reasons:
+1. You'll get a compiler warning that AnyObject! may be unexpected. We should be able to fix this with a simple typecast. Typecasting this, however, will crash the compiler.
+2. It allows you to only test for the "all work" and "none work" case. I tried adding additional patterns that match against Optional.None (like =case (let xa, let xb, .None)=), however that failed because AnyObject! is not of type enum. Since I don't have much time now I didn't investigate much further. Nevertheless, this is a good, first step to test against multiple dictionary keys in one statement.
+
+     
