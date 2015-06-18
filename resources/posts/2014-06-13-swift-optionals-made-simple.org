@@ -205,23 +205,24 @@ m()?.la1?.la1 // and so on
 
 **** Unwrapping Multiple Dictionary Keys
 
-Say you're receiving data from a json frontend. The data converts to a NSDictionary, and then you want to process it. However, this being json and a mystic webservice, you don't know for sure if the dictionary contains all the keys. So the be really sure, you'd like to test for all keys in the dictionary. It is not immediately clear how to do that, but [[https://twitter.com/_nickmain][@_nickmain on Twitter]] came up with a really good solution for this. He's utilizing the switch statement with a tuple to test for multiple entries.
+Say you're receiving data from a json frontend. The data converts to a NSDictionary, and then you want to process it. However, this being json and a mystic webservice, you don't know for sure if the dictionary contains all the keys. So the be really sure, you'd like to test for all keys in the dictionary. It is not immediately clear how to do that, but [[https://twitter.com/_nickmain][@_nickmain on Twitter]] (and subsequently [[http://twitter.com/westacular/status/478018591280070656][Wes Campaigne]]) came up with a really good solution for this. They're utilizing the switch statement with a tuple to test for multiple entries.
 
 #+BEGIN_SRC Javascript
-var a: NSDictionary = NSDictionary()
-
-switch (a["a"], a["b"], a["c"]) {
-  // test for the case where we have all
-  case (let xa, let xb, let xc):
-    println("xa \(xa) xb\(xb) xc\(xc)")
-  // Fallback for the case where one did not work
-  default:
-    println("none")
-}
+let j2 = fromJson("{\"a\":5, \"b\":45}")
+switch (j2["a"]?, j2["b"]?, j2["c"]?) {
+        case (.Some(let a), .None, .None):
+            println("got \(a)")
+        case (.Some(let a), .Some(let b), .None) where b is String:
+            println("got \(a), \(b)")
+        case (.Some(let a), .Some(let b), .Some(let c)):
+            println("got \(a), \(b), \(c)")
+        default:
+            println("got none")
+        }
 #+END_SRC
 
-This is still not optimal due to two reasons:
-1. You'll get a compiler warning that AnyObject! may be unexpected. We should be able to fix this with a simple typecast. Typecasting this, however, will crash the compiler.
-2. It allows you to only test for the "all work" and "none work" case. I tried adding additional patterns that match against Optional.None (like =case (let xa, let xb, .None)=), however that failed because AnyObject! is not of type enum. Since I don't have much time now I didn't investigate much further. Nevertheless, this is a good, first step to test against multiple dictionary keys in one statement.
+This prints "got none" because b is not of type string. If the dictionary would be =["b": "45"]= then, it would print =[got 5, "45"]=. This is a really nice solution, because it allows you to test different cases based on the information available in the dictionary. What's more, you can also use the =where= operator to test for advanced properties of your values. I.e. you can test whether they're of class String, or whether they're above a certain value (i.e. > 5). 
+
+If this looks tempting, have a look at my tutorial on using =switch= statements in Swift, particularly for people who're mostly accustomed to the way it works in C / Objective-C and not the much more powerful switch statements like in Swift, Scala, Erlang, or Clojure's core.match.
 
      
