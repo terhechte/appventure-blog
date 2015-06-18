@@ -55,7 +55,7 @@
   [:h3 :a] (enlive/content title)
   [:h3 :a] (enlive/set-attr :href url)
   [:#thearticle] (enlive/set-attr :id (str "article-" id))
-  [:.footnotes :> enlive/first-child] (enlive/content (map template-footnotes-model footnotes)) 
+  [:.footnotes :> enlive/first-child] (enlive/content (map template-footnotes-model footnotes))
   )
 
 (enlive/defsnippet template-category-model  base-template-file
@@ -64,7 +64,6 @@
   [:a] (enlive/do->
         (enlive/set-attr :href url)
         (enlive/content (str tag " (" count ")"))))
-
 
 (enlive/defsnippet template-project-model  base-template-file
   [:#projects :> :li.project-template]

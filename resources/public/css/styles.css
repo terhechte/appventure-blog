@@ -70,6 +70,14 @@ h1, h1 a {
     color: #939090;
 }
 
+h2 {
+    font-size: 1.4rem !important;
+}
+
+h3 {
+    font-size: 1.30rem !important;
+}
+
 #me {
     text-align: center;
 }
@@ -124,7 +132,7 @@ article h3 a {
     color: black !important;
     font-family: 'Open Sans', sans-serif !important;
     font-weight: 800 !important;
-    font-size: 1.4em;
+    font-size: 1.15em;
 }
 
 article p {
@@ -460,4 +468,12 @@ p > code, li > code, a > code {
     border-radius: 7px;
     background-color: lightgray;
     font-family: Consolas, Courier, monospace !important;
+}
+
+#followme {
+    background-color: gainsboro;
+    padding: 10px;
+    border-radius: 16px 16px 16px 16px;
+    text-align: center;
+    font-weight: bold;
 }
