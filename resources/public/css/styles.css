@@ -100,7 +100,7 @@ h1 span#icon {
 
 article {
     margin-bottom: 100px;
-    width: 90%;
+    width: 98%;
 }
 
 .footnotes {
@@ -136,7 +136,7 @@ article h3 a {
 }
 
 article p {
-    font-size: 1.20rem;
+    font-size: 1.15rem;
 }
 
 article h6 {
@@ -403,7 +403,7 @@ pre > code {
     line-height: 1.4rem !important;
     font-family: Consolas, "Liberation Mono", Courier, monospace !important;
     font-weight: normal !important;
-    font-size: 0.9rem !important;
+    font-size: 0.84rem !important;
     border-radius: 16px;
     overflow: scroll;
     padding: 20px;
@@ -464,6 +464,7 @@ table .right {
 }
 
 p > code, li > code, a > code {
+    font-weight: normal;
     padding: 4px;
     border-radius: 7px;
     background-color: lightgray;
