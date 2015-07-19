@@ -1,0 +1,356 @@
+#+title: Tuples in Swift, Advanced Usage and Best Practices
+#+tags: swift
+#+keywords: swift tuples generics
+#+OPTIONS: toc:nil ^:{} 
+
+Tuples are one of Swift's less visible language features. They're occupying a small space between Structs and Arrays. In addition to that, there's no comparable construct in Objective-C (or many other languages). Finally, the usage of tuples in the standard library and in Apple's example code is sparse. One could get the impression that their raison d'être in Swift is pattern machting, but I disgress.
+
+Most tuple explanations concentrate on three tuple use cases (pattern matching, return values, destructuring) and leave it at that. The following guide tries to give a  more comprehensive overview of tuples with best practices of when to use them, and when not to use them. I'll also try to list those things that you can't do with tuples, to spare you asking it on stack overflow. Let's dive in.
+
+* The absolute basics
+
+You'll probably already know most of this, so I'll keep it brief.
+
+Tuples allow you to combine different types into one. Tuples are immutable and even though they look like sequences they aren't sequences as there's no direct way of looping over the contents. We'll start with a quick primer on how to create and use tuples.
+
+** Creating and Accessing Tuples
+
+#+BEGIN_SRC Swift
+// Constructing a simple tuple
+let tp1 = (2, 3)
+let tp2 = (2, 3, 4)
+
+// Constructing a named tuple
+let tp3 = (x: 5, y: 3)
+
+// Different types
+let tp4 = (name: "Carl", age: 78, pets: ["Bonny", "Houdon", "Miki"])
+
+// Accessing tuple elements
+let tp5 = (13, 21)
+tp5.0 // 13
+tp5.1 // 21
+
+let tp6 = (x: 21, y: 33)
+tp6.x // 21
+tp6.y // 33
+
+#+END_SRC
+
+** Tuples for pattern matching
+
+As already mentioned above, this feels like the strongest use case for tuples.
+Swift's =switch= statement offers a really powerful way of easily defining complex conditionals without cluttering up the source code. You can then match for the type, existence, and value of multiple variables in one statement:
+
+#+BEGIN_SRC Swift
+
+// Contrieved example
+// these would be return values from various functions
+let age = 23
+let job: String? = "Operator"
+let payload: AnyObject = NSDictionary()
+
+#+END_SRC
+
+In the code above, we want to find the persons younger than 30 with a job and a NSDictionary payload. Imagine the payload as something from the Objective-C world, it could be a Dictionary or an Array or a Number. Awful code somebody else wrote years ago and you have to interact with it now.
+
+#+BEGIN_SRC Swift
+
+switch (age, job, payload) {
+  case (let age, _?, _ as NSDictionary) where age < 30:
+   // do something
+}
+
+#+END_SRC
+
+By constructing the switch argument as a tuple =(age, job, payload)= we can query for the specific or unspecific attributes of all tuple elements at once. This allows for elaborately constrained conditionals.
+
+** Tuples as return types
+
+Probably the next-best tuple use case. Since tuples can be constructed on the fly, they're a great way of easily returning multiple values from one function. 
+
+#+BEGIN_SRC Swift
+func abc() -> (Int, Int, String) {
+    return (3, 5, "Carl")
+}
+#+END_SRC
+
+** Tuple Destructuring
+
+Swift took a lot of inspirations from different programming languages, and this is something that Python has been doing for years. While the previous examples mostly showed how to easily get something into a tuple, destructuring is a swifty way of getting something out of a tuple, and in line with the =abc= example above, it looks like this:
+
+#+BEGIN_SRC Swift
+let (a, b, c) = abc()
+print(a)
+#+END_SRC
+
+Another example is getting several function calls into one line:
+
+#+BEGIN_SRC Swift
+let (a, b, c) = (a(), b(), c())
+#+END_SRC
+
+Or, an easy way of swapping two values:
+
+#+BEGIN_SRC Swift
+var a = 5
+var b = 4
+(b, a) = (a, b)
+#+END_SRC
+
+* Beyond the basics
+
+** Tuples as anonymous structs
+
+Tuples as well as structs both allow you to combine different types into one type:
+#+BEGIN_SRC Swift
+struct User {
+  let name: String
+  let age: Int
+}
+// vs.
+let user = (name: "Carl", age: 40)
+#+END_SRC
+
+As you can see, these two types are similar, yet while the struct is made from a struct description and a struct instance, the tuple exists only as an instance. This similarity can be leveraged whenever you have the need of defining a temporary struct inside a function or method. As the Swift docs say:
+
+#+BEGIN_QUOTE
+Tuples are useful for temporary groups of related values. (...) If your data structure is likely to persist beyond a temporary scope, model it as a class or structure (...)
+#+END_QUOTE
+
+As an example of this, consider the following situation where the return values from several functions first need to be uniquely collected and then inserted:
+
+#+BEGIN_SRC Swift
+
+// Find all unique streets in our userbase
+var streets: [String: (zip: String, street: String, count: Int)] = [:]
+for userid in users {
+    let zip = zipForUser(userid)
+    let street = streetForUser(userid)
+    let key = "\(zip)-\(street)"
+    if let (_, _, count) = streets[key] {
+        streets[key] = (zip, street, count + 1)
+    } else {
+        streets[key] = (zip, street, 1)
+    }
+}
+
+drawStreetsOnMap(streets.values)
+
+#+END_SRC
+
+Here, the tuple is being used as a simple structure for a short interim usecase. Defining a struct would also be possible, but is not strictly necessary.
+
+Another example would be a class which handles algorithmic data, and you're moving an interim result from one method to the next one. Defining an extra struct for something which is only used once in between two or three methods may not be required.
+
+#+BEGIN_SRC Swift
+// Made up algorithm
+func calculateInterim(values: [Int]) -> (r: Int, alpha: CGFloat, chi: (CGFloat, CGFLoat)) {
+   ...
+}
+func expandInterim(interim: (r: Int, alpha: CGFloat, chi: (CGFloat, CGFLoat))) -> CGFloat {
+   ...
+}
+#+END_SRC
+
+There's, of course, a fine line here. Defining a struct for one instance is overly complex, defining a tuple 4 times instead of one struct is overly complex too. Finding the sweet spot depends on various factors.
+
+** Private State
+
+In addition to the previous example, there're also use cases where using tuples beyond a temporary scope is useful. Following Rich Hickey's "If a tree falls in the woods, does it make a sound?" as long as the scope is private and the tuple's type isn't littered over the implementation, using tuples for storing internal state can be fine.
+
+A simple and contrieved example would be storing a static UITableView structure which displays various information from a user profile and contains the key path to the actual value as well as a flag whether the value can be edited when tapping on the cell.
+
+#+BEGIN_SRC Swift
+let tableViewValues = [(title: "Age", value: "user.age", editable: true),
+(title: "Name", value: "user.name.combinedName", editable: true),
+(title: "Username", value: "user.name.username", editable: false),
+(title: "ProfilePicture", value: "user.pictures.thumbnail", editable: false)]
+#+END_SRC
+
+The alternative would be to define a struct, but if the data is a purely private implementation detail, a tuple works just as well.
+
+A better example is when you defined an object and want to add the ability to add multiple change listeners to your object. Each listener consists out of a name and the closure to be called upon any change:
+
+#+BEGIN_SRC Swift
+func addListener(name: String, action: (change: AnyObject?) -> ())
+func removeListener(name: String)
+#+END_SRC
+
+How are you storing these listeners in your object? The obvious solution would be to define a struct, but this is a very limited scope, and the struct would only be internal, and it'd only be used in three cases. Here, using a tuple may even be the better solution as the destructuring makes things simpler:
+
+#+BEGIN_SRC Swift
+
+var listeners: [(String, (AnyObject?) -> ())]
+
+func addListener(name: String, action: (change: AnyObject?) -> ()) {
+   self.listeners.append((name, action))
+}
+func removeListener(name: String) {
+   if let idx = axx.indexOf { $1.0 == 1 } {
+    self.listeners.removeAtIndex(idx)
+   }
+}
+func execute() {
+   for (_, listener) in self.listeners {
+      listener(self.change)
+   } 
+}
+
+#+END_SRC
+
+As you can see in the =execute= function, the destructuring abilities make tuples especially useful in this case as the contents are directly destructured into the local scope.
+
+
+** Tuples as Fixed-Size Sequences
+
+Another area where tuples can be used is when you intend to constrain a type to a fixed amount of items. Imagine an object that calculates various statistics for all months in a year. You need to store a certain Integer value for each month separately. The solution that comes to mind first, would of course be:
+
+#+BEGIN_SRC Swift
+var monthValues: [Int]
+#+END_SRC
+
+However, in this case we don't know whether the property indeed contains 12 elements. A user of our object could accidentally insert 13 values, or 11. We can't tell the type checker that this is a fixed size array of 12 items[fn:: Interestingly, something which C can do just fine]. With tuples, this specific constraint can easily be put into place:
+
+#+BEGIN_SRC Swift
+var monthValues: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)
+#+END_SRC
+
+The alternative would be to have the constraining logic in the object's functionality (say via the new =guard= statement), however this would be a run time check. The tuple check would be at compile time; your code wouldn't even compile when you try to give 11 months to your object.
+
+** Tuples for Complex Varargs Types
+
+Varargs i.e. variable function arguments are a very useful technique for situations where the amount of parameters of a function is unknown.
+
+#+BEGIN_SRC Swift
+// classic example
+func sumOf(numbers: Int...) -> Int {
+    // add up all numbers with the + operator
+    return numbers.reduce(0, combine: +)
+}
+
+sumOf(1, 2, 5, 7, 9) // 24
+#+END_SRC
+
+Tuples can be useful here if your requirement goes beyond simple integers. Take this function which does a batch update of =n= entities in a database:
+
+#+BEGIN_SRC Swift
+func batchUpdate(updates: (String, Int)...) -> Bool {
+    self.db.begin()
+    for (key, value) in updates {
+        self.db.set(key, value)
+    }
+    self.db.end()
+}
+
+// We're imagining a weird database
+batchUpdate(("tk1", 5), ("tk7", 9), ("tk21", 44), ("tk88", 12))
+#+END_SRC
+
+* Advanced Tuples
+
+** Tuple Iteration
+
+In the above descriptions, I've tried to stay clear from calling tuples sequences or collections because they aren't. Since every element of a tuple can have a different type, there's no type-safe way of looping or mapping over the contents of a tuple. Well, no beautiful one, that is. 
+
+Swift does offer limited reflection capabilities, and these allow us to inspect the contents of a tuple and loop over it. The downside is that the type checker has no way of figuring out what the type within the loop is, and thus everything is typed as =Any=. It is your job then to cast and match this against your possible types to figure out what to do.
+
+#+BEGIN_SRC Swift
+    let t = (a: 5, b: "String", c: NSDate())
+
+    let mirror = reflect(t)
+    for i in 0..<mirror.count {
+        let value = mirror[i].1.value
+        switch value {
+        case is Int:
+            print("int")
+        case is String:
+            print("string")
+        case is NSDate:
+            print("nsdate")
+        default: ()
+        }
+    }
+#+END_SRC
+
+This is not as simple as array iteration, but it does work if you really need it.
+
+** Tuples and Generics
+
+There's no =Tuple= type available in Swift. If you wonder why that is, think about it: Every tuple is a totally different type, dependin on the types within it. So instead of defining a generic tuple requirement, you define the specific but generic incarnation of the tuple you intend to use:
+
+#+BEGIN_SRC Swift
+func wantsTuple<T1, T2>(tuple: (T1, T2)) -> T1 {
+    return tuple.0
+}
+
+wantsTuple(("a", "b")) // "a"
+wantsTuple((1, 2)) // 1
+#+END_SRC
+
+You can also use tuples in =typealiases=, thus allowing subclasses to fill out your types with details. This looks fairly useless and complicated, but I've already had a use case where I need to specifically do this.
+
+#+BEGIN_SRC Swift
+class BaseClass<A,B> {
+    typealias Element = (A, B)
+    func addElement(elm: Element) {
+        print(elm)
+    }
+}
+class IntegerClass<B> : BaseClass<Int, B> {
+}
+let example = IntegerClass<String>()
+example.addElement((5, ""))
+// Prints (5, "")
+#+END_SRC
+
+** Define a Specific Tuple Type
+
+In many of the earlier examples, we re-wrote a certain tuple type like =(Int, Int, String)= multiple times. This, of course, is not necessary per se, as you could define a =typealias= for it:
+
+#+BEGIN_SRC Swift
+typealias Example = (Int, Int, String)
+func add(elm: Example) {
+}
+#+END_SRC
+
+However, if you're using a certain tuple construction so often that you think about adding a typealias for it, you might really be better of defining a struct.
+
+
+* Tuple impossibilities
+
+Finally, we reach the list of some of the things that are impossible to achieve with tuples. 
+
+** Tuples as Dictionary Keys
+
+If you'd like to do the following:
+
+#+BEGIN_SRC Swift
+let p: [(Int, Int): String]
+#+END_SRC
+
+Then this is not possible, because tuples don't conform to the hashable protocol. Which is, really, a bummer as the example above has a multitude of use cases. There may be a crazy type checker hack to extend tuples of varying arities to the hashable protocol, but I haven't really looked into that. If you happen to know if this works, feel free to contact me via [[http://twitter.com/terhechte][twitter]].
+
+** Tuple Protocol Compliance
+
+Given the following protocol:
+
+#+BEGIN_SRC Swift
+protocol PointProtocol {
+  var x: Int { get }
+  var y: Int { set }
+}
+#+END_SRC
+
+You can't tell the type checker that a tuple =(x: 10, y: 20)= complies with that protocol.
+
+#+BEGIN_SRC Swift
+func addPoint(point: PointProtocol)
+addPoint((x: 10, y: 20)) // doesn't work.
+#+END_SRC
+
+* Addendum
+
+That's it. I probably forgot the one or other thing. Things may also be wrong. If you find a factual error, or if there's something else I forgot, feel free to [[http://twitter.com/terhechte][contact me]].
+
+
