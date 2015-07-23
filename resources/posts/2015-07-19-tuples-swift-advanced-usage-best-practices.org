@@ -306,6 +306,7 @@ example.addElement((5, ""))
 
 ** Define a Specific Tuple Type
 
+
 In many of the earlier examples, we re-wrote a certain tuple type like =(Int, Int, String)= multiple times. This, of course, is not necessary per se, as you could define a =typealias= for it:
 
 #+BEGIN_SRC Swift
@@ -315,7 +316,22 @@ func add(elm: Example) {
 #+END_SRC
 
 However, if you're using a certain tuple construction so often that you think about adding a typealias for it, you might really be better of defining a struct.
+** Tuples as function parameters
 
+As [[http://www.paulrobinson.net/function-parameters-are-tuples-in-swift/][Paul Robinson lays out eloquently]] there's a strange similarity between =(a: Int, b: Int, c: String) ->= and =(a: Int, b: Int, c:String)=. Indeed, for the Swift compiler, the parameter header of a method / function is nothing more than a tuple:
+
+#+BEGIN_SRC Swift
+// Copied from Paul Robinson's blog, you should read the article:
+// http://www.paulrobinson.net/function-parameters-are-tuples-in-swift/
+
+func foo(a: Int, _ b: Int, _ name: String) -> Void     
+}
+
+let arguments = (4, 3, "hello")
+foo(arguments)
+#+END_SRC
+
+This has a lot of interesting implications and possibilities. When you plan your types well, you can then move parameters around functions without having to destructure the data.
 
 * Tuple impossibilities
 
@@ -354,3 +370,5 @@ addPoint((x: 10, y: 20)) // doesn't work.
 That's it. I probably forgot the one or other thing. Things may also be wrong. If you find a factual error, or if there's something else I forgot, feel free to [[http://twitter.com/terhechte][contact me]].
 
 
+*** Changes
+**07/23/2015** Added section on tuples as function parameters
