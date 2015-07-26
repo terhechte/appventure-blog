@@ -505,3 +505,6 @@ p > code, li > code, a > code {
     text-align: center;
     font-weight: bold;
 }
+.hljs {
+    border: 1px solid #bbb;
+}
