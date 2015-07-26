@@ -67,16 +67,17 @@
 
 (enlive/defsnippet template-swift-link base-template-file
   [:#swiftblogs :> :div :> :ul :> enlive/first-child]
-  [{:keys [title url]}]
+  [{:keys [title url keyword-keywords]}]
   [:a] (enlive/do->
          (enlive/set-attr :href url)
-         (enlive/content title)))
+         (enlive/content title))) ;title
 
 (enlive/defsnippet template-swift-model base-template-file
   [:#swiftblogs :> :div]
   [items]
   [:div :> :ul] (enlive/content (map template-swift-link
-                                  (reverse (filter #(some #{:swift} (:keyword-tags %)) items)))))
+                                  (reverse (filter #(and (some #{:swift} (:keyword-tags %))
+                                                      (some #{:feature} (:keyword-keywords %))) items)))))
 
 (enlive/defsnippet template-project-model  base-template-file
   [:#projects :> :li.project-template]

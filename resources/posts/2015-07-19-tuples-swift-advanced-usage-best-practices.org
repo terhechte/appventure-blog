@@ -1,6 +1,6 @@
 #+title: Tuples in Swift, Advanced Usage and Best Practices
 #+tags: swift
-#+keywords: swift tuples generics
+#+keywords: swift tuples generics feature
 #+OPTIONS: toc:nil ^:{} 
 
 Tuples are one of Swift's less visible language features. They're occupying a small space between Structs and Arrays. In addition to that, there's no comparable construct in Objective-C (or many other languages). Finally, the usage of tuples in the standard library and in Apple's example code is sparse. One could get the impression that their raison d'être in Swift is pattern machting, but I disgress.

@@ -27,7 +27,7 @@
 
   ;[:#swiftblogs] (enlive/content (map #(static.core/template-swift-model %) content))
 
-  ;[:#debug] (enlive/content (-> content first))
+  [:#debug] (enlive/content (-> content first))
 
      ; And the projects
      [:#projects] (enlive/append (map #(static.core/template-project-model %) (:projects metadata)))
