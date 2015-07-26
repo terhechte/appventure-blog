@@ -1,4 +1,4 @@
-; The define-template macro takes care of all the boilerpalte
+;; The define-template macro takes care of all the boilerpalte
 (static.core/define-template base-template-file 
      ; set the head properties
      [:head] (enlive/content (static.core/template-head-model metadata))
@@ -15,6 +15,19 @@
 
      ; The categories
      [:#categories] (enlive/content (map #(static.core/template-category-model %) (:categories metadata)))
+
+     ; Remove the swift box if we don't have a swift tag
+  ; kinda awful code
+  [:#swiftblogs] (if-let [st (-> content first :keyword-tags)]
+                   (if (and (some #{:swift} st) ;(> (count (filter #(= :swift %) st)) 0)
+                         (= (:type metadata) :post))
+                     (enlive/content (static.core/template-swift-model (:postlist metadata)))
+                     nil)
+                   nil)
+
+  ;[:#swiftblogs] (enlive/content (map #(static.core/template-swift-model %) content))
+
+  ;[:#debug] (enlive/content (-> content first))
 
      ; And the projects
      [:#projects] (enlive/append (map #(static.core/template-project-model %) (:projects metadata)))

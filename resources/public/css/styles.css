@@ -478,3 +478,30 @@ p > code, li > code, a > code {
     text-align: center;
     font-weight: bold;
 }
+
+#swiftblogs div {
+    background-color: #eee;
+    border-radius: 8px;
+    margin-bottom: 60px;
+}
+#swiftblogs ul {
+    list-style-type: none;
+}
+#swiftblogs li {
+    list-style-type: none;
+    margin-left: 0px;
+    width: 180px;
+    padding-bottom: 10px;
+}
+#swiftblogs li a:before {
+    content: "→ ";
+}
+#swiftblogs li a {
+    font-size: 0.9rem !important;
+}
+
+#swiftblogs h6 {
+    padding-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}

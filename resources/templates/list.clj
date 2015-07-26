@@ -7,6 +7,8 @@
      ; The categories
      [:#categories] (enlive/content (map #(static.core/template-category-model %) (:categories metadata)))
 
+     [:#swiftblogs] (enlive/content nil)
+
      ; And the projects
      [:#projects] (enlive/content (map #(template-project-model %) (:projects metadata)))
 )
