@@ -3,9 +3,9 @@
 #+keywords: lisp swift optional scala simple optionals switch chaining
 #+OPTIONS: toc:nil ^:{} 
 
-With Swift, Apple introduced several new programming languages features to iOS and Mac developers. One of them are =Optionals=. I've used Optionals before in Scala and I found them a deeply satisfying concept that made me feel much better about the code I wrote.
+*Note*: This blog post has been edited to be compatible with Swift 2.0 b4
 
-Somebody asked on Reddit about a simple explanation of Optionals and I quickly wrote one down. I decided later on that I could, maybe, expand a littlebit upon that and wrote this blog post.
+With Swift, Apple introduced several new programming languages features to iOS and Mac developers. One of them are =Optionals=. I've used Optionals before in Scala and I found them a deeply satisfying concept that made me feel much better about the code I wrote.
 
 I'm trying a simple explanation that glosses over details to make it more approachable.
 
@@ -25,7 +25,7 @@ In Objective-C, each method that returns a NSObject[fn:: or NSProxy, but you sho
 @end
 #+END_SRC
 
-If we can't partition the array, what are we to do, we can only return nil. Everything else would be wrong.
+If we can't partition the array, what are we to do, we can only return nil.
 
 Now in Swift, we can't do such a thing. If we tell the Swift compiler that we're returning an NSArray from a function, we *have* to return an NSArray. Everything else is a compile error. So what you do in Swift instead, if you were to write a function =partitionArray= is to tell the compiler that the function *may* return an NSArray, but that it *may* also return nil. That really depends upon the input values. The return value of your function may be NSArray or nil, it is optional. 
 
@@ -123,7 +123,7 @@ func opt2() -> Int? {
 }
 #+END_SRC
 
-*** Additional tips and tricks
+*** Additional Tips and Tricks
 
 **** Optionals for unknown Methods
 Optionals also work for unknown selectors. Say you want to call a method on a Objective-C object, but you didn't know whether it existed or not, you can do that the following way:
@@ -132,26 +132,56 @@ Optionals also work for unknown selectors. Say you want to call a method on a Ob
 // 1.
 object.secredMethod?(param)
 // 2.
-if let obj = object.secretMethod(param) {
+if let obj = object.secretFunction(param) {
    // do things with obj
 }
 #+END_SRC
 
 **** Optionals in Pattern Matching
      
-The sophisticated Pattern Matching in Swift's =switch= construct[fn:: Inspired by Clojure's core.match, no less!] is also a good alternative to unwrap optionals:
+The sophisticated Pattern Matching in Swift's =switch= construct is also a good alternative to unwrap Optionals:
 
 #+BEGIN_SRC Javascript
-var result: String? = secretMethod()
+var result: String? = secretFunction()
 switch result {
 case .None:
-    println("is nothing")
+    print("is nothing")
 case let a:
-    println("is a value")
+    print("is a value")
 }
 #+END_SRC
 
-While this may seem to offer little benefit, the advanced pattern matching syntax in Swift allow you to define far more detailed cases that test for much more than just nil or not nil (i.e. "case let s where s!.hasPrefix("F"):")
+With Swift 2.0, this can also be expressed more cleanly:
+
+#+BEGIN_SRC Javascript
+var result: String? = secretFunction()
+switch result {
+case nil:
+    print("is nothing")
+case let a?:
+    print("is a value")
+}
+#+END_SRC
+
+While this may seem to offer little benefit, the advanced pattern matching syntax in Swift allow you to define far more detailed cases that test for much more than just nil or not nil.
+
+#+BEGIN_SRC Javascript
+// A number of very stub methods 
+func secretFunction1() -> Int? {return 0}
+func secretFunction2() -> [String] {return ["a", "b"]}
+func secretFunction3() -> Bool {return true}
+
+switch (secretFunction1(), secretFunction2(), secretFunction3()) {
+case (nil, let col, true):
+    print("case1")
+case (let num?, let col, true) where num > 1:
+    print("case2")
+default: ()
+    print ("default")
+}
+#+END_SRC
+
+Try to figure out what the above will finally print. We're matching for the return results of three function calls at once. This would quickly become a cumbersome list of =if= and =else= blocks if it weren't for =Optionals= and =switch=.
 
 **** Objective-C interop
      
@@ -170,6 +200,9 @@ This is also necessary for NSDictionary access:
 
 #+BEGIN_SRC Javascript
 let u: NSDictionary = magicMethod()
+// image u as having the following structure
+// Objc Syntax: @{@"a-key": @[@1, @2, @3]}
+// Swift Syntax: ["a-key": [1, 2, 3]]
 u["a-key"].count // u["a-key"] returns an optional, this fails.
 u["a-key"]!.count // this works fine 
 // *Until* a-key does not exist in your NSDictionary, then it will crash.
@@ -178,47 +211,88 @@ if let ux = u["a-key"] {
 }
 #+END_SRC
 
-However, there it is much more important to use the =let ux = ...= syntax, until you're really, really sure, that the NSDictionary *will* contain the required key. Sadly, Swift does not support a multi-let if for an easy checking / unwrapping of multiple NSDictionary items
+However, it is much more important here to use the =let ux = ...= syntax, until you're really, really sure, that the NSDictionary *will* contain the required key. In general, if your code contains =!= outside of =IBOutlet= bindings, there may be a better way to do this.
+In this case, Swift's combined =let= statements.
+
+#+BEGIN_SRC Javascript
+let example = ["a": ["b": ["c": 1]]]
+if let a = example["a"],
+    b = a["b"],
+    c = b["c"] where c > 0 {
+        print(c)
+}
+#+END_SRC
+
+Since =let= can access previous =let='s contents, we can access =b= from =a= etc. We can also add a where block for any of the let-bound values. This makes it particularly easy to express the desired requirements for accessing a value.
 
 
 **** Optional Chaining
+
+The alternative to the list of =let= statements from the previous section would be =optional chaining=. Here, Swift will take the return value of an optional operation, and if it is non-nil, will process the next operation on the value, and return the optional result of this again.
      
-I just explained that all Cocoa objects return optionals. If you have a nested set of objects, this may result in rather ugly code:
+By adding =?= in between each call / access, Swift will automatically unwrap if there is a value, or stop the chain as soon as any one evaluates to nil. For our previous example, that would look like the following:
 
 #+BEGIN_SRC Javascript
+example["a"]?["b"]?["c"]
+#+END_SRC
 
-if let a = m() {
-    if let u = a.la1 {
-      if let o = u.la1 {
-         // and so on
-      }
-  }
+**** Mapping
+
+Consider the following code:
+
+#+BEGIN_SRC Javascript
+func example() -> Int? {return 10}
+if let value = example() {
+    storeInDatabase(value * 2)
 }
-
 #+END_SRC
 
-The alternative of forced unwrapping would lead to a runtime error as soon as any object in the nested set returns to nil. For this specific use case, Swift offers =Optional Chaining=. By adding =?= in between each call / access, Swift will automatically unwrap if there is a value, or stop the chain as soon as any one evaluates to nil.
+If we break down the logic, what we're really trying to achieve, were it not for optionals, is the following:
 
 #+BEGIN_SRC Javascript
-m()?.la1?.la1 // and so on
+storeInDatabase(example() * 10)
 #+END_SRC
+
+Optionals are still very useful here, as they prevent us from the danger of multiplying nil with 10 and trying to store that in the database. But still, we have to admit that the optionals code looks more convoluted. As you can imagine, there's a solution to this, of course.
+
+Optionals offer an implementation of the =map= function which will call the =.Some= value of an optional with a supplied closure iff the optional has a value.
+
+#+BEGIN_SRC Javascript
+// The following will call print with 5, i.e. will print 5
+let px: Int? = 5
+px.map { print($0) }
+
+// The following won't call print
+let px: Int? = nil
+px.map { print($0) }
+
+#+END_SRC
+
+This lets us rewrite our example from above in terms of =map= as follows:
+
+#+BEGIN_SRC Javascript
+example().map { storeInDatabase($0 * 2) }
+#+END_SRC
+
 
 **** Unwrapping Multiple Dictionary Keys
+
+*Note*: I've kept the following in since it still explains a nice way to match multiple dictionary entries, however the intended use case for matching JSON values is better served by using one of the modern JSON Swift libraries like SwityJSON or Argo.
 
 Say you're receiving data from a json frontend. The data converts to a NSDictionary, and then you want to process it. However, this being json and a mystic webservice, you don't know for sure if the dictionary contains all the keys. So the be really sure, you'd like to test for all keys in the dictionary. It is not immediately clear how to do that, but [[https://twitter.com/_nickmain][@_nickmain on Twitter]] (and subsequently [[http://twitter.com/westacular/status/478018591280070656][Wes Campaigne]]) came up with a really good solution for this. They're utilizing the switch statement with a tuple to test for multiple entries.
 
 #+BEGIN_SRC Javascript
-let j2 = fromJson("{\"a\":5, \"b\":45}")
-switch (j2["a"]?, j2["b"]?, j2["c"]?) {
-        case (.Some(let a), .None, .None):
-            println("got \(a)")
-        case (.Some(let a), .Some(let b), .None) where b is String:
-            println("got \(a), \(b)")
-        case (.Some(let a), .Some(let b), .Some(let c)):
-            println("got \(a), \(b), \(c)")
-        default:
-            println("got none")
-        }
+let j2 = ["a": 1, "b": 2, "c": 3]
+switch (j2["a"], j2["b"], j2["c"]) {
+case (let a?, nil, nil):
+    print("got \(a)")
+case (let a?, let b?, .None) where b is String:
+    print("got \(a), \(b)")
+case (let a?, let b?, let c?):
+    print("got \(a), \(b), \(c)")
+default:
+    print("got none")
+}
 #+END_SRC
 
 This prints "got none" because b is not of type string. If the dictionary would be =["b": "45"]= then, it would print =[got 5, "45"]=. This is a really nice solution, because it allows you to test different cases based on the information available in the dictionary. What's more, you can also use the =where= operator to test for advanced properties of your values. I.e. you can test whether they're of class String, or whether they're above a certain value (i.e. > 5). 
