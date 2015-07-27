@@ -13,6 +13,15 @@
      ; and append the pager, if possible
      [:#maincontent] (enlive/append (if (:pager metadata) (static.core/template-pager-model (:pager metadata)) ""))
 
+     ; at the bottom, add a list of other posts for this tag
+  [:#maincontent] (enlive/append
+                    (if (= (:type metadata) :post)
+                      (static.core/template-tags-model
+                        ["Related Articles"
+                          (filter #(some (set (-> content first :keyword-tags)) (:keyword-tags %)) (reverse (:postlist metadata)))])
+                      nil))
+  [:#maincontent :> :.tagoverview] (enlive/set-attr :style "margin-top: -100px; margin-bottom: 60px;")
+
      ; The categories
      [:#categories] (enlive/content (map #(static.core/template-category-model %) (:categories metadata)))
 

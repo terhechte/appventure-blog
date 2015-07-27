@@ -477,6 +477,12 @@ p > code, li > code, a > code {
     border-radius: 16px 16px 16px 16px;
     text-align: center;
     font-weight: bold;
+    margin-top: 33px;
+    margin-bottom: 33px;
+}
+
+#followme a {
+    color: navy !important;
 }
 
 #swiftblogs div {
