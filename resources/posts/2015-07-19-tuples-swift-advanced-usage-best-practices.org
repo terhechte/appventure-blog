@@ -258,9 +258,8 @@ Swift does offer limited reflection capabilities, and these allow us to inspect 
 #+BEGIN_SRC Swift
     let t = (a: 5, b: "String", c: NSDate())
 
-    let mirror = reflect(t)
-    for i in 0..<mirror.count {
-        let value = mirror[i].1.value
+    let mirror = Mirror(reflecting: t)
+    for (label, value) in mirror.children {
         switch value {
         case is Int:
             print("int")
@@ -372,3 +371,6 @@ That's it. I probably forgot the one or other thing. Things may also be wrong. I
 
 *** Changes
 **07/23/2015** Added section on tuples as function parameters
+**08/06/2015** Updated the Reflection example to the latest Swift beta 4. (It removes the =reflect= call)
+
+
