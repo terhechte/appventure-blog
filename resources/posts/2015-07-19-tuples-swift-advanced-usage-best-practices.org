@@ -419,8 +419,11 @@ That's it. I probably forgot the one or other thing. Things may also be wrong. I
 
 *** Changes
 **07/23/2015** Added section on tuples as function parameters
+
 **08/06/2015** Updated the Reflection example to the latest Swift beta 4. (It removes the =reflect= call)
+
 **08/12/2015** Updated the *Tuples as function parameters* with a couple more examples and more information.
+
 **08/13/2015** Fixed a couple of bugs..
 
 
