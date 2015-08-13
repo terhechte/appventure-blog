@@ -58,7 +58,8 @@ In the code above, we want to find the persons younger than 30 with a job and a 
 
 switch (age, job, payload) {
   case (let age, _?, _ as NSDictionary) where age < 30:
-   // do something
+  print(age)
+  default: ()
 }
 
 #+END_SRC
@@ -121,6 +122,9 @@ Tuples are useful for temporary groups of related values. (...) If your data str
 As an example of this, consider the following situation where the return values from several functions first need to be uniquely collected and then inserted:
 
 #+BEGIN_SRC Swift
+func zipForUser(userid: String) -> String { return "12124" }
+func streetForUser(userid: String) -> String { return "Charles Street" }
+
 
 // Find all unique streets in our userbase
 var streets: [String: (zip: String, street: String, count: Int)] = [:]
@@ -186,15 +190,17 @@ var listeners: [(String, (AnyObject?) -> ())]
 func addListener(name: String, action: (change: AnyObject?) -> ()) {
    self.listeners.append((name, action))
 }
+
 func removeListener(name: String) {
-   if let idx = axx.indexOf { $1.0 == 1 } {
-    self.listeners.removeAtIndex(idx)
-   }
+    if let idx = listeners.indexOf({ e in return e.0 == name }) {
+        listeners.removeAtIndex(idx)
+    }
 }
-func execute() {
-   for (_, listener) in self.listeners {
-      listener(self.change)
-   } 
+
+func execute(change: Int) {
+    for (_, listener) in listeners {
+        listener(change)
+    }
 }
 
 #+END_SRC
@@ -415,5 +421,6 @@ That's it. I probably forgot the one or other thing. Things may also be wrong. I
 **07/23/2015** Added section on tuples as function parameters
 **08/06/2015** Updated the Reflection example to the latest Swift beta 4. (It removes the =reflect= call)
 **08/12/2015** Updated the *Tuples as function parameters* with a couple more examples and more information.
+**08/13/2015** Fixed a couple of bugs..
 
 
