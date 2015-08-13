@@ -323,14 +323,56 @@ As [[http://www.paulrobinson.net/function-parameters-are-tuples-in-swift/][Paul 
 // Copied from Paul Robinson's blog, you should read the article:
 // http://www.paulrobinson.net/function-parameters-are-tuples-in-swift/
 
-func foo(a: Int, _ b: Int, _ name: String) -> Void     
+func foo(a: Int, _ b: Int, _ name: String) -> Int     
+    return a
 }
 
 let arguments = (4, 3, "hello")
-foo(arguments)
+foo(arguments) // returns 4
 #+END_SRC
 
+This looks cool, doesn't it. But wait a minute.. In this case the function signature is a bit specific. What happens when we add or remove labels. Same with the tuple. Well, lets find out:
+
+#+BEGIN_SRC Swift
+// Lets try with labels:
+func foo2(a a: Int, b: Int, name: String) -> Int {
+    return a
+}
+let arguments = (4, 3, "hello")
+foo2(arguments) // fails to work
+
+let arguments2 = (a: 4, b: 3, name: "hello")
+foo2(arguments2) // works! (4)
+#+END_SRC
+
+So labelled tuples are supported if the function signature also has labels.
+
+Do we explicitly need to write the tuple into a variable, though?
+
+#+BEGIN_SRC Swift
+foo2((a: 4, b: 3, name: "hello")) // Error
+#+END_SRC
+
+Yeah, bummer, that doesn't work. But what if we get the tuple back from a function call?
+
+#+BEGIN_SRC Swift
+
+func foo(a: Int, _ b: Int, _ name: String) -> Int     
+    return a
+}
+
+func get_tuple() -> (Int, Int, String) {
+    return (4, 4, "hello")
+}
+
+foo(get_tuple()) // Works! returns 4!
+#+END_SRC
+
+Awesome, this works!
+
 This has a lot of interesting implications and possibilities. When you plan your types well, you can then move parameters around functions without having to destructure the data.
+
+Even better, for functional programming, you can return a tuple with multiple parameters straight into a function without having to destructure it.
 
 * Tuple impossibilities
 
@@ -372,5 +414,6 @@ That's it. I probably forgot the one or other thing. Things may also be wrong. I
 *** Changes
 **07/23/2015** Added section on tuples as function parameters
 **08/06/2015** Updated the Reflection example to the latest Swift beta 4. (It removes the =reflect= call)
+**08/12/2015** Updated the *Tuples as function parameters* with a couple more examples and more information.
 
 
