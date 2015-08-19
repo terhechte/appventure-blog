@@ -1,10 +1,10 @@
-#+title: Match me if you can: Swift Pattern Matching in detail.
+#+title: Match Me if you can: Swift Pattern Matching in Detail.
 #+tags: swift ios cocoa
-#+keywords: lisp swift optional scala simple optionals switch chaining for pattern matching clojure haskell
+#+keywords: feature lisp swift optional scala simple optionals switch chaining for pattern matching clojure haskell
 
 Among the new features that Swift offers to Objective-C programmers is one that disguises itself like a boring old man while it offers huge potential for forming elegant solutions to otherwise unwieldy sets of nested branches. I'm, of course talking about the =switch= statement that many Objective-C programmers probably consider as a clunky syntax device which is most entertaining when used as [[http://en.wikipedia.org/wiki/Duff's_device][Duff's Device]], yet usually offers little to no advantages over multiple if statements.
 
-The =Switch= statement in Swift can do much more though. In the following tutorial, I will try to explain the various usages for these new features in more detail. I'll mostly ignore those solutions where there's no benefit over how =switch= works in Objective-C or C. The basics of this post were actually written in July 2014, but so many of my patterns crashed the compiler back then that I postponed writing it until now that Swift 2.0 is out.
+The =Switch= statement in Swift can do much more though. In the following tutorial, I will try to explain the various usages for these new features in more detail. I'll mostly ignore those solutions where there's no benefit over how =switch= works in Objective-C or C. The basics of this post were actually written in July 2014, but so many of my patterns crashed the compiler back then that I postponed writing it until there's better support.
 
 * Diving In
 The main feature of =switch= is of course pattern matching, the ability to destructure values and match different switch cases based on correct match of the values to the cases. 
