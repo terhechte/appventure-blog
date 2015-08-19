@@ -103,6 +103,18 @@
      (enlive/set-attr :title (:site-title (static.config/config)))
 
      ; The title
-     [:head :title] (enlive/content (if-let [t (:title metadata)] t (:site-title metadata)))
+     [:title] (enlive/content (if-let [t (:title metadata)] t (:site-title metadata)))
+
+  [:script]
+  (if (not (nil? (:watching metadata)))
+    (enlive/clone-for [{:keys [url]} [{:url "/js/live.js"}]]
+      (enlive/do->
+        (enlive/set-attr :src url)))
+    identity)
+
+     ; If we're in development mode, render live js
+     ;[:head] (enlive/append (if true (enlive/html-content "<script src='/js/live.js'></script>") ""))
+
+  ;[:head] (enlive/append (enlive/html-content "<script src='/js/live.js'></script>"))
   )
 

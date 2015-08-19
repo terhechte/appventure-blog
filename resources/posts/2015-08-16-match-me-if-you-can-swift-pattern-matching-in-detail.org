@@ -1,13 +1,10 @@
-#+title: Match me if you can. Swift Pattern Matching in detail.
+#+title: Match me if you can: Swift Pattern Matching in detail.
 #+tags: swift ios cocoa
-#+keywords: lisp swift optional scala simple optionals switch chaining
-#+inactive: true
-#+OPTIONS: toc:nil ^:{} 
+#+keywords: lisp swift optional scala simple optionals switch chaining for pattern matching clojure haskell
 
+Among the new features that Swift offers to Objective-C programmers is one that disguises itself like a boring old man while it offers huge potential for forming elegant solutions to otherwise unwieldy sets of nested branches. I'm, of course talking about the =switch= statement that many Objective-C programmers probably consider as a clunky syntax device which is most entertaining when used as [[http://en.wikipedia.org/wiki/Duff's_device][Duff's Device]], yet usually offers little to no advantages over multiple if statements.
 
-Among the new features that Swift offers to Objective-C programmers is one that disguises itself like a boring old man while it offers huge potential for forming elegant solutions to otherwise unwieldy sets of nested branches. I'm of course talking about the =switch= statement that many Objective-C programmers probably consider as a clunky syntax device which is most entertaining when used as [[http://en.wikipedia.org/wiki/Duff's_device][Duff's Device]], yet usually offers little to no advantages over multiple if statements.
-
-The =Switch= statement in Swift can do much more though. In the following tutorial, I will try to explain the various usages for these new features in more detail. I'll mostly ignore those solutions where there's no benefit over how =switch= works in Objective-C or C.
+The =Switch= statement in Swift can do much more though. In the following tutorial, I will try to explain the various usages for these new features in more detail. I'll mostly ignore those solutions where there's no benefit over how =switch= works in Objective-C or C. The basics of this post were actually written in July 2014, but so many of my patterns crashed the compiler back then that I postponed writing it until now that Swift 2.0 is out.
 
 * Diving In
 The main feature of =switch= is of course pattern matching, the ability to destructure values and match different switch cases based on correct match of the values to the cases. 
@@ -24,7 +21,716 @@ switch (bool1, bool2) {
 }
 #+END_SRC
 
-For a short introduction into the tuple matching syntax above, have a look at my TUPLE BEST PRACTICES LINK
+Pattern matching has long existed in other languages like Haskell, Erlang, Scala, or Prolog. This is a boon, because it allows us to have a look at how those languages utilize pattern matching in order to solve their problems. We can even have a look at their examples to find the most practical ones that offer real world adaptability.
 
-Pattern matching has long existed in other languages like Erlang, Scala, or Clojure. This is a boon, because it allows us to have a look at how those languages utilize pattern matching in order to solve their problems. We can even have a look at their examples to find the most practical ones that offer real world adaptability.
+* A Trading Engine
+
+So Wall Street contacted you, they need a new trading platform running on iOS devices. You're in for the money of course, so you start developing. As it is a trading platform, you define an =enum= for trades.
+
+** First Draft
+
+#+BEGIN_SRC swift :noweb-ref tenum1
+enum Trades {
+    case Buy(stock: String, amount: Int, stockPrice: Float)
+    case Sell(stock: String, amount: Int, stockPrice: Float)
+}
+#+END_SRC
+
+You were also handed the following API to handle trades. *Notice how sell orders are just negative amounts*. And you're told the stock price is not important, their engine will take an internal one anyway.
+
+#+BEGIN_SRC swift :noweb-ref tprocess1
+/**
+ - parameter stock: The stock name
+ - parameter amount: The amount, negative number = sell, positive = buy
+*/
+func process(stock: String, _ amount: Int) {
+    print ("\(amount) of \(stock)")
+}
+#+END_SRC
+
+The next step is to process those trades. You see the potential for using pattern matching and write this:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tenum1>>
+<<tprocess1>>
+let aTrade = Trades.Buy(stock: "APPL", amount: 200, stockPrice: 115.5)
+
+switch aTrade {
+case .Buy(let stock, let amount, _):
+    process(stock, amount)
+case .Sell(let stock, let amount, _):
+    process(stock, amount * -1)
+}
+// Prints "buy 200 of APPL"
+#+END_SRC
+
+#+RESULTS:
+: 200 of APPL
+
+Swift lets us conveniently only destructure / extract the information from the =enum= that we really want. In this case only the stock and the amount.
+
+Awesome, you visit Wall Street to show of your fantastic trading platform. However, as always, the reality is much more cumbersome than the beautiful theory. Trades aren't trades you learn. 
+
+- You have to calculate in a fee which is different based on the trader type. 
+- The smaller the institution the higher the fee. 
+- Also, bigger institutions get a higher priority. 
+
+They also realized that you'll need a new API for this, so you were handed this:
+
+#+BEGIN_SRC swift :noweb-ref tprocess2
+func processSlow(stock: String, _ amount: Int, _ fee: Float) { print("slow") }
+func processFast(stock: String, _ amount: Int, _ fee: Float) { print("fast") }
+#+END_SRC
+
+** Trader Types
+
+So you go back to the drawing board and add another =enum=. The trader type is part of every trade, too.
+
+#+BEGIN_SRC swift :noweb-ref tenum2
+enum TraderType {
+case SingleGuy
+case Company
+} 
+
+enum Trades {
+    case Buy(stock: String, amount: Int, stockPrice: Float, type: TraderType)
+    case Sell(stock: String, amount: Int, stockPrice: Float, type: TraderType)
+}
+
+#+END_SRC
+
+So, how do you best implement this new restriction? You could just have an =if= / =else= switch for buy and for sell, but that would lead to nested code which quickly lacks clarity - and who knows maybe these Wall Street guys come up with further complications. So you define it instead as additional requirements on the pattern matches:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tenum2>>
+<<tprocess2>>
+
+let aTrade = Trades.Sell(stock: "GOOG", amount: 100, stockPrice: 666.0, type: TraderType.Company)
+
+switch aTrade {
+case .Buy(let stock, let amount, _, TraderType.SingleGuy):
+    processSlow(stock, amount, 5.0)
+case .Sell(let stock, let amount, _, TraderType.SingleGuy):
+    processSlow(stock, -1 * amount, 5.0)
+case .Buy(let stock, let amount, _, TraderType.Company):
+    processFast(stock, amount, 2.0)
+case .Sell(let stock, let amount, _, TraderType.Company):
+    processFast(stock, -1 * amount, 2.0)
+}
+#+END_SRC
+
+#+RESULTS:
+: fast
+
+The beauty of this is that there's a very succinct flow describing the different possible combinations.
+
+** Guards
+
+Once again you present your development to your Wall Street customer, and once again a new issue pops up (you really should have asked for a more detailed project description). 
+
+- Sell orders exceeding a total value of $1.000.000 do always get fast handling, even if it's just a single guy. 
+- Buy orders under a total value of $1.000 do always get slow handling.
+
+With traditional nested =if= syntax, this would already become a bit messy. Not so with =switch=. Swift includes guards for =switch cases= which allow you to further restrict the possible matching of those cases. 
+
+You only need to modify your =switch= a little bit to accommodate for those new changes
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tenum2>>
+<<tprocess2>>
+
+let aTrade = Trades.Buy(stock: "GOOG", amount: 1000, stockPrice: 666.0, type: TraderType.SingleGuy)
+
+switch aTrade {
+case .Buy(let stock, let amount, _, TraderType.SingleGuy):
+    processSlow(stock, amount, 5.0)
+case .Sell(let stock, let amount, let price, TraderType.SingleGuy)
+    where price*Float(amount) > 1000000:
+    processFast(stock, -1 * amount, 5.0)
+case .Sell(let stock, let amount, _, TraderType.SingleGuy):
+    processSlow(stock, -1 * amount, 5.0)
+case .Buy(let stock, let amount, let price, TraderType.Company)
+    where price*Float(amount) < 1000:
+    processSlow(stock, amount, 2.0)
+case .Buy(let stock, let amount, _, TraderType.Company):
+    processFast(stock, amount, 2.0)
+case .Sell(let stock, let amount, _, TraderType.Company):
+    processFast(stock, -1 * amount, 2.0)
+}
+#+END_SRC
+
+#+RESULTS:
+: slow
+
+This code is quite structured, still rather easy to read, and wraps up the complex cases quite well.
+
+That's it, we've successfully implemented our trading engine. However, this solution still has a bit of repetition; we wonder if there're pattern matching ways to improve upon that. So, let's look into pattern matching a bit more.
+
+* Advanced Pattern Matching
+
+So now we've seen several patterns in action. But what's the syntax here? Which other things can we match for? Swift distinguishes *7* different patterns. We're going to have a quick look at each of them.
+
+** Wildcard Pattern
+
+The wildcard pattern ignores the value to be matched against. In this case any value is possible. This is the same pattern as =let _ = fn()= where the =_= indicates that you don't wish to further use this value. The interesting part is that this matches all values except =nil=. You can even match optionals by appending a =?=:
+
+#+BEGIN_SRC swift
+let p: String? = "yes"
+switch p {
+case _?: print ("Has String")
+case nil: print ("No String")
+}
+#+END_SRC 
+
+#+RESULTS:
+: Has String
+
+As you've seen in the trading example, it also allows you to omit the data you don't need from matching =enums= or =tuples=:
+
+#+BEGIN_SRC swift
+switch (15, "example", 3.14) {
+    case (_, _, let pi): print ("pi: \(pi)")
+}
+#+END_SRC
+
+#+RESULTS:
+: pi: 3.14
+
+** Identifier Pattern
+
+Matches a concrete value. This is how things work in Objective-C's =switch= implementation:
+
+#+BEGIN_SRC swift
+switch 5 {
+  case 5: print("5")
+}
+#+END_SRC
+
+#+RESULTS:
+: 5
+
+** Value-Binding Pattern
+
+This is the very same as binding values to variables via =let= or =var=. Only in a switch statement. You've already seen this before, so I'll provide a very short example:
+
+#+BEGIN_SRC swift
+switch (4, 5) {
+  case (let x, let y): print("\(x) \(y)")
+}
+#+END_SRC
+
+** Tuple Pattern
+
+[[http://appventure.me/2015/07/19/tuples-swift-advanced-usage-best-practices/][I've written a whole blog post about tuples,]] which offer much more information than this, but here's a quick example:
+
+#+BEGIN_SRC swift
+let age = 23
+let job: String? = "Operator"
+let payload: AnyObject = NSDictionary()
+
+switch (age, job, payload) {
+  case (let age, _?, _ as NSDictionary):
+  print(age)
+  default: ()
+}
+#+END_SRC
+
+Here, we're combining three values into a tuple (imagine they're coming from different API calls) and matching them in one go. Note that the pattern achieves three things:
+1. It extracts the age
+2. It makes sure there is a job, even though we don't need it
+3. It makes sure that the payload is of kind =NSDictionary= even though we don't need the actual value either.
+
+** Enumeration Case Pattern
+
+As you saw in our trading example, pattern matching works *really great* with Swift's =enums=. That's because =enum cases= are like sealed, immutable, destructable structs. Much like with =tuples=, you can unwrap the contents of an individual case right in the match and only extract the information you need [fn:: I'm not sure whether the compiler optimizes for this, but theoretically, it should be able to calculate the correct position of the requested data and inline the address ignoring the other parts of the enum case].
+
+Imagine you're writing a game in a functional style and you have a couple of entities that you need to define. You could use =structs= but as your entities will have very little state, you feel that that's a bit of an overkill.
+
+#+BEGIN_SRC swift :noweb-ref entt
+enum Entities {
+    case Soldier(x: Int, y: Int)
+    case Tank(x: Int, y: Int)
+    case Player(x: Int, y: Int)
+}
+#+END_SRC
+
+Now you need to implement the drawing loop. Here, we only need the X and Y position:
+
+#+BEGIN_SRC swift :exports none :noweb-ref entfun
+func entities() -> [Entities] {
+    return [Entities.Soldier(x: 0, y: 0)]
+}
+func drawImage(p: String, _ x: Int, _ y: Int) {
+    print (p)
+}
+#+END_SRC
+
+#+BEGIN_SRC swift :noweb strip-export
+<<entt>>
+<<entfun>>
+for e in entities() {
+    switch e {
+    case .Soldier(let x, let y):
+      drawImage("soldier.png", x, y)
+    case .Tank(let x, let y):
+      drawImage("tank.png", x, y)
+    case .Player(let x, let y):
+      drawImage("player.png", x, y)
+    }
+}
+#+END_SRC
+
+#+RESULTS:
+: soldier.png
+
+** Type-Casting Patterns
+
+As the name already implies, this pattern casts or matches types. It has two different keywords:
+
+- =is= *type*: Matches the runtime type (or a subclass of it) against the right hand side. This performs a type cast but disregards the returned type. So your =case= block won't know about the matched type.
+- pattern =as= *type*: Performs the same match as the =is= pattern but for a successful match casts the type into the pattern specified on the left hand side.
+
+Here is an example of the two. 
+
+#+BEGIN_SRC swift
+let a: Any = 5 
+switch a {
+  // this fails because a is still anyobject
+  // error: binary operator '+' cannot be applied to operands of type 'AnyObject' and 'Int'
+  case is Int: print (a + 1)
+  // This works and returns '6'
+  case let n as Int: print (n + 1)
+  default: ()
+}
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+Note that there is no =pattern= before the =is=. It matches directly against =a=.
+
+** Expression Pattern
+
+The expression pattern is very powerful. It matches the =switch= value against an expression implementing the =~== operator. There're default implementations for this operator, for example for ranges, so that you can do:
+
+#+BEGIN_SRC swift
+switch 5 {
+ case 0..10: print("In range 0-10")
+}
+#+END_SRC
+
+However, the much more interesting possibility is overloading the operator yourself in order to add matchability to your custom types. Let's say that you decided to rewrite the soldier game we wrote earlier and you want to use structs after all.
+
+#+BEGIN_SRC swift :noweb-ref psentity
+struct Soldier {
+  let hp: Int
+  let x: Int
+  let y: Int
+}
+#+END_SRC
+
+Now you'd like to easily match against all entities with a health of *0*. We can simply implement the =~== operators as follows.
+
+#+BEGIN_SRC swift :noweb strip-export :noweb-ref pspat
+<<psentity>>
+func ~= (pattern: Int, value: Soldier) -> Bool {
+    return pattern == value.hp
+}
+#+END_SRC
+
+#+RESULTS:
+
+Now we can match against an entity:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<pspat>>
+let soldier = Soldier(hp: 99, x: 10, y: 10)
+switch soldier {
+   case 0: print("dead soldier")
+   default: ()
+}
+#+END_SRC
+
+#+RESULTS:
+
+Sadly, full matching with tuples does not seem to work. If you implement the code below, there'll be a type checker error.
+
+#+BEGIN_SRC swift
+func ~= (pattern: (hp: Int, x: Int, y: Int), value: Soldier) -> Bool {
+   let (hp, x, y) = pattern
+   return hp == value.hp && x == value.x && y == value.y
+}
+#+END_SRC
+
+One possible way of implementing something akin to the above is by adding a =unapply= method to your =struct= and then matching against that:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<psentity>>
+
+extension Soldier {
+   func unapply() -> (Int, Int, Int) {
+      return (self.hp, self.x, self.y)
+   }
+}
+
+func ~= (p: (Int, Int, Int), t: (Int, Int, Int)) -> Bool {
+   return p.0 == t.0 && p.1 == t.1 && p.2 == t.2 
+}
+
+let soldier = Soldier(hp: 99, x: 10, y: 10)
+print(soldier.unapply() ~= (99, 10, 10))
+
+#+END_SRC
+
+But this is rather cumbersome and defeats the purpose of a lot of the magic behind pattern matching.
+
+Also, =~== does not understand =protocols= it seems. Having a =Entity= protocol and doing =struct Soldier: Entity= and then matching against =Entity= instead of =Soldier= won't work either.
+
+Still there's a lot of things you can do with =Expression Patterns=. For a much more detailed explanation of Expression Patterns, [[http://austinzheng.com/2014/12/17/custom-pattern-matching/][have a look at this terrific blog post by Austin Zheng]].
+
+This completes list of possible switch patterns. But, what else can we do with pattern matching? Here're some more useful real world examples:
+
+* Real World Examples
+
+** Optionals
+
+[[http://appventure.me/2014/06/13/swift-optionals-made-simple/][There're many ways to unwrap optionals,]] and pattern matching is one of them. You've probably used that quite frequently by now, nevertheless, here's a short example:
+
+#+BEGIN_SRC swift
+var result: String? = secretMethod()
+switch result {
+case .None:
+    println("is nothing")
+case let a:
+    println("\(a) is a value")
+}
+#+END_SRC
+
+With Swift 2.0, this becomes even easier:
+
+#+BEGIN_SRC swift :exports none :noweb-ref abcexp
+func secretMethod() -> String? {
+    return "yes"
+}
+#+END_SRC
+
+#+BEGIN_SRC swift :noweb strip-export
+<<abcexp>>
+var result: String? = secretMethod()
+switch result {
+case nil:
+    print("is nothing")
+case let a?:
+    print("\(a) is a value")
+}
+#+END_SRC
+
+As you can see, =result= could be a string, but it could also be =nil=. It's an =optional=. By switching on result, we can figure out whether it is =.None= or whether it is an actual value. Even more, if it is a value, we can also bind this value to variable right away. In this case =a=. What's beautiful here, is the clearly visible distinction between the two states, that the variable =result= can be in.
+
+** Type Matches
+
+Given Swift's strong type system, there's usually no need for runtime type checks like it more often happens in Objective-C. However, when you interact with legacy Objective-C code [[https://netguru.co/blog/objective-c-generics][(which hasn't been updated to reflect simple generics yet)]], then you often end up with code that needs to check for types. Imagine getting an array of NSStrings and NSNumbers:
+
+#+BEGIN_SRC swift :noweb-ref nstest1 :prologue "import Cocoa"
+let u = NSArray(array: [NSString(string: "String1"), NSNumber(int: 20), NSNumber(int: 40)])
+#+END_SRC
+
+When you go through this NSArray, you never know what kind of type you get. However, =switch= statements allow you to easily test for types here:
+
+#+BEGIN_SRC swift :noweb strip-export :prologue "import Cocoa"
+<<nstest1>>
+for x in u {
+    switch x {
+    case _ as NSString:
+        print("string")
+    case _ as NSNumber:
+        print("number")
+    default:
+        print("Unknown types")
+    }
+}
+#+END_SRC
+
+#+RESULTS:
+: string
+: number
+: number
+
+** Applying ranges for grading
+
+So you're writing the grading iOS app for your local Highschool. The teachers want to enter a number value from 0 to 100 and receive the grade character for it (A - F). Pattern Matching to the rescue:
+
+#+BEGIN_SRC swift
+let aGrade = 84
+
+switch aGrade {
+case 90...100: print("A")
+case 80...90: print("B")
+case 70...80: print("C")
+case 60...70: print("D")
+case 0...60: print("F")
+default:
+    print("Incorrect Grade")
+}
+#+END_SRC
+
+#+RESULTS:
+: B
+
+** Word Frequencies
+
+We have a sequence of pairs, each representing a word and its frequency in some text. Our goal is to filter out those pairs whose frequency is below or above a certain threshold, and then only return the remaining words, without their respective frequencies. 
+
+Here're our words:
+
+#+BEGIN_SRC swift :noweb-ref tfreq1
+let wordFreqs = [("k", 5), ("a", 7), ("b", 3)]
+#+END_SRC
+
+A simple solution would be to model this with =map= and =filter=:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tfreq1>>
+let res = wordFreqs.filter({ (e) -> Bool in
+    if e.1 > 3 {
+        return true
+    } else {
+        return false
+    }
+}).map { $0.0 }
+print(res)
+#+END_SRC
+
+#+RESULTS:
+: [k, a]
+
+However, with =flatmap= a map that only returns the non-nil elements, we can improve a lot upon this solution. First and foremost, we can get rid of the =e.1= and instead have proper destructuring by utilizing (you guessed it) tuples. And then, we only need one call =flatmap= instead of =filter= and then =map= which adds unnecessary performance overhead.
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tfreq1>>
+let res = wordFreqs.flatMap { (e) -> String? in
+    switch e {
+    case (let s, let t) where t > 3: return s
+    default: return nil
+    }
+}
+print(res)
+#+END_SRC
+
+#+RESULTS:
+: [k, a]
+
+** Directory Traversion
+
+Imagine you want to traverse a file hierachy and find:
+- all "psd" files from customer1 and customer2 
+- all "blend" files from customer2
+- all "jpeg" files from all customers.
+
+#+BEGIN_SRC swift :prologue "import Foundation"
+guard let enumerator = NSFileManager.defaultManager().enumeratorAtPath("/customers/2014/")
+else { return }
+
+for url in enumerator {
+    switch (url.pathComponents, url.pathExtension) {
+
+    // psd files from customer1, customer2
+    case (let f, "psd") 
+            where f.contains("customer1") 
+            || f.contains("customer2"): print(url)
+
+    // blend files from customer2
+    case (let f, "blend") where f.contains("customer2"): print(url)
+
+    // all jpg files
+    case (_, "jpg"): print(url)
+
+    default: ()
+    }
+}
+#+END_SRC
+
+Note that =contains= stops at the first match and doesn't traverse the complete path.
+Again, pattern matching lead to very succinct and readable code.
+
+** Fibonacci
+
+Also, see how beautiful an implementation of the fibonacci algorithm looks with pattern matching [fn:: of course, no match for a Haskell implementation: \\
+fib 0 = 0\\
+fib 1 = 1\\
+fib n = fib (n-1) + fib (n-2)]
+
+#+BEGIN_SRC swift
+func fibonacci(i: Int) -> Int {
+    switch(i) {
+    case let n where n <= 0: return 0
+    case 0: return 1
+    case 1: return 1
+    case let n: return fibonacci(n - 1) + fibonacci(n - 2)
+    }
+}
+
+print(fibonacci(8))
+#+END_SRC
+
+#+RESULTS:
+: 21
+
+Of course, this will kill your stack with big numbers.
+
+** Legacy API and Value Extractions
+
+Oftentimes, when you get data from an external source, like a library, or an API, it is not only good practige but usually even required that you check the data for consistency before interpreting it. You need to make sure that all keys exists or that the data is of the correct type, or the arrays have the required length. Not doing so can lead from buggy behaviour (missing key) to crash of the app (indexing non-existent array items). The classic way to do this is by nesting =if= statements. 
+
+Let's imagine an API that returns a user. However, there're two types of users: System users - like the administrator, or the postmaster - and local users - like "John B", "Bill Gates", etc. Due to the way the system was designed and grew, there're a couple of nuisances that API consumers have to deal with:
+- =system= and =local= users come via the same API call.
+- =the department= key may not exist, since early versions of the db did not have that field and early employees never had to fill it out.
+- the =name= array contains either 4 items (firstname, middlename, lastname, username) or 2 items (username, full name) depending on when the user was created.
+- the =age= is an Integer with the year of birth
+
+Our system needs to create user accounts for all system users from this API with only the following information: username, department. We only need users born before 1980. If no department is given, "Corp" is assumed.
+  
+#+BEGIN_SRC swift :noweb-ref legacyapi 
+func legacyAPI(id: Int) -> [String: AnyObject] {
+    return ["type": "system", "department": "Dark Arts", "age": 57, 
+           "name": ["voldemort", "Tom", "Marvolo", "Riddle"]] 
+}
+#+END_SRC
+
+#+BEGIN_SRC swift :exports none :noweb-ref grrr
+func createSystemUser(b: String, dep: String) {
+    print(b, dep)
+}
+#+END_SRC
+
+#+RESULTS:
+
+Given these constraints, let's develop a pattern match for it:
+
+#+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation"
+<<legacyapi>>
+<<grrr>>
+let item = legacyAPI(4)
+switch (item["type"], item["department"], item["age"], item["name"]) {
+   case (let sys as String, let dep as String, let age as Int, let name as [String]) where 
+      age < 1980 &&
+      sys == "system":
+     createSystemUser(name.count == 2 ? name.last! : name.first!, dep: dep ?? "Corp")
+  default:()
+}
+
+// returns ("voldemort", "Dark Arts")
+#+END_SRC
+
+#+RESULTS:
+: ("voldemort", "Dark Arts")
+
+Note that this code makes one dangerous assumption, which is that if the name array does not have 2 items, it *must* have 4 items. If that case doesn't hold, and we get a zero item name array, this would crash. 
+
+Other than that, it is a nice example of how pattern matching even with just one case can help you write cleaner code and simplify value extractions.
+
+
+
+* Pattern Matching and the *for* keyword
+
+With Swift 2.0, pattern matching has become even more important in the language as the =switch= capabilities have been extended to other keywords as well. For example, let's write a simple array function which only returns the non-nil elements
+
+#+BEGIN_SRC swift 
+func nonnil<T>(array: [T?]) -> [T] {
+   var result: [T] = []
+   for case let x? in array {
+      result.append(x)
+   }
+   return result
+}
+
+print(nonnil(["a", nil, "b", "c", nil]))
+#+END_SRC
+
+The =case= keyword can be used in for loops just like in =switch= cases. Here's another example. Remember the game we talked about earlier? Well, after the first refactoring, our entity system now looks like this:
+
+#+BEGIN_SRC swift :noweb-ref tgame2
+enum Entity {
+    enum EntityType {
+        case Soldier
+        case Player
+    }
+    case Entry(type: EntityType, x: Int, y: Int, hp: Int)
+}
+#+END_SRC
+
+Fancy, this allows us to draw all items with even less code:
+
+#+BEGIN_SRC swift :exports none :noweb-ref tgame3 
+func gameEntities() -> [Entity] {
+    return [Entity.Entry(type: .Soldier, x: 10, y: 10, hp: 99)]
+}
+func drawEntity(tp: Entity.EntityType, _ x: Int, _ y: Int) {
+}
+#+END_SRC
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tgame2>>
+<<tgame3>>
+for case Entity.Entry(let t, let x, let y, _) in gameEntities()
+where x > 0 && y > 0 {
+    drawEntity(t, x, y)
+}
+#+END_SRC
+
+#+RESULTS:
+
+Our one line unwraps all the necessary properties, makes sure we're not drawing beyond 0, and finally calls the render call (=drawEntity=).
+
+In order to see if the player won the game, we want to know if there is at least one Soldier with health > 0
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tgame2>>
+<<tgame3>>
+func gameOver() -> Bool {
+    for case Entity.Entry(Entity.EntityType.Soldier, _, _, let hp) in gameEntities() 
+    where hp > 0 {return false}
+    return true
+}
+print(gameOver())
+#+END_SRC
+
+#+RESULTS:
+: false
+
+What's nice is that the =Soldier= match is part of the for query. This feels a bit like =SQL= and less like imperative loop programming. Also, this makes our intent clearer to the compiler, opening up the possibilities for dispatch enhancements down the road.
+
+* Limitations
+
+Sadly, not all patterns can be used with the =for= keyword. The Swift documentation has this to say:
+
+#+BEGIN_QUOTE
+Although any pattern can occur in the case labels of a switch statement, in the other contexts, only =wildcard patterns=, =identifier patterns=, and patterns containing those two patterns can occur.
+#+END_QUOTE
+
+This means, that the code below, for example, will not work, as it is using the =Type-Casting= pattern.
+
+#+BEGIN_SRC swift
+  for case let x as String in ["a", 1] {
+      if true {
+          
+      }
+  }
+#+END_SRC
+
+Other limitations were already mentioned in the text, such as the issues regarding =Expression Patterns=, which don't match against =protocols= if they're part of a =struct= or which seem to not match against =tuples= (which would be really convenient). In Scala or Clojure, pattern matching can also work against collections, so you could match head, tail, parts, etc. [fn:: I.e. switch [1, 2, 4, 3] { \\
+case [_, 2, _, 3]: \\
+}] This doesn't work in Swift ([[http://austinzheng.com/2014/12/17/custom-pattern-matching/][although Austin Zheng kinda implemented this in the blog post I linked above]]).
+
+Another thing which doesn't work (wich, again, Scala does just fine) is matching against classes or structs. Scala allows us to define an =unapply= method which does basically the opposite of =init=. Implementing this method, then, allows the type checker to match against classes. In Swift, this could look as follows:
+
+#+BEGIN_SRC swift
+struct Imaginary {
+   let x: Int
+   let y: Int
+   func unapply() -> (Int, Int) {
+     return (self.x, self.y)
+   }
+}
+#+END_SRC
 

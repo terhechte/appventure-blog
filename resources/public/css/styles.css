@@ -76,6 +76,7 @@ h2 {
 
 h3 {
     font-size: 1.30rem !important;
+    margin-bottom: 35px;
 }
 
 #me {
@@ -465,10 +466,13 @@ table .right {
 
 p > code, li > code, a > code {
     font-weight: normal;
-    padding: 4px;
+    padding: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
     border-radius: 7px;
-    background-color: lightgray;
+    background-color: #eee;
     font-family: Consolas, Courier, monospace !important;
+    color: black !important;
 }
 
 #followme {
@@ -513,4 +517,39 @@ p > code, li > code, a > code {
 }
 .hljs {
     border: 1px solid #bbb;
+}
+
+#text-table-of-contents {
+    border: 1px solid #bbb;
+    border-radius: 16px;
+    display: inline-flex;
+    float: left;
+    margin-right: 25px;
+    margin-bottom: 25px;
+    padding: 7px;
+}
+
+#table-of-contents h2 {
+    display: none;
+}
+
+#text-table-of-contents li::before {
+    content: ""
+}
+
+#text-table-of-contents li {
+    font-size: 14px;
+    line-height: 1.05em;
+    margin-bottom: 0px;
+}
+
+#text-table-of-contents li a {
+    color: black;
+    border-bottom: 1px solid #aaa;
+}
+#text-table-of-contents > ul > li {
+    font-weight: bold;
+}
+#text-table-of-contents > ul > li > ul > li {
+    font-weight: normal;
 }

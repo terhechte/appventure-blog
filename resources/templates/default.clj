@@ -1,12 +1,11 @@
 ;; The define-template macro takes care of all the boilerpalte
 (static.core/define-template base-template-file 
      ; set the head properties
-     [:head] (enlive/content (static.core/template-head-model metadata))
+     [:head] (enlive/substitute (static.core/template-head-model metadata))
 
      ; Now the main Content
-     [:#maincontent]   (enlive/content (map #(static.core/template-article-model % ) content)) 
+     [:#maincontent] (enlive/content (map #(static.core/template-article-model % ) content)) 
 
-     
      ; if we have a site entry, remove the date and the headline
      [:#maincontent :> :article :> [:h6 (enlive/nth-of-type 1)]] #(when (not (= (:type metadata) :site)) %)
 
