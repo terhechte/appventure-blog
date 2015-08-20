@@ -55,6 +55,7 @@
   [:h3 :a] (enlive/content title)
   [:h3 :a] (enlive/set-attr :href url)
   [:#thearticle] (enlive/set-attr :id (str "article-" id))
+  [:#footnotes] (enlive/clone-for [x [1]] identity)
   [:.footnotes :> enlive/first-child] (enlive/content (map template-footnotes-model footnotes))
   )
 

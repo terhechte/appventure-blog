@@ -1,7 +1,6 @@
 #+title: Swift optionals made simple
 #+tags: swift ios cocoa
 #+keywords: lisp swift optional scala simple optionals switch chaining feature
-#+OPTIONS: toc:nil ^:{} 
 
 *Note*: This blog post has been edited to be compatible with Swift 2.0 b4
 

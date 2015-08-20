@@ -1,7 +1,6 @@
 #+title: Tuples in Swift, Advanced Usage and Best Practices
 #+tags: swift
 #+keywords: swift tuples generics feature
-#+OPTIONS: toc:nil ^:{} 
 
 Tuples are one of Swift's less visible language features. They're occupying a small space between Structs and Arrays. In addition to that, there's no comparable construct in Objective-C (or many other languages). Finally, the usage of tuples in the standard library and in Apple's example code is sparse. One could get the impression that their raison d'être in Swift is pattern machting, but I disgress.
 
@@ -417,7 +416,7 @@ addPoint((x: 10, y: 20)) // doesn't work.
 That's it. I probably forgot the one or other thing. Things may also be wrong. If you find a factual error, or if there's something else I forgot, feel free to [[http://twitter.com/terhechte][contact me]].
 
 
-*** Changes
+* Changes
 **07/23/2015** Added section on tuples as function parameters
 
 **08/06/2015** Updated the Reflection example to the latest Swift beta 4. (It removes the =reflect= call)

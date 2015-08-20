@@ -12,7 +12,7 @@ a:hover {
 }
 
 header {
-    margin-bottom: 100px !important;
+    margin-bottom: 60px !important;
 }
 
 #headdesc {
@@ -76,6 +76,10 @@ h2 {
 
 h3 {
     font-size: 1.30rem !important;
+}
+
+article > h3 {
+    font-size: 1.40rem !important;
     margin-bottom: 35px;
 }
 
@@ -202,12 +206,12 @@ article ul, article ol, .tagoverview > ul {
 article ul > li, .tagoverview > ul > li {
     font-size: 1.20rem;
     list-style: none;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
     line-height: 1.9em !important;
 }
 article ol > li {
     font-size: 1.20rem;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
     line-height: 1.9em !important;
 }
 article ul > li:before, .tagoverview > ul > li:before {    
@@ -552,4 +556,8 @@ p > code, li > code, a > code {
 }
 #text-table-of-contents > ul > li > ul > li {
     font-weight: normal;
+}
+
+.twitter-follow-button  {
+    margin-top: 20px;
 }

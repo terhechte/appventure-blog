@@ -25,7 +25,7 @@ Pattern matching has long existed in other languages like Haskell, Erlang, Scala
 
 * A Trading Engine
 
-So Wall Street contacted you, they need a new trading platform running on iOS devices. You're in for the money of course, so you start developing. As it is a trading platform, you define an =enum= for trades.
+So Wall Street contacted you, they need a new trading platform running on iOS devices. As it is a trading platform, you define an =enum= for trades.
 
 ** First Draft
 
@@ -170,7 +170,7 @@ That's it, we've successfully implemented our trading engine. However, this solu
 
 So now we've seen several patterns in action. But what's the syntax here? Which other things can we match for? Swift distinguishes *7* different patterns. We're going to have a quick look at each of them.
 
-** Wildcard Pattern
+** 1. Wildcard Pattern
 
 The wildcard pattern ignores the value to be matched against. In this case any value is possible. This is the same pattern as =let _ = fn()= where the =_= indicates that you don't wish to further use this value. The interesting part is that this matches all values except =nil=. You can even match optionals by appending a =?=:
 
@@ -196,7 +196,7 @@ switch (15, "example", 3.14) {
 #+RESULTS:
 : pi: 3.14
 
-** Identifier Pattern
+** 2. Identifier Pattern
 
 Matches a concrete value. This is how things work in Objective-C's =switch= implementation:
 
@@ -209,7 +209,7 @@ switch 5 {
 #+RESULTS:
 : 5
 
-** Value-Binding Pattern
+** 3. Value-Binding Pattern
 
 This is the very same as binding values to variables via =let= or =var=. Only in a switch statement. You've already seen this before, so I'll provide a very short example:
 
@@ -219,7 +219,7 @@ switch (4, 5) {
 }
 #+END_SRC
 
-** Tuple Pattern
+** 4. Tuple Pattern
 
 [[http://appventure.me/2015/07/19/tuples-swift-advanced-usage-best-practices/][I've written a whole blog post about tuples,]] which offer much more information than this, but here's a quick example:
 
@@ -240,7 +240,7 @@ Here, we're combining three values into a tuple (imagine they're coming from dif
 2. It makes sure there is a job, even though we don't need it
 3. It makes sure that the payload is of kind =NSDictionary= even though we don't need the actual value either.
 
-** Enumeration Case Pattern
+** 5. Enumeration Case Pattern
 
 As you saw in our trading example, pattern matching works *really great* with Swift's =enums=. That's because =enum cases= are like sealed, immutable, destructable structs. Much like with =tuples=, you can unwrap the contents of an individual case right in the match and only extract the information you need [fn:: I'm not sure whether the compiler optimizes for this, but theoretically, it should be able to calculate the correct position of the requested data and inline the address ignoring the other parts of the enum case].
 
@@ -283,7 +283,7 @@ for e in entities() {
 #+RESULTS:
 : soldier.png
 
-** Type-Casting Patterns
+** 6. Type-Casting Patterns
 
 As the name already implies, this pattern casts or matches types. It has two different keywords:
 
@@ -309,7 +309,7 @@ switch a {
 
 Note that there is no =pattern= before the =is=. It matches directly against =a=.
 
-** Expression Pattern
+** 7. Expression Pattern
 
 The expression pattern is very powerful. It matches the =switch= value against an expression implementing the =~== operator. There're default implementations for this operator, for example for ranges, so that you can do:
 
@@ -388,7 +388,54 @@ Also, =~== does not understand =protocols= it seems. Having a =Entity= protocol 
 
 Still there's a lot of things you can do with =Expression Patterns=. For a much more detailed explanation of Expression Patterns, [[http://austinzheng.com/2014/12/17/custom-pattern-matching/][have a look at this terrific blog post by Austin Zheng]].
 
-This completes list of possible switch patterns. But, what else can we do with pattern matching? Here're some more useful real world examples:
+This completes list of possible switch patterns. Before we move on, there's one final thing to discuss.
+
+** Fallthrough, Break, and Labels
+
+The following is not directly related to pattern matching but only affects the =switch= keyword, so I'll keep it brief. By default, and unlike C/C++/Objective-C, =switch= =cases= do not fall through into the next case which is why in Swift, you don't need to write =break= for every case. You can opt into traditional fallthrough behaviour with the =fallthrough= keyword.
+
+#+BEGIN_SRC swift
+switch 5 {
+   case 5:
+    print("Is 5")
+    fallthrough
+   default:
+    print("Is a number")
+}
+// Will print: "Is 5" "Is a number"
+#+END_SRC
+
+Alternatively, you can use =break= to break out of a switch statement early. Why would you do that if there's no default fallthrough? For example if you can only realize within the =case= that a certain requirement is not met and you can't execute the =case= any further:
+
+#+BEGIN_SRC swift
+let userType = "system"
+let userID = 10
+switch (userType, userID)  {
+   case ("system", _):
+     guard let userData = getSystemUser(userID) else { break }
+     print("user info: \(userData)")
+     insertIntoRemoteDB(userData)
+   default: ()
+}
+... more code that needs to be executed
+#+END_SRC
+
+Here, we don't want to call =insertIntoRemoteData= when the result from =getSystemUser= is =nil=. Of course, you could just use an =if let= here, but if multiple of those cases come together, you quickly end up with a bunch of horrifyingly ugly nested =if lets=. 
+
+But what if you execute your switch in a =while= loop and you want to break out of the loop, not the =switch=? For those cases, Swift allows you to define =labels= to =break= or =continue= to:
+
+#+BEGIN_SRC swift
+gameLoop: while true {
+  switch state() {
+     case .Waiting: continue gameLoop
+     case .Done: calculateNextState()
+     case .GameOver: break gameLoop
+  }
+}
+#+END_SRC
+
+We've discussed the syntax and implementation details of =switch= and pattern matching.
+Now, let us have a look at some interesting (more or less) real world examples.
 
 * Real World Examples
 
