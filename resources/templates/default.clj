@@ -33,9 +33,12 @@
                      nil)
                    nil)
 
+  ;; remove the toc on the index
+  [:#table-of-contents] (if (:blog-index metadata) nil identity)
+
   ;[:#swiftblogs] (enlive/content (map #(static.core/template-swift-model %) content))
 
-  ;[:#debug] (enlive/content (-> content first))
+  ;[:#debug] (enlive/content metadata)
 
      ; And the projects
      [:#projects] (enlive/append (map #(static.core/template-project-model %) (:projects metadata)))
