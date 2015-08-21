@@ -752,7 +752,7 @@ print(gameOver())
 
 What's nice is that the =Soldier= match is part of the for query. This feels a bit like =SQL= and less like imperative loop programming. Also, this makes our intent clearer to the compiler, opening up the possibilities for dispatch enhancements down the road. Another nice touch is that we don't have to spell out =Entity.EntityType.Soldier=. Swift understands our intent even if we only write =.Soldier= as above.
 
-* Guard Case
+* Guard Let Case
 
 Another keyword which supports patterns is the newly introduced =guard= keyword. You know how it allows you to bind =optionals= into the local scope much like =if let= only without nesting things:
 
