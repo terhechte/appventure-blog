@@ -108,13 +108,13 @@ So, how do you best implement this new restriction? You could just have an =if= 
 let aTrade = Trades.Sell(stock: "GOOG", amount: 100, stockPrice: 666.0, type: TraderType.Company)
 
 switch aTrade {
-case .Buy(let stock, let amount, _, TraderType.SingleGuy):
+case let .Buy(stock, amount, _, TraderType.SingleGuy):
     processSlow(stock, amount, 5.0)
-case .Sell(let stock, let amount, _, TraderType.SingleGuy):
+case let .Sell(stock, amount, _, TraderType.SingleGuy):
     processSlow(stock, -1 * amount, 5.0)
-case .Buy(let stock, let amount, _, TraderType.Company):
+case let .Buy(stock, amount, _, TraderType.Company):
     processFast(stock, amount, 2.0)
-case .Sell(let stock, let amount, _, TraderType.Company):
+case let .Sell(stock, amount, _, TraderType.Company):
     processFast(stock, -1 * amount, 2.0)
 }
 #+END_SRC
@@ -123,8 +123,9 @@ case .Sell(let stock, let amount, _, TraderType.Company):
 : fast
 
 The beauty of this is that there's a very succinct flow describing the different possible combinations.
+Also, note how we changed =.Buy(let stock, let amount)= into =let .Buy(stock, amount)= in order to keep things simpler. This will destructure the =enum= just as before, only with less syntax.
 
-** Guards
+** Guards! Guards!
 
 Once again you present your development to your Wall Street customer, and once again a new issue pops up (you really should have asked for a more detailed project description). 
 
@@ -142,19 +143,19 @@ You only need to modify your =switch= a little bit to accommodate for those new 
 let aTrade = Trades.Buy(stock: "GOOG", amount: 1000, stockPrice: 666.0, type: TraderType.SingleGuy)
 
 switch aTrade {
-case .Buy(let stock, let amount, _, TraderType.SingleGuy):
+case let .Buy(stock, amount, _, TraderType.SingleGuy):
     processSlow(stock, amount, 5.0)
-case .Sell(let stock, let amount, let price, TraderType.SingleGuy)
+case let .Sell(stock, amount, price, TraderType.SingleGuy)
     where price*Float(amount) > 1000000:
     processFast(stock, -1 * amount, 5.0)
-case .Sell(let stock, let amount, _, TraderType.SingleGuy):
+case let .Sell(stock, amount, _, TraderType.SingleGuy):
     processSlow(stock, -1 * amount, 5.0)
-case .Buy(let stock, let amount, let price, TraderType.Company)
+case let .Buy(stock, amount, price, TraderType.Company)
     where price*Float(amount) < 1000:
     processSlow(stock, amount, 2.0)
-case .Buy(let stock, let amount, _, TraderType.Company):
+case let .Buy(stock, amount, _, TraderType.Company):
     processFast(stock, amount, 2.0)
-case .Sell(let stock, let amount, _, TraderType.Company):
+case let .Sell(stock, amount, _, TraderType.Company):
     processFast(stock, -1 * amount, 2.0)
 }
 #+END_SRC
@@ -215,9 +216,12 @@ This is the very same as binding values to variables via =let= or =var=. Only in
 
 #+BEGIN_SRC swift
 switch (4, 5) {
-  case (let x, let y): print("\(x) \(y)")
+  case let (x, y): print("\(x) \(y)")
 }
 #+END_SRC
+
+#+RESULTS:
+: 4 5
 
 ** 4. Tuple Pattern
 
@@ -270,11 +274,11 @@ func drawImage(p: String, _ x: Int, _ y: Int) {
 <<entfun>>
 for e in entities() {
     switch e {
-    case .Soldier(let x, let y):
+    case let .Soldier(x, y):
       drawImage("soldier.png", x, y)
-    case .Tank(let x, let y):
+    case let .Tank(x, y):
       drawImage("tank.png", x, y)
-    case .Player(let x, let y):
+    case let .Player(x, y):
       drawImage("player.png", x, y)
     }
 }
@@ -557,7 +561,7 @@ However, with =flatmap= a map that only returns the non-nil elements, we can imp
 <<tfreq1>>
 let res = wordFreqs.flatMap { (e) -> String? in
     switch e {
-    case (let s, let t) where t > 3: return s
+    case let (s, t) where t > 3: return s
     default: return nil
     }
 }
@@ -611,8 +615,7 @@ fib n = fib (n-1) + fib (n-2)]
 func fibonacci(i: Int) -> Int {
     switch(i) {
     case let n where n <= 0: return 0
-    case 0: return 1
-    case 1: return 1
+    case 0, 1: return 1
     case let n: return fibonacci(n - 1) + fibonacci(n - 2)
     }
 }
@@ -659,7 +662,7 @@ Given these constraints, let's develop a pattern match for it:
 <<grrr>>
 let item = legacyAPI(4)
 switch (item["type"], item["department"], item["age"], item["name"]) {
-   case (let sys as String, let dep as String, let age as Int, let name as [String]) where 
+   case let (sys as String, dep as String, age as Int, name as [String]) where 
       age < 1980 &&
       sys == "system":
      createSystemUser(name.count == 2 ? name.last! : name.first!, dep: dep ?? "Corp")
@@ -675,6 +678,8 @@ switch (item["type"], item["department"], item["age"], item["name"]) {
 Note that this code makes one dangerous assumption, which is that if the name array does not have 2 items, it *must* have 4 items. If that case doesn't hold, and we get a zero item name array, this would crash. 
 
 Other than that, it is a nice example of how pattern matching even with just one case can help you write cleaner code and simplify value extractions.
+
+Also, see how we're writing =let= at the beginning right after the case, and don't have to repeat it for each assignment within the case.
 
 
 
@@ -719,7 +724,7 @@ func drawEntity(tp: Entity.EntityType, _ x: Int, _ y: Int) {
 #+BEGIN_SRC swift :noweb strip-export
 <<tgame2>>
 <<tgame3>>
-for case Entity.Entry(let t, let x, let y, _) in gameEntities()
+for case let Entity.Entry(t, x, y, _) in gameEntities()
 where x > 0 && y > 0 {
     drawEntity(t, x, y)
 }
@@ -735,7 +740,7 @@ In order to see if the player won the game, we want to know if there is at least
 <<tgame2>>
 <<tgame3>>
 func gameOver() -> Bool {
-    for case Entity.Entry(Entity.EntityType.Soldier, _, _, let hp) in gameEntities() 
+    for case Entity.Entry(.Soldier, _, _, let hp) in gameEntities() 
     where hp > 0 {return false}
     return true
 }
@@ -745,11 +750,57 @@ print(gameOver())
 #+RESULTS:
 : false
 
-What's nice is that the =Soldier= match is part of the for query. This feels a bit like =SQL= and less like imperative loop programming. Also, this makes our intent clearer to the compiler, opening up the possibilities for dispatch enhancements down the road.
+What's nice is that the =Soldier= match is part of the for query. This feels a bit like =SQL= and less like imperative loop programming. Also, this makes our intent clearer to the compiler, opening up the possibilities for dispatch enhancements down the road. Another nice touch is that we don't have to spell out =Entity.EntityType.Soldier=. Swift understands our intent even if we only write =.Soldier= as above.
+
+* Guard Case
+
+Another keyword which supports patterns is the newly introduced =guard= keyword. You know how it allows you to bind =optionals= into the local scope much like =if let= only without nesting things:
+
+#+BEGIN_SRC swift
+func example(a: String?) {
+    guard let a = a else { return }
+    print(a)
+}
+example("yes")
+#+END_SRC
+
+#+RESULTS:
+: yes
+
+=guard let case= allows you to do something similar with the power that pattern matching introduces. Let's have a look at our soldiers again. We want to calculate the required HP until our player has full health again. Soldiers can't regain HP, so we should always return 0 for a soldier entity.
+
+#+BEGIN_SRC swift :noweb strip-export
+<<tgame2>>
+<<tgame3>>
+let MAX_HP = 100
+
+func healthHP(entity: Entity) -> Int {
+    guard case let Entity.Entry(.Player, _, _, hp) = entity 
+    where hp < MAX_HP 
+    else { return 0 }
+    return MAX_HP - hp
+}
+
+print("Soldier", healthHP(Entity.Entry(type: .Soldier, x: 10, y: 10, hp: 79)))
+print("Player", healthHP(Entity.Entry(type: .Player, x: 10, y: 10, hp: 57)))
+
+// Prints:
+"Soldier 0"
+"Player 43"
+
+#+END_SRC
+
+This is a beautiful example of the culmination of the various mechanisms we've discussed so far. 
+
+- It is very clear, there is no nesting involved
+- Logic and initialization of state are handled at the top of the =func= which improves readability
+- Very terse.
+
+This can also be very successfully combined with =switch= and =for= to wrap complex logical constructs into an easy to read format. Of course, that won't make the logic any easier to understand, but at least it will be provided in a much saner package. Especially if you use =enums=.
 
 * Limitations
 
-Sadly, not all patterns can be used with the =for= keyword. The Swift documentation has this to say:
+Sadly, not all patterns can be used with =for= and =guard=. The Swift documentation has this to say:
 
 #+BEGIN_QUOTE
 Although any pattern can occur in the case labels of a switch statement, in the other contexts, only =wildcard patterns=, =identifier patterns=, and patterns containing those two patterns can occur.
@@ -781,3 +832,5 @@ struct Imaginary {
 }
 #+END_SRC
 
+* Changes
+**08/21/2015** Incorporated [[https://www.reddit.com/r/swift/comments/3hq6id/match_me_if_you_can_swift_pattern_matching_in/][helpful feedback from foBrowsing on Reddit]]
