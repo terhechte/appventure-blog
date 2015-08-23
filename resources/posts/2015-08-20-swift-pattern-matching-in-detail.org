@@ -388,9 +388,34 @@ print(soldier.unapply() ~= (99, 10, 10))
 
 But this is rather cumbersome and defeats the purpose of a lot of the magic behind pattern matching.
 
-Also, =~== does not understand =protocols= it seems. Having a =Entity= protocol and doing =struct Soldier: Entity= and then matching against =Entity= instead of =Soldier= won't work either.
+In an earlier version of this post, I wrote that =~== doesn't work with protocols, but I was wrong. I remember that I tried it in a Playground, and it didn't work. However, this example ([[https://www.reddit.com/r/swift/comments/3hq6id/match_me_if_you_can_swift_pattern_matching_in/cub187r][as kindly provided by latrodectus on reddit]]) does work fine:
 
-Still there's a lot of things you can do with =Expression Patterns=. For a much more detailed explanation of Expression Patterns, [[http://austinzheng.com/2014/12/17/custom-pattern-matching/][have a look at this terrific blog post by Austin Zheng]].
+#+BEGIN_SRC swift
+protocol Entity {
+    var value: Int {get}
+}
+
+struct Tank: Entity {
+    var value: Int
+    init(_ value: Int) { self.value = value }
+}
+
+struct Peasant: Entity {
+    var value: Int
+    init(_ value: Int) { self.value = value }
+}
+
+func ~=(pattern: Entity, x: Entity) -> Bool {
+    return pattern.value == x.value
+}
+
+switch Tank(42) {
+    case Peasant(42): print("Matched") // Does match
+    default: ()
+}
+#+END_SRC
+
+There's a lot of things you can do with =Expression Patterns=. For a much more detailed explanation of Expression Patterns, [[http://austinzheng.com/2014/12/17/custom-pattern-matching/][have a look at this terrific blog post by Austin Zheng]].
 
 This completes list of possible switch patterns. Before we move on, there's one final thing to discuss.
 
@@ -798,39 +823,67 @@ This is a beautiful example of the culmination of the various mechanisms we've d
 
 This can also be very successfully combined with =switch= and =for= to wrap complex logical constructs into an easy to read format. Of course, that won't make the logic any easier to understand, but at least it will be provided in a much saner package. Especially if you use =enums=.
 
-* Limitations
+* Pattern Availability
 
-Sadly, not all patterns can be used with =for= and =guard=. The Swift documentation has this to say:
+The Swift documentation points out, that not all patterns can be used with the =for= or the =guard= statement. However, the docs seem to be outdated. All 7 patterns work for all three keywords. [fn:: In particular, the following quote from the official docs is outdated: " Although any pattern can occur in the case labels of a switch statement, in the other contexts, only =wildcard patterns=, =identifier patterns=, and patterns containing those two patterns can occur."]
 
-#+BEGIN_QUOTE
-Although any pattern can occur in the case labels of a switch statement, in the other contexts, only =wildcard patterns=, =identifier patterns=, and patterns containing those two patterns can occur.
-#+END_QUOTE
+For those interested, I compiled an example Gist that has an example for each pattern for each keyword.
 
-This means, that the code below, for example, will not work, as it is using the =Type-Casting= pattern.
+[[https://gist.github.com/terhechte/6eaeb90276bbfcd1ea41][You can see the example patterns here.]]
+
+As a shorter example, see the *Value Binding*, *Tuple*, and *Type Casting* pattern used for all three keywords in one example:
 
 #+BEGIN_SRC swift
-  for case let x as String in ["a", 1] {
-      if true {
-          
-      }
-  }
+func valueTupleType(a: (Int, Any)) -> Bool {
+    guard case let (x, _ as String) = a else { return false}
+    print(x)
+    
+    for case let (a, _ as String) in [a] {
+        print(a)
+        return true
+    }
+    
+    switch a {
+    case let (a, _ as String):
+        print(a)
+        return true
+    default: return false
+    }
+}
+let u: Any = "a"
+let b: Any = 5
+print(valueTupleType((5, u)))
+print(valueTupleType((5, b)))
+// prints: 5, 5, true, false
 #+END_SRC
 
-Other limitations were already mentioned in the text, such as the issues regarding =Expression Patterns=, which don't match against =protocols= if they're part of a =struct= or which seem to not match against =tuples= (which would be really convenient). In Scala or Clojure, pattern matching can also work against collections, so you could match head, tail, parts, etc. [fn:: I.e. switch [1, 2, 4, 3] { \\
+
+* Limitations
+
+Some limitations were already mentioned in the text, such as the issues regarding =Expression Patterns=, which seem to not match against =tuples= (as would be really convenient). In Scala or Clojure, pattern matching can also work against collections, so you could match head, tail, parts, etc. [fn:: I.e. switch [1, 2, 4, 3] { \\
 case [_, 2, _, 3]: \\
 }] This doesn't work in Swift ([[http://austinzheng.com/2014/12/17/custom-pattern-matching/][although Austin Zheng kinda implemented this in the blog post I linked above]]).
 
-Another thing which doesn't work (wich, again, Scala does just fine) is matching against classes or structs. Scala allows us to define an =unapply= method which does basically the opposite of =init=. Implementing this method, then, allows the type checker to match against classes. In Swift, this could look as follows:
+Another thing which doesn't work (wich, again, Scala does just fine) is destructuring against classes or structs. Scala allows us to define an =unapply= method which does basically the opposite of =init=. Implementing this method, then, allows the type checker to match against classes. In Swift, this could look as follows:
 
 #+BEGIN_SRC swift
 struct Imaginary {
    let x: Int
    let y: Int
    func unapply() -> (Int, Int) {
+     // implementing this method would then in theory provide all the details needed to destructure the vars
      return (self.x, self.y)
    }
 }
+// this, then, would unapply automatically and then match
+guard case let Imaginary(x, y) = anImaginaryObject else { break }
 #+END_SRC
 
 * Changes
 **08/21/2015** Incorporated [[https://www.reddit.com/r/swift/comments/3hq6id/match_me_if_you_can_swift_pattern_matching_in/][helpful feedback from foBrowsing on Reddit]]
+  - Added =guard case let=
+  - Added simplified syntax for let (i.e. =let (x, y)= instead of =(let x, let y)=
+**08/22/2015** [[https://www.reddit.com/r/swift/comments/3hq6id/match_me_if_you_can_swift_pattern_matching_in/][Apparently I didn't test some things properly enough.]] Some of the limitations I listed do actually work, as another helpful Reddit commenter (latrodectus) pointed out.
+  - All patterns work for all three keywords. Changed that, and added a Gist with examples
+  - The limitations regarding protocols and the expression pattern were invalid. This works fine, too.
+  - Added "Pattern Availability" section
