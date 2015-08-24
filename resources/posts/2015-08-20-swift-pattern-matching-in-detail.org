@@ -1,6 +1,7 @@
 #+title: Match Me if you can: Swift Pattern Matching in Detail.
 #+tags: swift ios cocoa
 #+keywords: feature lisp swift optional scala simple optionals switch chaining for pattern matching clojure haskell
+#+summary: In this post, we'll have a look at Pattern Matching in Swift in terms of the 'switch', 'for', 'if', and 'guard' keywords. We'll have a look at the basic syntax and at best practices and helpful examples.
 
 Among the new features that Swift offers to Objective-C programmers is one that disguises itself like a boring old man while it offers huge potential for forming elegant solutions to otherwise unwieldy sets of nested branches. I'm, of course talking about the =switch= statement that many Objective-C programmers probably consider as a clunky syntax device which is most entertaining when used as [[http://en.wikipedia.org/wiki/Duff's_device][Duff's Device]], yet usually offers little to no advantages over multiple if statements.
 
@@ -170,6 +171,8 @@ That's it, we've successfully implemented our trading engine. However, this solu
 * Advanced Pattern Matching
 
 So now we've seen several patterns in action. But what's the syntax here? Which other things can we match for? Swift distinguishes *7* different patterns. We're going to have a quick look at each of them.
+
+All of those patterns can not only be used with the =switch= keyword, but also with the =if=, =guard=, and =for= keywords. For details on this, see below.
 
 ** 1. Wildcard Pattern
 
@@ -708,8 +711,46 @@ Also, see how we're writing =let= at the beginning right after the case, and don
 
 
 
-* Pattern Matching and the *for* keyword
+* Patterns with other Keywords
 
+The Swift documentation points out, that not all patterns can be used with the =if=, =for= or the =guard= statement. However, the docs seem to be outdated. All 7 patterns work for all three keywords.
+
+For those interested, I compiled an example Gist that has an example for each pattern for each keyword.
+
+[[https://gist.github.com/terhechte/6eaeb90276bbfcd1ea41][You can see the example patterns here.]]
+
+As a shorter example, see the *Value Binding*, *Tuple*, and *Type Casting* pattern used for all three keywords in one example:
+
+#+BEGIN_SRC swift
+func valueTupleType(a: (Int, Any)) -> Bool {
+    guard case let (x, _ as String) = a else { return false}
+    print(x)
+    
+    for case let (a, _ as String) in [a] {
+        print(a)
+    }
+
+    if case let (x, _ as String) = a {
+       print("if", x)
+    }
+    
+    switch a {
+    case let (a, _ as String):
+        print(a)
+        return true
+    default: return false
+    }
+}
+let u: Any = "a"
+let b: Any = 5
+print(valueTupleType((5, u)))
+print(valueTupleType((5, b)))
+// 5, 5, "if 5", 5, true, false
+#+END_SRC
+
+With this in mind, we will have a short look at each of those keywords in detail.
+
+* Using *for case* 
 With Swift 2.0, pattern matching has become even more important in the language as the =switch= capabilities have been extended to other keywords as well. For example, let's write a simple array function which only returns the non-nil elements
 
 #+BEGIN_SRC swift 
@@ -777,7 +818,7 @@ print(gameOver())
 
 What's nice is that the =Soldier= match is part of the for query. This feels a bit like =SQL= and less like imperative loop programming. Also, this makes our intent clearer to the compiler, opening up the possibilities for dispatch enhancements down the road. Another nice touch is that we don't have to spell out =Entity.EntityType.Soldier=. Swift understands our intent even if we only write =.Soldier= as above.
 
-* Guard Let Case
+* Using *guard case* 
 
 Another keyword which supports patterns is the newly introduced =guard= keyword. You know how it allows you to bind =optionals= into the local scope much like =if let= only without nesting things:
 
@@ -823,40 +864,22 @@ This is a beautiful example of the culmination of the various mechanisms we've d
 
 This can also be very successfully combined with =switch= and =for= to wrap complex logical constructs into an easy to read format. Of course, that won't make the logic any easier to understand, but at least it will be provided in a much saner package. Especially if you use =enums=.
 
-* Pattern Availability
+* Using *if case*
 
-The Swift documentation points out, that not all patterns can be used with the =for= or the =guard= statement. However, the docs seem to be outdated. All 7 patterns work for all three keywords. [fn:: In particular, the following quote from the official docs is outdated: " Although any pattern can occur in the case labels of a switch statement, in the other contexts, only =wildcard patterns=, =identifier patterns=, and patterns containing those two patterns can occur."]
+=if case= can be used as the opposite of =guard case=. It is a great way to unwrap and match data within a branch. In line with our previous =guard= example. Obviously, we need an move function. Something that allows us to say that an entity moved in a direction. Since our entities are =enums=, we need to return an updated entity.
 
-For those interested, I compiled an example Gist that has an example for each pattern for each keyword.
-
-[[https://gist.github.com/terhechte/6eaeb90276bbfcd1ea41][You can see the example patterns here.]]
-
-As a shorter example, see the *Value Binding*, *Tuple*, and *Type Casting* pattern used for all three keywords in one example:
-
-#+BEGIN_SRC swift
-func valueTupleType(a: (Int, Any)) -> Bool {
-    guard case let (x, _ as String) = a else { return false}
-    print(x)
-    
-    for case let (a, _ as String) in [a] {
-        print(a)
-        return true
+#+BEGIN_SRC swift :noweb strip-export
+func move(entity: Entity, xd: Int, yd: Int) -> Entity {
+	if case Entity.Entry(let t, let x, let y, let hp) = entity
+	where (x + xd) < 1000 &&
+	    (y + yd) < 1000 {
+	return Entity.Entry(type: t, x: (x + xd), y: (y + yd), hp: hp)
     }
-    
-    switch a {
-    case let (a, _ as String):
-        print(a)
-        return true
-    default: return false
-    }
+    return entity
 }
-let u: Any = "a"
-let b: Any = 5
-print(valueTupleType((5, u)))
-print(valueTupleType((5, b)))
-// prints: 5, 5, true, false
+print(move(Entity.Entry(type: .Soldier, x: 10, y: 10, hp: 79), xd: 30, yd: 500))
+// prints: Entry(main.Entity.EntityType.Soldier, 40, 510, 79)
 #+END_SRC
-
 
 * Limitations
 
@@ -887,3 +910,4 @@ guard case let Imaginary(x, y) = anImaginaryObject else { break }
   - All patterns work for all three keywords. Changed that, and added a Gist with examples
   - The limitations regarding protocols and the expression pattern were invalid. This works fine, too.
   - Added "Pattern Availability" section
+ **08/24/2015** Added =if case= examples, renamed some sections.

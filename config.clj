@@ -19,6 +19,7 @@
  :date-format-post "E, d MMM yyyy" ; the output dateformat for posts
  :date-format-rss "E, d MMM yyyy HH:mm:ss Z" ; the date format for the rss feed
  :date-format-archive "MMMM yyyy" ; the output dateformat for archive links
+ :rss-description-char-limit 400
  :atomic-build true
  :emacs "/usr/local/bin/emacs"
  :emacs-config " -q "
