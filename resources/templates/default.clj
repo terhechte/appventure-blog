@@ -3,6 +3,9 @@
      ; set the head properties
      [:head] (enlive/substitute (static.core/template-head-model metadata))
 
+     ; render the link to the github forking
+     [:#found-bug] (enlive/set-attr :href (str "https://github.com/terhechte/appventure-blog/tree/master/resources/posts/" (-> content first :filename)))
+
      ; Now the main Content
      [:#maincontent] (enlive/content (map #(static.core/template-article-model % ) content)) 
 
@@ -38,7 +41,7 @@
 
   ;[:#swiftblogs] (enlive/content (map #(static.core/template-swift-model %) content))
 
-  ;[:#debug] (enlive/content metadata)
+  ;[:#debug] (enlive/content (str (with-out-str (clojure.pprint/pprint metadata)) (with-out-str (clojure.pprint/pprint content))))
 
      ; And the projects
      [:#projects] (enlive/append (map #(static.core/template-project-model %) (:projects metadata)))

@@ -16,18 +16,26 @@
   <body>
     
 
-  <header class="row">
+  <header class="row" id="toptop">
     <div class="large-12 columns" >
-      <div class="right socialbar" id="socialbar-top">
-          <a href="/rss-feed" tooltip="Appventure.me RSS Feed"> <i class="fi-rss"></i> </a>
-          <a href="http://www.github.com/terhechte" tooltip="Github"> <i class="fi-social-github"></i> </a>
-          <a href="https://news.ycombinator.com/user?id=terhechte"> <i class="fi-social-hacker-news"></i> </a>
-          <a href="http://open.spotify.com/user/1218377486"> <i class="fi-social-spotify"></i> </a>
-          <a href="http://instagram.com/terhechte"> <i class="fi-social-instagram"></i> </a>
-          <a href="https://twitter.com/terhechte"> <i class="fi-social-twitter"></i> </a>
-          <a href="https://alpha.app.net/terhechte"> <i class="fi-background-color"></i> </a>
-      </div>
-      <h1><span id="icon"><img src="/img/ez-trans.png" onclick="document.location.href='/';"></span> <a href="/">APPVENTURE</a></h1>
+        <div class="contain-to-grid fixed">
+            <nav class="top-bar" data-topbar role="navigation">
+                <div class="right socialbar" id="socialbar-top">
+                    <a href="/rss-feed" tooltip="Appventure.me RSS Feed"> <i class="fi-rss"></i> </a>
+                    <a href="http://www.github.com/terhechte" tooltip="Github"> <i class="fi-social-github"></i> </a>
+                    <a href="https://news.ycombinator.com/user?id=terhechte"> <i class="fi-social-hacker-news"></i> </a>
+                    <a href="http://open.spotify.com/user/1218377486"> <i class="fi-social-spotify"></i> </a>
+                    <a href="http://instagram.com/terhechte"> <i class="fi-social-instagram"></i> </a>
+                    <a href="https://twitter.com/terhechte"> <i class="fi-social-twitter"></i> </a>
+                    <a href="https://alpha.app.net/terhechte"> <i class="fi-background-color"></i> </a>
+                </div>
+                <h1 id="lem"><span id="icon"><img src="/img/ez-trans.png" onclick="document.location.href='/';"></span> <a href="/">APPVENTURE</a></h1>
+                <h3 style="display:none;" id="scrol">
+                    <a id="back-to-top" href="#toptop" tooltip="Back to top"> <i class="fi-arrow-up"></i> </a>
+                    <a id="found-bug" href="https://github.com/terhechte/appventure-blog/tree/master/resources/posts">Found a bug? Fork and PR on Github</a>
+                </h3>
+            </nav>
+        </div>
     </div>
 
     <div class="large-12 columns" id="headdesc">
@@ -130,7 +138,7 @@
         
         <div class="actual-content">
  
-        <p>XXXThe coin with a simple <a href="">premise to be ultra rare</a> and make only 42 coins available was put live on Cryptsy this morning and went as far as forcing Cryptsy to have to re-write their code to support the massive up-tick in allowable Bitcoins per transaction (last I saw, one "42" coin was going for 1500 BTC, the current limit being set to 4000 BTC). Although only a fraction of a coin has been mined so far, people are apparently going nuts over the rarity to get that illusive first complete coin.</p>
+        <p>XXXThe coin with a simple <a href="">premise to be ultra rare</a> and make only 42 coins available was put live on Cryptsy this morning and went as far as forcing Cryptsy to have to re-write their code to support the massive up-tick in allowable Bitcoins per transaction (last I saw, one "42" coin was going for 1500 BTC, the current limit being set to 4000 BTC). Although only a fraction of a coin has been mined so far, people are apparently going nuts over the rarity to get that illusive first complete coin.  <sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> </p>
 
         </div>
 
@@ -141,6 +149,8 @@
 
                 <div class="footdef"><sup><a href="#fnr.1" class="footnum" name="fn.1" id="fn.1">1</a></sup> <p>XXXThe coin with a simple <a href="">premise to be ultra rare</a> and make only 42 coins available was put live on Cryptsy this morning and went as far as forcing Cryptsy to have to re-write their code to support the massive up-tick in allowable Bitcoins per transaction (last I saw, one "42" coin was going for 1500 BTC, the current limit being set to 4000 BTC). Although only a fraction of a coin has been mined so far, people are apparently going nuts over the rarity to get that illusive first complete coin.</p></div>
                 <div class="footdef"><sup><a href="#fnr.1" class="footnum" name="fn.1" id="fn.1">23</a></sup> <p>This is a long footnote to see how it works</p></div>
+
+                <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p>Also, you'll always need to add additional dependencies to your project</p></div>
 
 
             </div>
@@ -274,6 +284,38 @@
 
   <div id="debug" style="display: none;">
   </div>
+
+  <script>
+   $(".footref").each(function(e, u) {
+       var element = $(u);
+       var ref = element.attr("name");
+       var contentElm = $('a[href="#' + ref + '"]');
+       var parentContentElm = contentElm.parent().parent().clone();
+       parentContentElm.find("sup").remove()
+       // .html()
+       element.attr("data-tooltip", true);
+       element.attr("aria-haspopup", true);
+       element.addClass("has-tip");
+       element.addClass("tip-bottom");
+       element.attr("title", parentContentElm.html());
+   });
+   $(document).foundation();
+   $(document).foundation('tooltip', 'reflow');
+
+   $(window).scroll(function () {
+       var currentScroll = $(this).scrollTop();
+       if (currentScroll > 200) {
+           $("#lem").fadeOut("fast", function() {
+               $("#scrol").fadeIn("fast");
+           });
+       } else {
+           $("#scrol").fadeOut("fast", function() {
+               $("#lem").fadeIn("fast");
+           });
+       }
+   });
+
+  </script>
  
   </body>
 </html>

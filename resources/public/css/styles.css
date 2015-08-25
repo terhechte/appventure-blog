@@ -561,3 +561,22 @@ p > code, li > code, a > code {
 .twitter-follow-button  {
     margin-top: 20px;
 }
+
+/* New Nav Bar */
+.contain-to-grid {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.top-bar {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+#scrol > #back-to-top {
+    color: #111 !important;
+    font-size: 30px !important;
+    margin-right: 30px;
+}
+
+#found-bug {
+    font-weight: normal;
+}
