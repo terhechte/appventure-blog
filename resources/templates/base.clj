@@ -92,11 +92,16 @@
   [:head]
   [metadata]
   [[:meta (enlive/attr= :content "template")]]
-  (enlive/clone-for [{:keys [name value]} [{:name "description" :value (:description metadata)}
-                                           {:name "keywords" :value (:tags metadata)}
-                                           {:name "author" :value (:author metadata)}]]
+  (enlive/clone-for [{:keys [key name value]} [ {:key :name :name "description" :value (:description metadata)}
+                                            {:key :name :name "keywords" :value (:tags metadata)}
+                                            {:key :name :name "author" :value (:author metadata)}
+                                            ;{:key :property :name "og:title" :value (:title metadata)}
+                                            ;{:key :property :name "og:description" :value (:description metadata)}
+                                            {:key :name :name "twitter:title" :value (:title metadata)}
+                                            {:key :name :name "twitter:description" :value (:description metadata)}
+                                            ]]
                     (enlive/do->
-                     (enlive/set-attr :name name)
+                     (enlive/set-attr key name)
                      (enlive/set-attr :content value)))
 
      ; Next, the RSS Link
