@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <link rel="stylesheet" href="shared/styles/railscasts.css" />
+    <style>
+     pre > code {
+         line-height: 1.4rem !important;
+         font-family: Consolas, "Liberation Mono", Courier, monospace !important;
+         font-weight: normal !important;
+         font-size: 0.84rem !important;
+         border-radius: 16px;
+         padding: 20px;
+     }
+     html { font-size: 162.5%; } 
+     html, body {
+         padding: 0px;
+         margin: 0px;
+         height: 100%;
+     }
+     code {
+         margin: 0px;
+         border-radius: 0px;
+         height: 100%;
+     }
+     div, pre {
+         margin: 0px;
+         border-radius: 0px;
+         height: 100%;
+         padding: 0px;
+     }
+     .hljs {
+         border-radius: 0px;
+         border: 0px;
+         height: 100%;
+         overflow: hidden;
+         text-shadow: 4px 4px 12px black;
+     }
+     /*
+     #uiui {
+-webkit-transform: "perspective(700px) rotate3d(0, 1, 1, 30deg)";
+     }*/
+
+/*
+looks great, but I'm not sure if it will confuse readers, so keeping it off for now
+
+@font-face {
+font-family: Hasklig-Medium;
+src: url("/fonts/Hasklig-Medium.otf") format("opentype");
+}
+
+code.hljs, code.hljs span {
+    font-family: Hasklig-Medium !important;
+    -webkit-font-variant-ligatures: common-ligatures;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-feature-settings: "kern";
+	font-feature-settings: "kern";
+	font-kerning: normal;
+}
+*/
+
+    </style>
+  </head>
+  <body>
+      <div class="org-src-container">
+          <pre id="uiui" class="src">
+              <code>{{code}}</code>
+          </pre>
+      </div>
+    <script src="shared/jquery.js"></script>
+    <script src="shared/highlight.pack.js"></script>
+    <script>
+     $(document).ready(function(){
+         $('pre code').each(function(i, block) {
+             hljs.highlightBlock(block);
+         });
+
+        // color the page with the syntax backgrond color
+        var color = $(".hljs").css("background-color");
+        $("body").css({
+            "background-color": color
+        });
+
+
+     });
+    </script>
+  </body>
+</html>
