@@ -1,17 +1,13 @@
 var system = require('system');
 var fs = require('fs');
 
-var code = null;
+/* Debug script to render a template to an image during
+ template development */
 
 if (system.args.length !== 3) {
-    console.log('Usage: render.js template outpath/outfile ');
+    console.log('Usage: render_tpl.js template-html-file outfile');
     phantom.exit();
-} else {
-    //  this blocks even in phantom.exit case
-    // yeah...
-    code = system.stdin.read(1024 * 1024);
-}
-
+} 
 
 //console.log(code);
 var template = system.args[1];
@@ -19,18 +15,6 @@ var outfile = system.args[2];
 
 // change the working directory to the current library path
 fs.changeWorkingDirectory(phantom.libraryPath);
-
-var templateContent = fs.read(template + ".html");
-phantom.injectJs('shared/handlebars.js');
-var handlebar = Handlebars.compile(templateContent);
-
-var renderedTemplate = handlebar({code: code});
-
-//var temporary_outfile = "tmp_render_outfile.html";
-var temporary_outfile = outfile.split("/").pop().split(".")[0] + "-" + system.pid + ".html";
-//console.log(temporary_outfile);
-
-fs.write(temporary_outfile, renderedTemplate, "w");
 
 var page = require('webpage').create();
 page.onLoadFinished = function(status) {
@@ -60,11 +44,8 @@ page.onLoadFinished = function(status) {
             height: size.h + 50
         };
 
-        page2.open(temporary_outfile, function() {
+        page2.open(template, function() {
             page2.render(outfile, {quality: '100'});
-
-            // delete the remnants
-            fs.remove(temporary_outfile);
 
             phantom.exit();
         });
@@ -72,7 +53,6 @@ page.onLoadFinished = function(status) {
     }, 100);
 };
 
-page.open(temporary_outfile, function() {
+page.open(template, function() {
 });
-
 

@@ -580,3 +580,21 @@ p > code, li > code, a > code {
 #found-bug {
     font-weight: normal;
 }
+
+/*
+looks great, but I'm not sure if it will confuse readers, so keeping it off for now
+
+@font-face {
+font-family: Hasklig-Medium;
+src: url("/fonts/Hasklig-Medium.otf") format("opentype");
+}
+
+code.hljs, code.hljs span {
+    font-family: Hasklig-Medium !important;
+    -webkit-font-variant-ligatures: common-ligatures;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-feature-settings: "kern";
+	font-feature-settings: "kern";
+	font-kerning: normal;
+}
+*/

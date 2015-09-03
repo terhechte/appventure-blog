@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
-    <link rel="stylesheet" href="shared/styles/railscasts.css" />
+    <link rel="stylesheet" href="shared/styles/xcode.css" />
     <style>
      pre > code {
          line-height: 1.4rem !important;
@@ -11,7 +11,7 @@
          border-radius: 16px;
          padding: 20px;
      }
-     html { font-size: 222%; } 
+     html { font-size: 200%; } 
      html, body {
          padding: 0px;
          margin: 0px;
@@ -32,23 +32,23 @@
          border-radius: 0px;
          border: 0px;
          height: 100%;
-         text-shadow: 19px 29px 20px rgba(90, 90, 90, .3);
      }
      #uiui {
          /*-webkit-transform: rotate3d(1, 0, 0, 100deg);
          -webkit-transform: rotate3d(0, 1, 0, 50deg);
             -webkit-transform: rotate3d(0, 0, 1, -10deg);*/
-         -webkit-transform:
-         rotateY(20deg)
-         rotateZ(-2deg)
-         rotateX(55deg)
-         translateX(65px)
-         translateZ(70px)
-         ;
+
+     }
+
+     pre {
+         background-color: rgba(0, 0, 0, 0);
      }
 
      body {
-         background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%);
+         background-color: #fff; 
+         background-image: 
+         -webkit-linear-gradient(#eee .1em, transparent .1em);
+         background-size: 100% 1.2em;
      }
 
      .hljs {
@@ -56,10 +56,17 @@
      }
 
      /*
+     body {
+         background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%);
+     }
+        */
+
+
+     /*
 @font-face {
 font-family: Hasklig-Medium;
 src: url("shared/fonts/Hasklig-Medium.otf") format("opentype");
-}*/
+}
 
 @font-face {
 font-family: FiraCode-Regular;
@@ -67,7 +74,6 @@ src: url("shared/fonts/FiraCode-Regular.otf") format("opentype");
 }
 
 code.hljs, code.hljs span {
-    /*font-family: Hasklig-Medium !important;*/
     font-family: FiraCode-Regular !important;
     -webkit-font-variant-ligatures: common-ligatures;
     font-variant-ligatures: common-ligatures;
@@ -75,7 +81,7 @@ code.hljs, code.hljs span {
 	font-feature-settings: "kern";
 	font-kerning: normal;
      letter-spacing: -0.04em;
-}
+}*/
 
     </style>
   </head>

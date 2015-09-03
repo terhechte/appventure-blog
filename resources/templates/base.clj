@@ -90,19 +90,32 @@
 
 (enlive/defsnippet template-head-model base-template-file
   [:head]
-  [metadata]
+  [metadata content-metadata]
   [[:meta (enlive/attr= :content "template")]]
-  (enlive/clone-for [{:keys [key name value]} [ {:key :name :name "description" :value (:description metadata)}
-                                            {:key :name :name "keywords" :value (:tags metadata)}
-                                            {:key :name :name "author" :value (:author metadata)}
-                                            ;{:key :property :name "og:title" :value (:title metadata)}
-                                            ;{:key :property :name "og:description" :value (:description metadata)}
-                                            {:key :name :name "twitter:title" :value (:title metadata)}
-                                            {:key :name :name "twitter:description" :value (:description metadata)}
-                                            ]]
-                    (enlive/do->
-                     (enlive/set-attr key name)
-                     (enlive/set-attr :content value)))
+  (let [entries [{:key :name :name "description" :value (:description metadata)}
+                  {:key :name :name "keywords" :value (:tags metadata)}
+                  {:key :name :name "author" :value (:author metadata)}
+                  {:key :property :name "og:title" :value (:title metadata)}
+                  {:key :property :name "og:description" :value (:description metadata)}
+                  {:key :property :name "og:url" :value (str "http://appventure.me" (:url metadata))}
+                  {:key :name :name "twitter:title" :value (:title metadata)}
+                  {:key :name :name "twitter:description" :value (:description metadata)}]
+         entries (if (:feature-image metadata)
+                   ;; if we have a feature image, use the big image template
+                   (into entries [{:key :name :name "twitter:card" :value "summary_large_image"}
+                                   {:key :name :name "twitter:image" :value (str "http://appventure.me" (:feature-image metadata))}
+                                   {:key :property :name "og:image" :value (str "http://appventure.me" (:feature-image metadata))}
+                                   ])
+                   ;; otherwise, use the description template
+                   (into entries [{:key :name :name "twitter:card" :value "summary"}
+                                   {:key :name :name "twitter:image" :value "http://appventure.me/img/ez@2x.png"}
+                                   {:key :property :name "og:image" :value "http://appventure.me/img/ez@2x.png"}])
+                   )]
+    (enlive/clone-for [{:keys [key name value]} entries]
+      (enlive/do->
+        (enlive/remove-attr :name :property)
+        (enlive/set-attr key name)
+        (enlive/set-attr :content value))))
 
      ; Next, the RSS Link
      [[:link (enlive/attr= :rel "alternate" :title "rsstemplate")]]

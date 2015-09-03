@@ -1,7 +1,7 @@
 #+title: Match Me if you can: Swift Pattern Matching in Detail.
 #+tags: swift ios cocoa
 #+keywords: feature lisp swift optional scala simple optionals switch chaining for pattern matching clojure haskell
-#+summary: In this post, we'll have a look at Pattern Matching in Swift in terms of the 'switch', 'for', 'if', and 'guard' keywords. We'll have a look at the basic syntax and at best practices and helpful examples.
+#+description: In this post, we'll have a look at Pattern Matching in Swift in terms of the 'switch', 'for', 'if', and 'guard' keywords. We'll have a look at the basic syntax and at best practices and helpful examples.
 
 Among the new features that Swift offers to Objective-C programmers is one that disguises itself like a boring old man while it offers huge potential for forming elegant solutions to otherwise unwieldy sets of nested branches. I'm, of course talking about the =switch= statement that many Objective-C programmers probably consider as a clunky syntax device which is most entertaining when used as [[http://en.wikipedia.org/wiki/Duff's_device][Duff's Device]], yet usually offers little to no advantages over multiple if statements.
 
@@ -872,7 +872,8 @@ This can also be very successfully combined with =switch= and =for= to wrap comp
 
 =if case= can be used as the opposite of =guard case=. It is a great way to unwrap and match data within a branch. In line with our previous =guard= example. Obviously, we need an move function. Something that allows us to say that an entity moved in a direction. Since our entities are =enums=, we need to return an updated entity.
 
-#+BEGIN_SRC swift :noweb strip-export
+#+NAME: feature-image
+#+BEGIN_SRC swift :noweb strip-export :export-image true :export-template template5
 func move(entity: Entity, xd: Int, yd: Int) -> Entity {
 	if case Entity.Entry(let t, let x, let y, let hp) = entity
 	where (x + xd) < 1000 &&

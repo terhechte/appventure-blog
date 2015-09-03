@@ -1,6 +1,7 @@
 #+title: Optional throw via try? in Swift 2 beta 6
 #+tags: swift
 #+keywords: swift error throw result either rethrow try syntax swift2
+#+description: Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
 #+OPTIONS: toc:nil ^:{} 
 
 Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
@@ -67,7 +68,8 @@ A new keyword 'try?' has been added to Swift. 'try?' attempts to perform an oper
 
 This makes it possible to retrieve the value of a potential throwing operation as an optional. If we apply this to our code above, we can simplify it quite a bit:
 
-#+BEGIN_SRC swift :noweb strip-export
+#+NAME: feature-image
+#+BEGIN_SRC swift :noweb strip-export :export-image true
   <<fns>>
 
   if let uid = loggedInUser(),

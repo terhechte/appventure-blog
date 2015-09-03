@@ -23,6 +23,9 @@ then the source block will be exported as an image")
 (defvar org-image-gen-blocks '()
   "this is where the block information on image-gen blocks is being stored")
 
+(defvar org-image-gen-strip-noweb t
+  "Should any noweb references be stripped from code blocks, i.e. <<noweb>>")
+
 ;; This will store the contents of source code blocks as local vars,
 ;; thus enabling access to them at a later export stage
 
@@ -67,14 +70,19 @@ then the source block will be exported as an image")
 ;; This function will take a string of code, run it through the
 ;; templating tool, and return the path of the generated image.
 
+(replace-regexp-in-string "<<\\w+>>" "" "abc\n<<klaus>>\nfunc <t>abc()")
+(replace-regexp-in-string "abc\n<<klaus>>\nfunc <t>abc()" "abc" "")
+
 (defun org-generate-header-image (name code template)
   "generate a header image with code/template, return the path to the image"
   (let* ((image-abs-path (format "%s%s%s.jpg" org-image-gen-base-path org-image-image-out-path name))
           (image-srv-path (format "%s%s.jpg" org-image-image-srv-path name))
+          ;; remove any noweb references.
+          (clean-code (if org-image-gen-strip-noweb
+                        (replace-regexp-in-string "<<\\w+>>" "" code)
+                        code))
           (command (format "%s %s%s %s %s" org-image-gen-phantomjs-path org-image-gen-base-path org-image-gen-code-renderer template image-abs-path))
-          (result (perform-command command code)))
-    (print result)
-    (princ result)
+          (result (perform-command command clean-code)))
     image-srv-path))
 
 (defun meta-template (name value)
@@ -94,7 +102,7 @@ then the source block will be exported as an image")
         ;; check if this fails because of .. paths..
         (let* ( (fname (format "%s-%s" (file-name-base) (first entry))) ; the gen file name
                 (template (assoc org-image-gen-template-property (nth 1 entry)))
-                (template (if template (last template) org-image-gen-default-template))
+                (template (if template (cdr template) org-image-gen-default-template))
                 (path (org-generate-header-image
                       fname
                       (nth 3 entry)

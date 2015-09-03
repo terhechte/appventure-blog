@@ -1,0 +1,3 @@
+#!/bin/sh
+/usr/local/lib/node_modules/phantomjs/bin/phantomjs ./render_tpl.js  ./testxxx-78178.html /tmp/xp1.jpg
+open /tmp/xp1.jpg

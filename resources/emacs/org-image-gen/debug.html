@@ -1,0 +1,124 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <link rel="stylesheet" href="shared/styles/monokai.css" />
+    <style>
+     html { font-size: 200%; } 
+     html, body {
+         padding: 0px;
+         margin: 0px;
+         height: 100%;
+     }
+     code {
+         margin: 0px;
+         border-radius: 0px;
+         height: 100%;
+     }
+     div, pre {
+         margin: 0px;
+         border-radius: 0px;
+         height: 100%;
+         padding: 0px;
+     }
+     .hljs {
+         border-radius: 0px;
+         border: 0px;
+         height: 100%;
+     }
+     #uiui {
+         padding: 8px;
+     }
+
+     /*
+
+
+     body {
+         background-color:#158;
+         background-image: -webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,.3) 0%,rgba(0,0,0,0) 100%);
+     }
+     .hljs {
+         background-color: rgba(0, 0, 0, 0);
+     }
+
+
+
+
+
+     body {
+         background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%);
+     }
+        */
+
+
+@font-face {
+font-family: Hasklig-Black;
+src: url("shared/fonts/Hasklig-Black.otf") format("opentype");
+}
+
+@font-face {
+font-family: FiraCode-Regular;
+src: url("shared/fonts/FiraCode-Regular.otf") format("opentype");
+}
+
+code.hljs, code.hljs span {
+    font-family: Hasklig-Black !important;
+    -webkit-font-variant-ligatures: common-ligatures;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-feature-settings: "kern";
+	font-feature-settings: "kern";
+	font-kerning: normal;
+     text-shadow:  1px  1px 1px black,
+                  1px -1px 1px black,
+                 -1px  1px 1px black,
+                 -1px -1px 1px black;
+}
+
+     .hljs {
+         background-color: rgba(0, 0, 0, 0);
+     }
+
+     body {
+         background: -webkit-linear-gradient(-45deg, rgba(225,255,255,1) 0%,rgba(225,255,255,1) 7%,rgba(225,255,255,1) 12%,rgba(253,255,255,1) 12%,rgba(230,248,253,1) 30%,rgba(200,238,251,1) 54%,rgba(190,228,248,1) 75%,rgba(177,216,245,1) 100%);
+     }
+
+    </style>
+  </head>
+  <body>
+      <div class="org-src-container">
+          <pre id="uiui" class="src">
+<code>
+func entities() -> [Entities] {
+    return [Entities.Soldier(x: 0, y: 0)]
+}
+for e in entities() {
+    switch e {
+    case let .Soldier(x, y):
+      drawImage("soldier.png", x, y)
+    case let .Tank(x, y):
+      drawImage("tank.png", x, y)
+    case let .Player(x, y):
+      drawImage("player.png", x, y)
+    }
+}
+</code>
+          </pre>
+      </div>
+    <script src="shared/jquery.js"></script>
+    <script src="http://livejs.com/live.js"></script>
+    <script src="shared/highlight.pack.js"></script>
+    <script>
+     $(document).ready(function(){
+         $('pre code').each(function(i, block) {
+             hljs.highlightBlock(block);
+         });
+
+        var color = $(".hljs").css("background-color");
+        $("body").css({
+            "background-color": color
+        });
+         //$('.hljs').css({"background-color": "rgba(0, 0, 0, 0);"})
+
+     });
+    </script>
+  </body>
+</html>

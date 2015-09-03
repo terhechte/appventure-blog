@@ -1,7 +1,9 @@
 ;; The define-template macro takes care of all the boilerpalte
 (static.core/define-template base-template-file 
      ; set the head properties
-     [:head] (enlive/substitute (static.core/template-head-model metadata))
+  [:head] (enlive/substitute (static.core/template-head-model
+                               metadata
+                               (if-let [c (first content)] c {})))
 
      ; render the link to the github forking
      [:#found-bug] (enlive/set-attr :href (str "https://github.com/terhechte/appventure-blog/tree/master/resources/posts/" (-> content first :filename)))
@@ -41,7 +43,7 @@
 
   ;[:#swiftblogs] (enlive/content (map #(static.core/template-swift-model %) content))
 
-  ;[:#debug] (enlive/content (str (with-out-str (clojure.pprint/pprint metadata)) (with-out-str (clojure.pprint/pprint content))))
+  [:#debug] (enlive/content (str (with-out-str (clojure.pprint/pprint metadata)) (with-out-str (clojure.pprint/pprint content))))
 
      ; And the projects
      [:#projects] (enlive/append (map #(static.core/template-project-model %) (:projects metadata)))

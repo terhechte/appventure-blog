@@ -1,6 +1,6 @@
 (static.core/define-template base-template-file
   
-     [:head] (enlive/content (static.core/template-head-model metadata))
+     [:head] (enlive/content (static.core/template-head-model metadata {}))
 
      [:#maincontent]   (enlive/content (map #(static.core/template-tags-model %) content)) 
 
