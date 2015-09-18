@@ -7,6 +7,10 @@ Among the new features that Swift offers to Objective-C programmers is one that 
 
 The =Switch= statement in Swift can do much more though. In the following tutorial, I will try to explain the various usages for these new features in more detail. I'll mostly ignore those solutions where there's no benefit over how =switch= works in Objective-C or C. The basics of this post were actually written in July 2014, but so many of my patterns crashed the compiler back then that I postponed writing it until there's better support.
 
+This Blog Post is also available in the following languages:
+
+- [[http://qiita.com/mono0926/items/f2875a9eacef53e88122][Japanese]] (Thanks to [[https://twitter.com/_mono][M Ono]]!)
+
 * Diving In
 The main feature of =switch= is of course pattern matching, the ability to destructure values and match different switch cases based on correct match of the values to the cases. 
 
@@ -918,3 +922,5 @@ guard case let Imaginary(x, y) = anImaginaryObject else { break }
  **08/24/2015** 
     - Added =if case= examples, renamed some sections.
     - Fixed typos in the text. In particular, I accidentally wrote that =_= does not match =nil=. That's of course not true, =_= matches everything. (thanks to [[https://github.com/obecker][obecker]])
+ **09/18/2015**
+    - Added link to Japanese Translation
