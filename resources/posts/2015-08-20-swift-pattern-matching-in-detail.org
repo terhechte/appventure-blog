@@ -661,7 +661,7 @@ Of course, this will kill your stack with big numbers.
 
 ** Legacy API and Value Extractions
 
-Oftentimes, when you get data from an external source, like a library, or an API, it is not only good practige but usually even required that you check the data for consistency before interpreting it. You need to make sure that all keys exists or that the data is of the correct type, or the arrays have the required length. Not doing so can lead from buggy behaviour (missing key) to crash of the app (indexing non-existent array items). The classic way to do this is by nesting =if= statements. 
+Oftentimes, when you get data from an external source, like a library, or an API, it is not only good practice but usually even required that you check the data for consistency before interpreting it. You need to make sure that all keys exists or that the data is of the correct type, or the arrays have the required length. Not doing so can lead from buggy behaviour (missing key) to crash of the app (indexing non-existent array items). The classic way to do this is by nesting =if= statements. 
 
 Let's imagine an API that returns a user. However, there're two types of users: System users - like the administrator, or the postmaster - and local users - like "John B", "Bill Gates", etc. Due to the way the system was designed and grew, there're a couple of nuisances that API consumers have to deal with:
 - =system= and =local= users come via the same API call.
