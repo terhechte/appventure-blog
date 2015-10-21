@@ -289,9 +289,9 @@ func selectCPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: "3.2GH
 func selectGPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: "3.2GHZ", GPU: "NVidia")}
 
 enum Desktop {
-   case Cube(RAM: Int, CPU: String, GPU: String)
-   case Tower(RAM: Int, CPU: String, GPU: String)
-   case Rack(RAM: Int, CPU: String, GPU: String)
+   case Cube(Config)
+   case Tower(Config)
+   case Rack(Config)
 }
 
 let aTower = Desktop.Tower(selectGPU(selectCPU(selectRAM((0, "", "") as Config))))
@@ -310,11 +310,6 @@ infix operator <^> { associativity left }
 func <^>(a: Config, f: (Config) -> Config) -> Config { 
     return f(a)
 }
-
-infix operator <*> { associativity left }
-func <*>(a: Config, f: (Config) -> Config) -> Config {
-    return a <^> f
-}
 #+END_SRC
 
 #+RESULTS:
@@ -325,7 +320,7 @@ Finally, we can thread through the different configuration steps. This is partic
 #+BEGIN_SRC swift :noweb strip-export
 <<tuplefunc>>
 
-let config = (0, "", "") <^> selectRAM  <*> selectCPU <*> selectGPU
+let config = (0, "", "") <^> selectRAM  <^> selectCPU <^> selectGPU
 let aCube = Desktop.Cube(config)
 
 #+END_SRC
