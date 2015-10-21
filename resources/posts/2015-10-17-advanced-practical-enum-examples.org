@@ -579,7 +579,7 @@ Some protocol implementations may need internal state handling to cope with the 
 protocol AccountCompatible {
   var remainingFunds: Int { get }
   mutating func addFunds(amount: Int) throws
-  mutating func removeFunds(amount: Int) -> Bool // if we're empty, return false
+  mutating func removeFunds(amount: Int) throws
 }
 #+END_SRC
 
@@ -619,26 +619,25 @@ enum Account: AccountCompatible {
     }
   }
 
-  mutating func removeFunds(amount: Int) -> Bool {
-    guard (try? self.addFunds(amount * -1)) != nil else { return false }
-    return true
+  mutating func removeFunds(amount: Int) throws {
+    try self.addFunds(amount * -1)
   }
 }
 
 var account = Account.Funds(remaining: 20)
 print("add: ", try? account.addFunds(10))
-print ("remove 1: ", account.removeFunds(15))
-print ("remove 2: ", account.removeFunds(55))
+print ("remove 1: ", try? account.removeFunds(15))
+print ("remove 2: ", try? account.removeFunds(55))
 // prints:
 // : add:  Optional(())
-// : remove 1:  true
-// : remove 2:  false
+// : remove 1:  Optional(())
+// : remove 2:  nil
 #+END_SRC
 
 #+RESULTS: feature-image
 : add:  Optional(())
-: remove 1:  true
-: remove 2:  false
+: remove 1:  Optional(())
+: remove 2:  nil
 
 #+RESULTS:
 
