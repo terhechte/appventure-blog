@@ -577,9 +577,9 @@ Some protocol implementations may need internal state handling to cope with the 
 
 #+BEGIN_SRC swift :noweb-ref accountcompatible
 protocol AccountCompatible {
-   var remainingFunds: Int { get }
-   mutating func addFunds(amount: Int)
-   mutating func removeFunds(amount: Int) -> Bool // if we're empty, return false
+  var remainingFunds: Int { get }
+  mutating func addFunds(amount: Int) throws
+  mutating func removeFunds(amount: Int) -> Bool // if we're empty, return false
 }
 #+END_SRC
 
@@ -593,23 +593,39 @@ You could easily fulfill this protocol with a =struct=, but in the context of yo
 enum Account: AccountCompatible {
   case Empty
   case Funds(remaining: Int)
-  var remainingFunds: Int {
-      switch self {
-         case Empty: return 0
-         case Funds(let remaining): return remaining
-      }
+
+  enum Error: ErrorType {
+    case Overdraft(amount: Int)
   }
 
-  mutating func addFunds(amount: Int) {
-      guard case .Funds(let remaining) = self 
-          else { self = .Empty; return }
-      self = .Funds(remaining: amount + remaining)
+  var remainingFunds: Int {
+    switch self {
+    case Empty: return 0
+    case Funds(let remaining): return remaining
+    }
   }
- 
+
+  mutating func addFunds(amount: Int) throws {
+    var newAmount = amount
+    if case let .Funds(remaining) = self {
+      newAmount += remaining
+    }
+    if newAmount < 0 {
+      throw Error.Overdraft(amount: -newAmount)
+    } else if newAmount == 0 {
+      self = .Empty
+    } else {
+      self = .Funds(remaining: newAmount)
+    }
+  }
+
   mutating func removeFunds(amount: Int) -> Bool {
-      guard self.remainingFunds >= amount else { return false }
-      self.addFunds(amount * -1)
+    do {
+      try self.addFunds(amount * -1)
       return true
+    } catch {
+      return false
+    }
   }
 }
 #+END_SRC
@@ -682,12 +698,12 @@ enum MyOptional<T> {
 }
 #+END_SRC
 
-What's special here is, that the enum's *associated values* take the type of the generic parameter =T=, so that optionals can be build for any kind you wish to return.
+What's special here is, that the enum's *associated values* take the type of the generic parameter =T=, so that optionals can be built for any kind you wish to return.
 
 Enums can have multiple generic parameters. Take the well-known *Either* type which is not part of Swift's standard library but implemented in many open source libraries as well as prevalent in other functional programming languages like Haskell or F#. The idea is that instead of just returning a value or no value (née Optional) you'd return either the successful value or something else (probably an error value).
 
 #+BEGIN_SRC swift
-// The well-knon either type is, of course, an enum that allows you to return either
+// The well-known either type is, of course, an enum that allows you to return either
 // value one (say, a successful value) or value two (say an error) from a function
 enum Either<T1, T2> {
   case Left(T1)
