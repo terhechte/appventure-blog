@@ -153,7 +153,7 @@ This allows you to use the much nicer looking *Delete* or *Write* cases, and lat
 
 ** Nesting Enums
 
-If you have specific sub type requirements, you can also logically nest enums in an enum. This allows you to contain specific information on your enum case within the actual enum. Imagine a character in an RPG. Each character can have a weapon, all characters have access to the sae set of weapons. All other instances in the game do not have access to those weapons (they're trolls, they just have clubs).
+If you have specific sub type requirements, you can also logically nest enums in an enum. This allows you to contain specific information on your enum case within the actual enum. Imagine a character in an RPG. Each character can have a weapon, all characters have access to the same set of weapons. All other instances in the game do not have access to those weapons (they're trolls, they just have clubs).
 
 #+BEGIN_SRC swift
 enum Character {
