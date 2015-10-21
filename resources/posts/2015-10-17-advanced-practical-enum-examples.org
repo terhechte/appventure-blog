@@ -620,15 +620,25 @@ enum Account: AccountCompatible {
   }
 
   mutating func removeFunds(amount: Int) -> Bool {
-    do {
-      try self.addFunds(amount * -1)
-      return true
-    } catch {
-      return false
-    }
+    guard (try? self.addFunds(amount * -1)) != nil else { return false }
+    return true
   }
 }
+
+var account = Account.Funds(remaining: 20)
+print("add: ", try? account.addFunds(10))
+print ("remove 1: ", account.removeFunds(15))
+print ("remove 2: ", account.removeFunds(55))
+// prints:
+// : add:  Optional(())
+// : remove 1:  true
+// : remove 2:  false
 #+END_SRC
+
+#+RESULTS: feature-image
+: add:  Optional(())
+: remove 1:  true
+: remove 2:  false
 
 #+RESULTS:
 
@@ -1191,4 +1201,9 @@ enum Characters {
 #+END_SRC
 
 You could still create new cases with different values, but the default settings for your character would be mapped.
+
+* Changes
+**10/21/2015** 
+    - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/4][#4 from @blixt]] and [[https://github.com/terhechte/appventure-blog/pull/2][#2 from @kandelvijayavolare]]
+    - Added calling code for the Account example.
 
