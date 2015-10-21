@@ -644,6 +644,9 @@ print ("remove 2: ", account.removeFunds(55))
 
 As you can see, we implemented all the protocol requirements by storing our values within our =enum cases=. A very nifty side effect of this is, that now you can test for an empty account with a simple pattern match all over your code base. You don't have to see whether the remainingFunds are zero.
 
+We're also nesting a =ErrorType= compatible =enum= in the *Account* enum so that we can use Swift 2.0's new error handling. This is explained in more detail in the *Practical Use Cases* section.
+
+
 ** Extensions
 
 Naturally, enums can also be extended. The most apparent use case for this is keeping =enum cases= and =methods= separate, so that a reader of your code can easily digest the =enum= and after that move on to the methods:
@@ -999,6 +1002,54 @@ We've already seen a couple of useful =enums= in the previous feature descriptio
 
 Here are, then, some more examples of practical =enum= usage to fuel your creativity.
 
+** Error Handling
+
+One of the prime examples of Enum usage in Swift is, of course, the new error handling in Swift 2.0. Your throwing function can throw anything which conforms to the empty =ErrorType= protocol. As the Swift documentation succinctly observes:
+
+#+BEGIN_QUOTE
+Swift enumerations are particularly well suited to modeling a group of related error conditions, with associated values allowing for additional information about the nature of an error to be communicated.
+#+END_QUOTE
+
+As an example, we have a look at the popular [[https://github.com/thoughtbot/Argo][JSON Decoding library Argo]]. When their JSON Decoding fails, it can fail due to two primary reasons.
+1. The JSON Data lacks a key which the end model requires (say your model has a property =username= and somehow the JSON lacks that)
+2. There's a type mismatch. Say instead of a String the =username= property in the JSON contains an =NSNull= [fn:: If you ever used JSON in an app, you may well have run into this issue once].
+
+In addition to that, Argo also includes a custom error for anything not fitting in these two categories above. Their =ErrorType enum= looks like this:
+
+#+BEGIN_SRC swift :noweb-ref argo
+enum DecodeError: ErrorType {
+  case TypeMismatch(expected: String, actual: String)
+  case MissingKey(String)
+  case Custom(String)
+}
+#+END_SRC
+
+All cases have associated values that contain additional information about the error in question.
+
+A more general =ErrorType= for complete HTTP / REST API handling could look like this:
+
+#+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation"
+<<argo>>
+enum APIError : ErrorType {
+    // Can't connect to the server (maybe offline?)
+    case ConnectionError(error: NSError)
+    // The server responded with a non 200 status code
+    case ServerError(statusCode: Int, error: NSError)
+    // We got no data (0 bytes) back from the server
+    case NoDataError
+    // The server response can't be converted from JSON to a Dictionary
+    case JSONSerializationError(error: ErrorType)
+    // The Argo decoding Failed
+    case JSONMappingError(converstionError: DecodeError)
+}
+#+END_SRC
+
+#+RESULTS:
+
+This =ErrorType= implements the complete REST Stack up to the point where your app would get the completely decoded native =struct= or =class= object. 
+If you look closely, you'll see that within the =JSONMappingError=, we're wrapping the *Argo* =DecodeError= into our =APIError= type as we're still using
+Argo for the actual JSON decoding.
+
 ** Observer Pattern
 
 There're various ways of modelling observation in Swift. If you include =@objc= compatibility, you can use =NSNotificationCenter= or *KVO*. Even if not, the =didSet= syntax makes it easy to implement simple observation. Enums can be used here in order to make the type of change that happens to the observed object clearer. Imagine collection observation. If we think about it, we only have a couple of possible cases: One or more items are inserted, one or more items are deleted, one or more items are updated. This sounds like a job for an enum:
@@ -1204,6 +1255,7 @@ You could still create new cases with different values, but the default settings
 
 * Changes
 **10/21/2015** 
-    - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/4][#4 from @blixt]] and [[https://github.com/terhechte/appventure-blog/pull/2][#2 from @kandelvijayavolare]]
+    - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/4][#4 from @blixt]] and [[https://github.com/terhechte/appventure-blog/pull/2][#2 from @kandelvijayavolare]] and [[https://github.com/terhechte/appventure-blog/pull/3][#3 from @sriniram]]
     - Added calling code for the Account example.
+    - Added =ErrorType= example
 
