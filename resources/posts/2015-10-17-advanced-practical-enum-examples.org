@@ -803,10 +803,10 @@ Now, we can write our =enum=, with one downside though: The initial values have 
 
 #+BEGIN_SRC swift :noweb-ref cgsizeenum2 :prologue "import Foundation" 
 enum Devices: CGSize {
-   case iPhone3GS = "320,  480"
-   case iPhone5 = "320, 568"
-   case iPhone6 = "375, 667"
-   case iPhone6Plus = "414, 736"
+   case iPhone3GS = "{320, 480}"
+   case iPhone5 = "{320, 568}"
+   case iPhone6 = "{375, 667}"
+   case iPhone6Plus = "{414, 736}"
 }
 #+END_SRC
 
