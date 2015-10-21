@@ -1251,7 +1251,7 @@ You could still create new cases with different values, but the default settings
 
 * Changes
 **10/21/2015** 
-    - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/4][#4 from @blixt]] and [[https://github.com/terhechte/appventure-blog/pull/2][#2 from @kandelvijayavolare]] and [[https://github.com/terhechte/appventure-blog/pull/3][#3 from @sriniram]]
+    - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/4][#4 from @blixt]] and [[https://github.com/terhechte/appventure-blog/pull/2][#2 from @kandelvijayavolare]] and [[https://github.com/terhechte/appventure-blog/pull/3][#3 from @sriniram]] and [[https://github.com/terhechte/appventure-blog/pull/5][#5 from @SixFiveSoftware]]
     - Added calling code for the Account example.
     - Added =ErrorType= example
 
