@@ -326,6 +326,9 @@ let aCube = Desktop.Cube(config)
 #+END_SRC
 
 *** Use Case Examples
+:PROPERTIES: 
+:CUSTOM_ID: basicexamples
+:END:      
 
 Associated Values can be used in a variety of ways. As code can tell more than a thousand words, what follows is a list of short examples in no particular order.
 
@@ -583,9 +586,8 @@ protocol AccountCompatible {
 You could easily fulfill this protocol with a =struct=, but in the context of your application, a =enum= is the more sensible approach. However, you can't add properties like =var remainingFunds: Int= to an =enum=, so would you model that? The answer is actually easy, you can use associated values for this:
 
 #+NAME: feature-image
-#+BEGIN_SRC swift :noweb strip-export :export-image true :export-template template4
-<<accountcompatible>>
-enum Account: AccountCompatible {
+#+BEGIN_SRC swift :noweb strip-export :noweb-ref accountthing :export-image true :export-template template4
+enum Account {
   case Empty
   case Funds(remaining: Int)
 
@@ -599,6 +601,15 @@ enum Account: AccountCompatible {
     case Funds(let remaining): return remaining
     }
   }
+}
+#+END_SRC
+
+To keep things clean, we can then define the required protocol functions in a protocol extension on the =enum=:
+
+#+BEGIN_SRC swift :noweb strip-export  
+<<accountcompatible>>
+<<accountthing>>
+extension Account: AccountCompatible {
 
   mutating func addFunds(amount: Int) throws {
     var newAmount = amount
@@ -617,6 +628,7 @@ enum Account: AccountCompatible {
   mutating func removeFunds(amount: Int) throws {
     try self.addFunds(amount * -1)
   }
+
 }
 
 var account = Account.Funds(remaining: 20)
@@ -634,16 +646,14 @@ print ("remove 2: ", try? account.removeFunds(55))
 : remove 1:  Optional(())
 : remove 2:  nil
 
-#+RESULTS:
-
 As you can see, we implemented all the protocol requirements by storing our values within our =enum cases=. A very nifty side effect of this is, that now you can test for an empty account with a simple pattern match all over your code base. You don't have to see whether the remainingFunds are zero.
 
-We're also nesting a =ErrorType= compatible =enum= in the *Account* enum so that we can use Swift 2.0's new error handling. This is explained in more detail in the *Practical Use Cases* section.
+We're also nesting a =ErrorType= compatible =enum= in the *Account* enum so that we can use Swift 2.0's new error handling. This is explained in more detail in the [[#errortype][*Practical Use Cases*]] section.
 
 
 ** Extensions
 
-Naturally, enums can also be extended. The most apparent use case for this is keeping =enum cases= and =methods= separate, so that a reader of your code can easily digest the =enum= and after that move on to the methods:
+As we just saw, enums can also be extended. The most apparent use case for this is keeping =enum cases= and =methods= separate, so that a reader of your code can easily digest the =enum= and after that move on to the methods:
 
 #+BEGIN_SRC swift :noweb-ref entities
 enum Entities {
@@ -992,11 +1002,14 @@ The Process enum contains the command line arguments of the current process (=Pr
 
 * Practical Use Cases
 
-We've already seen a couple of useful =enums= in the previous feature descriptions. Examples would be =Optional=, =Either=, =FileNode=, or the binary tree. However, there're many more scenarios where using an =enum= wins over a =struct= or =class=. Usually, if your problem domain can be divided into a finite set of distinctive categories, an =enum= may be the right choice. Even only two cases are a perfectly valid scenario for an enum, as the Optional and Either types show.
+We've already seen a couple of useful =enums= in the [[#basicexamples][previous feature descriptions.]] Examples would be =Optional=, =Either=, =FileNode=, or the binary tree. However, there're many more scenarios where using an =enum= wins over a =struct= or =class=. Usually, if your problem domain can be divided into a finite set of distinctive categories, an =enum= may be the right choice. Even only two cases are a perfectly valid scenario for an enum, as the Optional and Either types show.
 
 Here are, then, some more examples of practical =enum= usage to fuel your creativity.
 
 ** Error Handling
+:PROPERTIES: 
+:CUSTOM_ID: errortype
+:END:      
 
 One of the prime examples of Enum usage in Swift is, of course, the new error handling in Swift 2.0. Your throwing function can throw anything which conforms to the empty =ErrorType= protocol. As the Swift documentation succinctly observes:
 
@@ -1250,6 +1263,10 @@ enum Characters {
 You could still create new cases with different values, but the default settings for your character would be mapped.
 
 * Changes
+**10/22/2015**
+    - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/6][#6 from @mabidakun]].
+    - Added internal links
+    - Split up the account example into two easier to digest snippets.
 **10/21/2015** 
     - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/4][#4 from @blixt]] and [[https://github.com/terhechte/appventure-blog/pull/2][#2 from @kandelvijayavolare]] and [[https://github.com/terhechte/appventure-blog/pull/3][#3 from @sriniram]] and [[https://github.com/terhechte/appventure-blog/pull/5][#5 from @SixFiveSoftware]]
     - Added calling code for the Account example.
