@@ -1230,6 +1230,10 @@ Airspeed Velocity also wrote a great post about the implementation of a red blac
 
 We're ending this post, again, with a list of things that don't work yet with enums. 
 
+** Getting data from associated enums
+IMHO there is another swift enum limitation that is worth to mention: getting data from associated enums. More details by David Owens here:
+http://owensd.io/2015/09/15/associated-enum-cases-as-types.html
+
 ** Tuples
 
 The biggest issue is, [[http://appventure.me/2015/07/19/tuples-swift-advanced-usage-best-practices/][again, Tuple support]]. I love tuples, they make many things easier, but they're currently under-documented and cannot be used in many scenarios. In terms of enums, you can't have tuples as the enum value:
