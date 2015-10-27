@@ -15,7 +15,7 @@ The best understanding of the topic can be achieved by having a look at the API 
 
 Swift's reflection capabilities are based around a =struct= called *Mirror*. You create a mirror for a particular ~subject~ and the mirror will then let you query it.
 
-Before we do that, let's define a simple data structure that we can use as our.
+Before we do that, let's define a simple data structure that we can use as our subject.
 
 #+BEGIN_SRC swift :noweb-ref subjects1
 import Foundation.NSURL
@@ -215,7 +215,7 @@ We offer an Artificial Intelligence with a browser plugin that automatically ana
 
 It's 2016, Swift is already open source, so our server backend is obviously written in Swift. Since we have millions of site visits active in our system at a time, we'd like to use =structs= for the analysis part of each site that a user visits. However, if our AI decides that this is worthy of a bookmark, we'd like to use CoreData to store this type in a database. 
 
-However, we don't want to write custom serialization to Core Data code whenever we introduce a new =struct=. Rather, we'd like to develop this in a way so that we can utilize it for all future =structs= we develop.
+Now, we don't want to write custom serialization to Core Data code whenever we introduce a new =struct=. Rather, we'd like to develop this in a way so that we can utilize it for all future =structs= we develop.
 
 So, how do we do that?
 

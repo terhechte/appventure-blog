@@ -1225,10 +1225,59 @@ Each =Node case= points to the next case, and by using an =enum= instead of some
 
 Airspeed Velocity also wrote a great post about the implementation of a red black tree with indirect Swift enums, so while you're already reading his blog, [[http://airspeedvelocity.net/2015/07/22/a-persistent-tree-using-indirect-enums-in-swift/][you may just as well also read this one.]]
 
+** Settings Dictionaries
+:PROPERTIES:
+:CUSTOM_ID: settingsdics
+:END:
+
+
+[[http://ericasadun.com/2015/10/19/sets-vs-dictionaries-smackdown-in-swiftlang/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][This is a very, very smart solution that Erica Sadun came up with]]. Basically whenever you'd use a dictionary of attribute keys as a way to configure an item,
+you'd instead use a =Set= of enums with associated values. That way, the type checker can conform that your configuration values are of the correct type.
+
+[[http://ericasadun.com/2015/10/19/sets-vs-dictionaries-smackdown-in-swiftlang/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][For more details, and proper examples, check out her original blog post.]]
 
 * Limitations
 
 We're ending this post, again, with a list of things that don't work yet with enums. 
+
+** Retrieving Associated Values
+
+[[http://owensd.io/2015/09/15/associated-enum-cases-as-types.html][David Owens makes the case that the current way of associated value retrieval is unwieldy.]] I encourage you to follow the link and read the post, but here's the gist:
+In order to retrieve the associated values from an enum, you have to use pattern matching. However, associated values are effectively tuples which were attached to the enum case.
+Tuples, on the other hand, can be deconstructed in a much simpler way simply by using =.keyword or .0=. i.e:
+
+#+BEGIN_SRC swift
+// Enums
+enum Ex { case Mode(ab: Int, cd: Int) }
+if case Ex.Mode(let ab, let cd) = Ex.Mode(ab: 4, cd: 5) {
+    print(ab)
+}
+// vs tuples:
+let tp = (ab: 4, cd: 5)
+print(tp.ab)
+#+END_SRC
+
+If you also feel that this is how we should be able to deconstruct enums, there's a rdar for you: [[http://openradar.me/22704262][rdar://22704262]]
+
+** Equatable
+
+Enums with associated values do not conform to the equatable protocol. That's a pity because it makes a lot of things much more cumbersome and verbose than they need to be.
+The underlying reason is probably that associated values are just tuples internally and tuples do not conform to equatable. However, for a limited subset of cases, namely those where all associated value / typle types conform to equatable, I think, the default case should be that the compiler automatically also generates the equatable extension.
+
+#+BEGIN_SRC swift
+// Int and String are Equatable, so case Ex should also be equatable.
+enum Ex { case Mode(ab: Int, cd: String) }
+
+// Swift could auto-generate this func
+func == (lhs: Ex.Mode, rhs: Ex.Mode) -> Bool {
+    switch (lhs, rhs) {
+       case (.Mode(let a, let b), .Mode(let c, let d)):
+           return a == c && b == d
+       default:
+           return false
+    }
+}
+#+END_SRC
 
 ** Tuples
 
@@ -1262,7 +1311,11 @@ enum Characters {
 
 You could still create new cases with different values, but the default settings for your character would be mapped.
 
+
 * Changes
+**10/26/2015**
+    - Added additional limitation examples (Equatable & Retrieving associated values)
+    - [[settingsdics][Added Erica Sadun's Set with Associated Enums example]] 
 **10/22/2015**
     - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/6][#6 from @mabidakun]].
     - Added internal links
