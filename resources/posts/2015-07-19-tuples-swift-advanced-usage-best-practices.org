@@ -325,7 +325,7 @@ However, if you're using a certain tuple construction so often that you think ab
 
 As [[http://www.paulrobinson.net/function-parameters-are-tuples-in-swift/][Paul Robinson lays out eloquently]] there's a strange similarity between =(a: Int, b: Int, c: String) ->= and =(a: Int, b: Int, c:String)=. Indeed, for the Swift compiler, the parameter header of a method / function is nothing more than a tuple:
 
-#+BEGIN_SRC Swift
+#+BEGIN_SRC swift
 // Copied from Paul Robinson's blog, you should read the article:
 // http://www.paulrobinson.net/function-parameters-are-tuples-in-swift/
 
@@ -339,7 +339,7 @@ foo(arguments) // returns 4
 
 This looks cool, doesn't it. But wait a minute.. In this case the function signature is a bit specific. What happens when we add or remove labels. Same with the tuple. Well, lets find out:
 
-#+BEGIN_SRC Swift
+#+BEGIN_SRC swift
 // Lets try with labels:
 func foo2(a a: Int, b: Int, name: String) -> Int {
     return a
@@ -355,15 +355,15 @@ So labelled tuples are supported if the function signature also has labels.
 
 Do we explicitly need to write the tuple into a variable, though?
 
-#+BEGIN_SRC Swift
+#+BEGIN_SRC swift
 foo2((a: 4, b: 3, name: "hello")) // Error
 #+END_SRC
 
 Yeah, bummer, that doesn't work. But what if we get the tuple back from a function call?
 
-#+BEGIN_SRC Swift
+#+BEGIN_SRC swift
 
-func foo(a: Int, _ b: Int, _ name: String) -> Int     
+func foo(a: Int, _ b: Int, _ name: String) -> Int {
     return a
 }
 
@@ -374,11 +374,74 @@ func get_tuple() -> (Int, Int, String) {
 foo(get_tuple()) // Works! returns 4!
 #+END_SRC
 
+#+RESULTS:
+
 Awesome, this works!
+
+We can also use a =typealias= to convert one tuple parameter signature into another one:
+
+#+BEGIN_SRC swift
+func foo(a a: Int, b: Int, name: String) -> Int {
+    return a
+}
+typealias Tp = (a: Int, b: Int, name: String)
+
+// We're leaving out parameter by utilizing a type alias
+foo((1, 2, "test") as Tp)
+#+END_SRC
+
+#+RESULTS:
 
 This has a lot of interesting implications and possibilities. When you plan your types well, you can then move parameters around functions without having to destructure the data.
 
 Even better, for functional programming, you can return a tuple with multiple parameters straight into a function without having to destructure it.
+
+** Tuples to reorder function parameters
+:PROPERTIES:
+:CUSTOM_ID: bananas
+:END:
+
+
+[[https://twitter.com/J7zz][Bernd Ohr]] has a nice example that shows how tuples can be used to reorder function parameters.
+In his example, he's creating a simple =Banana struct=, a function =createBanana=, and a =tuple typealias= which has the same parameters as the function:
+
+#+BEGIN_SRC swift :noweb-ref bananas
+struct Banana { 
+    let size: Int 
+    let color: Int 
+}
+typealias BananaTuple = (size: Int, color: Int)
+func createBanana(size size: Int, color: Int) -> Banana {
+    return Banana(size: size, color: color)
+}
+#+END_SRC
+
+#+RESULTS:
+
+Now, if you call =createBanana= you'll get back a Banana. Both, =createBanana= and the =Banana.init= initializer require the argument order =size, color=: I.e. you can't call them like this: =createBanana(color: 2, size: 3)=.
+
+However, if we call the function with a different Tuple, we can cast it to the correct parameter order:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<bananas>>
+// This will automatically reorder the function parameters
+let aBanana = createBanana( (color: 4, size: 1) as BananaTuple)
+print(aBanana)
+// prints: : Banana(size: 1, color: 4)
+#+END_SRC
+
+#+RESULTS:
+: Banana(size: 1, color: 4)
+
+Or, as an array with differently ordered tuples:
+
+#+BEGIN_SRC swift :noweb strip-export
+<<bananas>>
+let anArray: [BananaTuple] = [(size: 4, color: 1), (color: 2, size: 5)]
+anArray.map(createBanana)
+#+END_SRC
+
+#+RESULTS:
 
 * Tuple impossibilities
 
@@ -412,6 +475,9 @@ func addPoint(point: PointProtocol)
 addPoint((x: 10, y: 20)) // doesn't work.
 #+END_SRC
 
+
+
+
 * Addendum
 
 That's it. I probably forgot the one or other thing. Things may also be wrong. If you find a factual error, or if there's something else I forgot, feel free to [[http://twitter.com/terhechte][contact me]].
@@ -425,5 +491,7 @@ That's it. I probably forgot the one or other thing. Things may also be wrong. I
 **08/12/2015** Updated the *Tuples as function parameters* with a couple more examples and more information.
 
 **08/13/2015** Fixed a couple of bugs..
+
+**10/28/2015** Fixed bugs and added a new section on parameter reordering.
 
 
