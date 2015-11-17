@@ -786,7 +786,7 @@ enum Devices: CGSize {
 }
 #+END_SRC
 
-However, this doesn't compile. CGPoint is not a literal and can't be used as an enum value. Instead, what you need to do is add a type extension for the =StringLiteralConvertible= protocol. The protocol requires us to implement three *initializers* each of them is being called with a =String=, and we have to convert this string into our receiver type (=CGSize=)
+However, this doesn't compile. CGSize is not a literal and can't be used as an enum value. Instead, what you need to do is add a type extension for the =StringLiteralConvertible= protocol. The protocol requires us to implement three *initializers* each of them is being called with a =String=, and we have to convert this string into our receiver type (=CGSize=)
 
 #+BEGIN_SRC swift :prologue "import Foundation; func CGSizeFromString(a: String) -> CGSize { return NSSizeFromString(a)}" :noweb-ref cgsizenum
 extension CGSize: StringLiteralConvertible {
@@ -820,7 +820,7 @@ enum Devices: CGSize {
 }
 #+END_SRC
 
-This, finally, allows us to use our =CGPoint= enum. Keep in mind that in order to get the actual CGPoint value, we have to access the =rawvalue= of the enum.
+This, finally, allows us to use our =CGSize= enum. Keep in mind that in order to get the actual CGSize value, we have to access the =rawvalue= of the enum.
 
 #+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation; func CGSizeFromString(a: String) -> CGSize { return NSSizeFromString(a)}"  
 <<cgsizenum>>
