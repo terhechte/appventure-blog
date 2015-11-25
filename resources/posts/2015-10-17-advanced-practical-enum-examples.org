@@ -340,7 +340,7 @@ enum UserAction {
   case Restart(time: NSDate?, intoCommandLine: Bool)
 }
 
-// Or image you're implementing a powerful text editor that allows to have
+// Or imagine you're implementing a powerful text editor that allows you to have
 // multiple selections, like Sublime Text here:
 // https://www.youtube.com/watch?v=i2SVJa2EGIw
 enum Selection {
