@@ -583,7 +583,7 @@ protocol AccountCompatible {
 
 #+RESULTS:
 
-You could easily fulfill this protocol with a =struct=, but in the context of your application, an =enum= is the more sensible approach. However, you can't add properties like =var remainingFunds: Int= to an =enum=, so would you model that? The answer is actually easy, you can use associated values for this:
+You could easily fulfill this protocol with a =struct=, but in the context of your application, an =enum= is the more sensible approach. However, you can't add properties like =var remainingFunds: Int= to an =enum=, so how would you model that? The answer is actually easy, you can use associated values for this:
 
 #+NAME: feature-image
 #+BEGIN_SRC swift :noweb strip-export :noweb-ref accountthing :export-image true :export-template template4
