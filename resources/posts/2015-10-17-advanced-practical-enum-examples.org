@@ -648,7 +648,7 @@ print ("remove 2: ", try? account.removeFunds(55))
 
 As you can see, we implemented all the protocol requirements by storing our values within our =enum cases=. A very nifty side effect of this is, that now you can test for an empty account with a simple pattern match all over your code base. You don't have to see whether the remainingFunds are zero.
 
-We're also nesting a =ErrorType= compatible =enum= in the *Account* enum so that we can use Swift 2.0's new error handling. This is explained in more detail in the [[#errortype][*Practical Use Cases*]] section.
+We're also nesting an =ErrorType= compatible =enum= in the *Account* enum so that we can use Swift 2.0's new error handling. This is explained in more detail in the [[#errortype][*Practical Use Cases*]] section.
 
 
 ** Extensions
@@ -894,7 +894,7 @@ enum Device {
 
 #+RESULTS:
 
-In the above example, we used a failable initializer. However normal initializers work just as well:
+In the above example, we used a failable initializer. However, normal initializers work just as well:
 
 #+BEGIN_SRC swift
 enum NumberCategory {
@@ -968,12 +968,12 @@ extension Trade  {
 }
 #+END_SRC
 
-This still has the downside that you need to mirror your =enum= via a =NSObject= based type on the Objective-C side (or you just go and use an =NSDictionary=), but if you ever end up in a situation where you *need* to access an enum with associated values from Objective-C, this is a way to do it.
+This still has the downside that you need to mirror your =enum= via an =NSObject= based type on the Objective-C side (or you could just go and use an =NSDictionary=), but if you ever end up in a situation where you *need* to access an enum with associated values from Objective-C, this is a way to do it.
 
 
 ** Enum Internals
 
-[[http://ericasadun.com/2015/07/12/swift-enumerations-or-how-to-annoy-tom/][Erica Sadun wrote a great blog post explaining the internals]] of =enums= when you look at the bits and bytes behind the glossy syntax. This is something you should never do in production code, but still interesting to know. We'll only mention one of her findings here, go and read her original article for more.
+[[http://ericasadun.com/2015/07/12/swift-enumerations-or-how-to-annoy-tom/][Erica Sadun wrote a great blog post explaining the internals]] of =enums= when you look at the bits and bytes behind the glossy syntax. This is something you should never do in production code, but still interesting to know. We'll only mention one of her findings here, but go and read her original article for more.
 
 #+BEGIN_QUOTE Erica Sadun
 Enums are typically one byte long. [...] If you want to get very very silly, you can build an enumeration with hundreds of cases, in which case the enum takes up 2 or more bytes depending on the minimum bit count needed. 
@@ -1004,7 +1004,7 @@ The Process enum contains the command line arguments of the current process (=Pr
 
 We've already seen a couple of useful =enums= in the [[#basicexamples][previous feature descriptions.]] Examples would be =Optional=, =Either=, =FileNode=, or the binary tree. However, there're many more scenarios where using an =enum= wins over a =struct= or =class=. Usually, if your problem domain can be divided into a finite set of distinctive categories, an =enum= may be the right choice. Even only two cases are a perfectly valid scenario for an enum, as the Optional and Either types show.
 
-Here are, then, some more examples of practical =enum= usage to fuel your creativity.
+Here, then, are some more examples of practical =enum= usage to fuel your creativity.
 
 ** Error Handling
 :PROPERTIES: 
@@ -1017,7 +1017,7 @@ One of the prime examples of Enum usage in Swift is, of course, the new error ha
 Swift enumerations are particularly well suited to modeling a group of related error conditions, with associated values allowing for additional information about the nature of an error to be communicated.
 #+END_QUOTE
 
-As an example, we have a look at the popular [[https://github.com/thoughtbot/Argo][JSON Decoding library Argo]]. When their JSON Decoding fails, it can fail due to two primary reasons.
+As an example, have a look at the popular [[https://github.com/thoughtbot/Argo][JSON Decoding library Argo]]. When their JSON Decoding fails, it can fail due to two primary reasons.
 1. The JSON Data lacks a key which the end model requires (say your model has a property =username= and somehow the JSON lacks that)
 2. There's a type mismatch. Say instead of a String the =username= property in the JSON contains an =NSNull= [fn:: If you ever used JSON in an app, you may well have run into this issue once].
 
@@ -1146,7 +1146,7 @@ Another example of this would be Currency conversion. Also, mathematical symbols
 
 ** Games
 
-Enums are a great use cases for games, where many entities on screen belong to a specific family of items (enemies, obstacles, textures, ...). In comparison to native iOS or Mac apps, games oftentimes are a tabula rasa. Meaning you invent a new world with new relationships and new kinds of objects, whereas on iOS or OSX you're using a well-defined world of UIButtons, UITableViews, UITableViewCells or NSStackView.
+Enums are a great use case for games, where many entities on screen belong to a specific family of items (enemies, obstacles, textures, ...). In comparison to native iOS or Mac apps, games oftentimes are a tabula rasa. Meaning you invent a new world with new relationships and new kinds of objects, whereas on iOS or OSX you're using a well-defined world of UIButtons, UITableViews, UITableViewCells or NSStackView.
 
 What's more, since Enums can conform to protocols, you can utilize protocol extensions and protocol based programming to add functionality to the various enums that you defined for your game. Here's a short example that tries to display such a hierarchy:
 
@@ -1232,7 +1232,7 @@ Airspeed Velocity also wrote a great post about the implementation of a red blac
 
 
 [[http://ericasadun.com/2015/10/19/sets-vs-dictionaries-smackdown-in-swiftlang/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][This is a very, very smart solution that Erica Sadun came up with]]. Basically whenever you'd use a dictionary of attribute keys as a way to configure an item,
-you'd instead use a =Set= of enums with associated values. That way, the type checker can conform that your configuration values are of the correct type.
+you'd instead use a =Set= of enums with associated values. That way, the type checker can confirm that your configuration values are of the correct type.
 
 [[http://ericasadun.com/2015/10/19/sets-vs-dictionaries-smackdown-in-swiftlang/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][For more details, and proper examples, check out her original blog post.]]
 
@@ -1262,7 +1262,7 @@ If you also feel that this is how we should be able to deconstruct enums, there'
 ** Equatable
 
 Enums with associated values do not conform to the equatable protocol. That's a pity because it makes a lot of things much more cumbersome and verbose than they need to be.
-The underlying reason is probably that associated values are just tuples internally and tuples do not conform to equatable. However, for a limited subset of cases, namely those where all associated value / typle types conform to equatable, I think, the default case should be that the compiler automatically also generates the equatable extension.
+The underlying reason is probably that associated values are just tuples internally and tuples do not conform to equatable. However, for a limited subset of cases, namely those where all associated value / tuple types conform to equatable, I think the default case should be that the compiler automatically also generates the equatable extension.
 
 #+BEGIN_SRC swift
 // Int and String are Equatable, so case Ex should also be equatable.
