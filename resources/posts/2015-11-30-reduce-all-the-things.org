@@ -78,7 +78,7 @@ combinator(3, 3) { return 3 + 3 } = 6
 
 The *combinator* function will be called once for each item in the list =[1, 2, 3]=. The state will be kept in the *accumulator* variable which is just an Integer.
 
-Let's start re-implementing some of our other, trusted, functional programming friends. In order to keep things simple for now, all these functions will operate on =Int= or =Optional<Int>=; i.e. we will ignore generics in here.
+Let's start re-implementing some of our other, trusted, functional programming friends. In order to keep things simple for now, all these functions will operate on =Int= or =Optional<Int>=; i.e. we will ignore generics in here. Also, keep in mind that the implementations below exist to explain the behaviour of =reduce=. The native Swift implementations are usually much faster compared to the reduce versions below[fn:: For reasons why, [[http://airspeedvelocity.net/2015/08/03/arrays-linked-lists-and-performance/][have a look at this blog post]]]. Reduce shines in a different set of problems, which will be explained further below.
 
 ** Map
 
@@ -127,17 +127,17 @@ func rmap(elements: [Int], transform: (Int) -> Int) -> [Int] {
 
 In order to better understand =reduce= we will now go on and also implement =flatMap= and =filter=.
 #+BEGIN_SRC swift :prologue "import Foundation"
-func rflatMap(elements: [Int?], transform: (Int) -> Int) -> [Int] {
+func rflatMap(elements: [Int], transform: (Int) -> Int?) -> [Int] {
     return elements.reduce([Int](), 
-       combine: { guard let m = $1 else { return $0 } 
-                  return $0 + [transform(m)]})
+       combine: { guard let m = transform($1) else { return $0 } 
+                  return $0 + [m]})
 }
-print(rflatMap([1, nil, 3, 4], transform: { $0 * 2}))
-// [2, 6, 8]
+print(rflatMap([1, 3, 4], transform: { guard $0 != 3 else { return nil }; return $0 * 2}))
+// [2, 8]
 #+END_SRC
 
 #+RESULTS:
-: [2 (\, 6) (\, 8)]
+: [2 (\, 8)]
 
 The main difference is that we're adding a =guard= to make sure the optional contains a value.
 
@@ -279,7 +279,7 @@ font-weight: normal;
 
 As you can see, the =reduce= version' performance is very close to the mutating for loop and more than twice as fast as the chaining operation.
 
-However, in other situations, where list operations benefit from slicing and laziness, chained operation can greatly outperform =reduce=. Consider the following example:
+However, in other situations, chained operation can greatly outperform =reduce=. Consider the following example:
 
 #+BEGIN_SRC swift
 Array(0...100000).map({ $0 + 3}).reverse().prefix(3)
@@ -294,9 +294,11 @@ Array(0...100000).reduce([], combine: { (var ac: [Int], r: Int) -> [Int] in
 // 2.927 Seconds
 #+END_SRC
 
-In this case, the =reduce= code has to iterate over *all* items in the range 0-100000, while the map/reverse code can utilize Swift's lazy collections to only process the actual required three last items.
+Here, we have a stark performance difference of 0.027s for the chained operation vs. 2.927s for the reduce operation, what's happening here?[fn:: In an earlier version of this post I was falsely assuming Swift's laziness feature to be the culprit of the difference. [[https://www.reddit.com/r/swift/comments/3uv1hy/reduce_all_the_things_alternatives_to_mapfilter/][Thanks to this Reddit thread for pointing out my mistake]]]
 
-When you're replacing a set of operations with =reduce=, always keep mind whether reduction is indeed a good use case for the situation in question.
+foBrowsing on Reddit points out that reduce's semantics means that the parameters to the closure (if mutated) are copied once for every element in the underlying sequence. In our case, this means that the *accumulator* parameter =ac= will be copied for each item in our 0...100000 range. A better, more detailed explanation of this can be [[http://airspeedvelocity.net/2015/08/03/arrays-linked-lists-and-performance/][found in this Airspeedvelocity blog post]].
+
+So, when you're replacing a set of operations with =reduce=, always keep mind whether reduction is indeed a good use case for the situation in question.
 
 We can now go back to our initial count & average problem and try to solve it with =reduce=.
 
@@ -348,6 +350,8 @@ We also defined a =typealias= *Acc* within the =func= in order to simplify the t
 This was a short overview of the power behind the =reduce= method. It is particularly helpful if you end up chaining a lot of functional methods together, *or* when output shape of your data differs from the input shape. I'll end this post with more reduce examples to give you inspirations for various use cases where reduce can easily be applied:
 
 * More Examples
+
+The following examples display additional =reduce= use cases. Keep in mind that they're educational in nature. I.e. they exist to stress the usage of reduce, not to be general solutions for your codebase. Most of the examples can be written in a better and faster way (i.e. by using extensions or generics). There are better implementations of these examples in various Swift libraries such as [[https://github.com/oisdk/SwiftSequence][SwiftSequence]] or [[https://github.com/ankurp/Dollar.swift][Dollar.swift]]
 
 ** Minimum
 
@@ -469,3 +473,8 @@ This function uses a more complicated =accumulator= consisting out of a stack, t
 
 
 
+* Changes
+**12/01/2015**
+    - Fixed the =rFlatMap= type signature
+    - Added additional explanations for the code examples
+    - Fixed issue where performance differences were attributed to laziness
