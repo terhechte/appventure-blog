@@ -886,8 +886,9 @@ enum Device {
     init?(term: String) {
       if term == "iWatch" {
           self = .AppleWatch
+      } else {
+          return nil
       }
-      return nil
     }
 }
 #+END_SRC
