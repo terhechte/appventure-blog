@@ -31,12 +31,12 @@ The expected result in the example would be 3 persons , as we have three persons
 #+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation"
 <<data>>
 func infoFromState(state state: String, persons: [[String: AnyObject]]) 
-     -> Float {
+     -> Int {
     return persons.flatMap( { $0["city"]?.componentsSeparatedByString(", ").last })
            .filter({$0 == state})
            .count
 }
-personsFromState(state: "CA", persons: persons)
+infoFromState(state: "CA", persons: persons)
 //#+RESULTS:
 //: 3
 #+END_SRC
