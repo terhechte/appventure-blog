@@ -270,7 +270,7 @@ loop: while true {
 
 Our =e= event structure is - again - a =UnsafeMutablePointer=, so we have to access the actual structure via the =memory= property. The =Expose= event means that the window is visible, so we have to re-draw it. Our drawing is very simple: We're using the =XFillRectangle= call to draw a small black box, and the =XDrawString= call to draw our initial =msg= text in the window at position 10, 70. Please note that I don't know whether X11 expects unicode or ascii, so the =Int32(msg.characters.count)= is probably wrong, but it works in this example.
 
-The other event, =KeyPress= allows us to break the outer =while= looop and quit the app once the user enters a key.
+The other event, =KeyPress= allows us to break the outer =while= loop and quit the app once the user enters a key.
 
 * Running It
 
