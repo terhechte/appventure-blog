@@ -11,7 +11,7 @@ Most tuple explanations concentrate on three tuple use cases (pattern matching, 
 
 You'll probably already know most of this, so I'll keep it brief.
 
-Tuples allow you to combine different types into one. Tuples are immutable and even though they look like sequences they aren't sequences as there's no direct way of looping over the contents. We'll start with a quick primer on how to create and use tuples.
+Tuples allow you to combine different types into one. Tuples are value types and even though they look like sequences they aren't sequences as there's no direct way of looping over the contents. We'll start with a quick primer on how to create and use tuples.
 
 ** Creating and Accessing Tuples
 
