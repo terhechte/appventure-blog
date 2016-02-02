@@ -100,16 +100,25 @@
                   {:key :property :name "og:url" :value (str "http://appventure.me" (:url metadata))}
                   {:key :name :name "twitter:title" :value (:title metadata)}
                   {:key :name :name "twitter:description" :value (:description metadata)}]
-         entries (if (:feature-image metadata)
+
+         entries (if (not (nil? (:feature-image metadata)))
                    ;; if we have a feature image, use the big image template
                    (into entries [{:key :name :name "twitter:card" :value "summary_large_image"}
                                    {:key :name :name "twitter:image" :value (str "http://appventure.me" (:feature-image metadata))}
                                    {:key :property :name "og:image" :value (str "http://appventure.me" (:feature-image metadata))}
                                    ])
                    ;; otherwise, use the description template
-                   (into entries [{:key :name :name "twitter:card" :value "summary"}
-                                   {:key :name :name "twitter:image" :value "http://appventure.me/img/ez@2x.png"}
-                                   {:key :property :name "og:image" :value "http://appventure.me/img/ez@2x.png"}])
+                   (if (not (nil? (:static-feature-image metadata)))
+                     ;; if we have a feature image, use the big image template
+                     (into entries [{:key :name :name "twitter:card" :value "summary_large_image"}
+                                     {:key :name :name "twitter:image" :value (:static-feature-image metadata)}
+                                     {:key :property :name "og:image" :value (:static-feature-image metadata)}
+                                     ])
+                     ;; otherwise, use the description template
+                     (into entries [{:key :name :name "twitter:card" :value "summary"}
+                                     {:key :name :name "twitter:image" :value "http://appventure.me/img/ez@2x.png"}
+                                     {:key :property :name "og:image" :value "http://appventure.me/img/ez@2x.png"}])
+                     )
                    )]
     (enlive/clone-for [{:keys [key name value]} entries]
       (enlive/do->
