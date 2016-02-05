@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/terhechte
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://appventure.me
+  * I am terhechte (https://keybase.io/terhechte) on keybase.
+  * I have a public key with fingerprint 9637 08F2 4838 F953 6D90  FA3F 7CD9 6B05 258B 7980
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0101f7b4a4526f85029c5d5c94ad1510d93cd4d8107a50ece080f120d1a39bb387840a",
+            "fingerprint": "963708f24838f9536d90fa3f7cd96b05258b7980",
+            "host": "keybase.io",
+            "key_id": "7cd96b05258b7980",
+            "kid": "0101f7b4a4526f85029c5d5c94ad1510d93cd4d8107a50ece080f120d1a39bb387840a",
+            "uid": "f96570097e06183d32de656ae42e1119",
+            "username": "terhechte"
+        },
+        "service": {
+            "hostname": "appventure.me",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1454682867,
+    "expire_in": 157680000,
+    "prev": "293f166905389efe90146198c0ba78b37aeea432ac1b71d8d5329330998fe400",
+    "seqno": 5,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.49
+Comment: https://keybase.io/crypto
+
+yMIoAnicrVJbSBVBGD5qWSpZD0GQaLWFUp1qZi+zMweELkY30Ay60eUwuzN7zqbt
+nnZXTyonujxZQgUWGV2wolAJIoxK6R4RRRI9RBeEyoegC5pFBNFlVuqtx+Zl+P/5
+vm++/+O/Oy4nkp91fkh6W5o9dCfr4a22usia7oufmyTDZQ1SrEmq4SMXr2XcD+I1
+NpNiEoAAWrqhUlWTkYU1IBNTY5pJVMqgBgEjislUhiHQqQa4yQEGFpQBg1QhhqFg
+HauASlHJsp0E91Ke7QRCliBFB9iSVaxgi2gKYgRYVLF0kxFkAE3WsKETDAQx6foh
+Q5gzqM/n2q7oiSI+Yu8f+P/su25EziJI0wEgOgcIYoUpMuNIQ5SrMocQkhDoc8+h
+W7lAB9xLcjMZcCkTlUS73jZ5mGw4yh8ITaXquRPUeXyuqKNSynMD13RrxVMyCFJ+
+LKQGDakQm+ZG/I9K3LAdJpIUjHru+bbrSDEokGZgh7JQ1VSEZYz0qMS3p2yPx+0Q
+oekIA3HCf3i9kJSJYkGECNAUTLjFCYAqggSbwKA6NhSdck5VRaYmNHTIMNMUQVEA
+IdjiKghz9vk2x5VimrBJE0LStxMODQeSMrdvbhwVycqP5I7ODjcskp834e/etd0c
+82vjpcIfFQfWlw1Ouq+unbf82YLKsg3VJ4bl7OKW4l0+ut8/Xb+6cGm7u7R1/OaV
+PQ0dZ3d860wON73KP5EunTpz8enq2kUn9zfPaEkPkuJP32evetBYYsVWgJasslVo
+RldiXf+TgrE39h0cXnLjcjqTeN28d0XuKXaGJtWO54V5FQX74s2VPR4pL0n0FK17
+tLsos/1pxfdz9reBvT/Jl7Mocq3wcOWWicmDmyI7X3YW5Zxb8Lh3OEhfO9LxptS5
+jn8YpdmXjw/seVfc93XWlaOHrvPIlJyrs7yqqo4LbS/aP76vTjS2tn4+Njl3Wd+o
+Ocd7M/PLp9+LFXSv7moERws+oM7UtN+Etzj3
+=nWCo
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/terhechte
+
+==================================================================
