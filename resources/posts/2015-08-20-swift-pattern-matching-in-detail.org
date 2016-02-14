@@ -10,6 +10,7 @@ The =Switch= statement in Swift can do much more though. In the following tutori
 This Blog Post is also available in the following languages:
 
 - [[http://qiita.com/mono0926/items/f2875a9eacef53e88122][Japanese]] (Thanks to [[https://twitter.com/_mono][M Ono]]!)
+- [[http://swift.gg/2015/10/27/swift-pattern-matching-in-detail][Chinese]] (Thanks to [[http://swift.gg/][SwiftGG]]!)
 
 * Diving In
 The main feature of =switch= is of course pattern matching, the ability to destructure values and match different switch cases based on correct match of the values to the cases. 
