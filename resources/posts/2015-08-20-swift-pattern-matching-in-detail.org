@@ -3,14 +3,16 @@
 #+keywords: feature lisp swift optional scala simple optionals switch chaining for pattern matching clojure haskell
 #+description: In this post, we'll have a look at Pattern Matching in Swift in terms of the 'switch', 'for', 'if', and 'guard' keywords. We'll have a look at the basic syntax and at best practices and helpful examples.
 
+#+BEGIN_HTML
+<h6><a href="http://swift.gg/2015/10/27/swift-pattern-matching-in-detail/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
+<h6><a href="http://qiita.com/mono0926/items/f2875a9eacef53e88122">This post is also available in <b>🇯🇵Japanese</b></a><span> Thanks to </span><a href="https://twitter.com/_mono">M Ono</a></h6>
+#+END_HTML
+
 Among the new features that Swift offers to Objective-C programmers is one that disguises itself like a boring old man while it offers huge potential for forming elegant solutions to otherwise unwieldy sets of nested branches. I'm, of course talking about the =switch= statement that many Objective-C programmers probably consider as a clunky syntax device which is most entertaining when used as [[http://en.wikipedia.org/wiki/Duff's_device][Duff's Device]], yet usually offers little to no advantages over multiple if statements.
 
 The =Switch= statement in Swift can do much more though. In the following tutorial, I will try to explain the various usages for these new features in more detail. I'll mostly ignore those solutions where there's no benefit over how =switch= works in Objective-C or C. The basics of this post were actually written in July 2014, but so many of my patterns crashed the compiler back then that I postponed writing it until there's better support.
 
 This Blog Post is also available in the following languages:
-
-- [[http://qiita.com/mono0926/items/f2875a9eacef53e88122][Japanese]] (Thanks to [[https://twitter.com/_mono][M Ono]]!)
-- [[http://swift.gg/2015/10/27/swift-pattern-matching-in-detail][Chinese]] (Thanks to [[http://swift.gg/][SwiftGG]]!)
 
 * Diving In
 The main feature of =switch= is of course pattern matching, the ability to destructure values and match different switch cases based on correct match of the values to the cases. 

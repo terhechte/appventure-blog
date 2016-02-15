@@ -4,6 +4,10 @@
 #+description: Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
 #+OPTIONS: toc:nil ^:{} 
 
+#+BEGIN_HTML
+<h6><a href="http://swift.gg/2015/09/11/optional-throw-swift/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
+#+END_HTML
+
 Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
 
 In Swift 1.x, all we had for error handling were optionals and =NSError=. Which is [[https://github.com/antitypical/Result][why many people adopted =Either= / =Result= types]] as they can be found in [[https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Either.html][other]] [[http://www.scala-lang.org/api/2.9.3/scala/Either.html][programming]] languages:

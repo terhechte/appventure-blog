@@ -5,6 +5,10 @@
 #+description: In this post I'll examine the Swift reflection API, see how fast it is, and will try to show use cases where it can be applied successfully.
 #+OPTIONS: toc:t 
 
+#+BEGIN_HTML
+<h6><a href="http://swift.gg/2015/11/23/swift-reflection-api-what-you-can-do/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
+#+END_HTML
+
 Even though Swift stresses strong types, compile time safety, static dispatch it still offers a Reflection mechanism as part of the standard library. You may already have seen it in various blog posts or projects like [[http://design.featherless.software/enumerating-tuple-values-swift/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][here (Tuples)]], [[http://design.featherless.software/enumerate-messages-midipacket-swift-reflection/][here (Midi Packets)]] or [[https://github.com/terhechte/corevalue][here (Core Data).]] Maybe you're interested in using in one of your projects, or you may want to better understand the problem domains on which reflection can be applied. This is an overview of the possibilities of the Swift Reflection API based a talk I held recently at the [[http://www.macoun.de][Macoun conference]] in Frankfurt, Germany.
 
 * API Overview

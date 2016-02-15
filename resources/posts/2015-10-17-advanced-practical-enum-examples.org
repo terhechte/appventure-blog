@@ -4,6 +4,10 @@
 #+summary: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 #+description: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 
+#+BEGIN_HTML
+<h6><a href="http://swift.gg/2015/11/20/advanced-practical-enum-examples/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
+#+END_HTML
+
 When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 
 Similarly to the [[http://appventure.me/2015/08/20/swift-pattern-matching-in-detail/][=switch= statement]], =enum='s in Swift may at first glance look like a slightly improved variant of the well known *C* =enum= statement. I.e. a type that allows you to define that something is "one of something more general".  However, upon close introspection, the particular design decisions behind Swift's enums allow it to be used in a much wider range of practical scenarios than plain *C* enums. In particular, they're great tools to clearly manifest the intentions of your code.
