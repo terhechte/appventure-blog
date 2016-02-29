@@ -9,7 +9,7 @@
 
 * Step One: Adding a header
 
-The first obstacle is already a tricky one. =LibMobileGestalt= doesn't offer a header as it is a private library. So how do you tell Swift / the linker that the function you want to call will indeed exist at compile time. At first glance it seems that pure Swift doesn't offer any facilities for this (if you're impatient, there's another solution below ;-), so we can always resort back to the [[https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html][Brdiging Header]] that Apple introduced to easily bridge the Swift and the Objective-C/C worlds. [[https://bohemianpolymorph.wordpress.com/2014/07/11/manually-adding-a-swift-bridging-header/][Here is]] a short guide on how to add a bridging header to your project. Basically add a new header file, and add the path to your target's Build Settings under =Objective-C Bridging Header=.
+The first obstacle is already a tricky one. =LibMobileGestalt= doesn't offer a header as it is a private library. So how do you tell Swift / the linker that the function you want to call will indeed exist at compile time. At first glance it seems that pure Swift doesn't offer any facilities for this (if you're impatient, there's another solution below ;-), so we can always resort back to the [[https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html][Bridging Header]] that Apple introduced to easily bridge the Swift and the Objective-C/C worlds. [[https://bohemianpolymorph.wordpress.com/2014/07/11/manually-adding-a-swift-bridging-header/][Here is]] a short guide on how to add a bridging header to your project. Basically add a new header file, and add the path to your target's Build Settings under =Objective-C Bridging Header=.
 
 Then, add the following code to your header:
 
@@ -59,7 +59,7 @@ A type for propagating an unmanaged object reference.
 When you use this type, you become partially responsible for keeping the object alive.
 #+END_QUOTE
 
-Of course, we're getting a value from the Core Foundation world where ARC does not know how to manage the memory. Objective-C uses the =__bridge= keyword to manage this, and in Swift it smartly changes the type so that we definitely don't forget that this variable's memory is currently not managed. [[http://nshipster.com/unmanaged/][NSHipster]], and [[https://developer.apple.com/library/prerelease/ios/documentation/Swift/Reference/Swift_Unmanaged_Structure/index.html][Apple]] have more documentation for this. What we'll do is call the =takeReaintedValue= method:
+Of course, we're getting a value from the Core Foundation world where ARC does not know how to manage the memory. Objective-C uses the =__bridge= keyword to manage this, and in Swift it smartly changes the type so that we definitely don't forget that this variable's memory is currently not managed. [[http://nshipster.com/unmanaged/][NSHipster]], and [[https://developer.apple.com/library/prerelease/ios/documentation/Swift/Reference/Swift_Unmanaged_Structure/index.html][Apple]] have more documentation for this. What we'll do is call the =takeRetainedValue= method:
 
 #+BEGIN_SRC Swift
 guard let chipInfo = MGCopyAnswer("HardwarePlatform")
