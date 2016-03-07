@@ -406,13 +406,13 @@ enum Wearable {
     case Helmet(weight: Weight, armor: Armor)
     func attributes() -> (weight: Int, armor: Int) {
        switch self {
-         case .Helmet(let w, let a): return (weight: w.rawValue * 2, armor: w.rawValue * 4)
+         case .Helmet(let w, let a): return (weight: w.rawValue * 2, armor: a.rawValue * 4)
        }
     }
 }
 let woodenHelmetProps = Wearable.Helmet(weight: .Light, armor: .Light).attributes()
 print (woodenHelmetProps)
-// prints "(2, 4)"
+// prints "(2, 8)"
 #+END_SRC
 
 #+RESULTS:
@@ -511,8 +511,8 @@ The definition is a lot clearer now. Indeed, if we add associated values and nes
 
 #+BEGIN_SRC  swift
 // Struct Example
-struct Point { let x: Int, let y: Int }
-struct Rect { let x: Int, let y: Int, let width: Int, let height: Int }
+struct Point { let x: Int, y: Int }
+struct Rect { let x: Int, y: Int, width: Int, height: Int }
 
 // Enum Example
 enum GeometricEntity {
@@ -567,7 +567,7 @@ enum Trade: CustomStringConvertible {
    }
 }
 
-let action = Trade.Buy
+let action = Trade.Buy.description
 print("this action is \(action)")
 // prints: this action is We're buying something
 #+END_SRC
