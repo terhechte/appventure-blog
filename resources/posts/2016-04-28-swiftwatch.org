@@ -1,0 +1,37 @@
+#+title: SwiftWatch
+#+tags: swift cocoa ios
+#+keywords: swift hackernews reddit designernews lamernews socialnews swiftlang programming community post vote comment
+#+summary: Introducing SwiftWatch, a place to share links to interesting Swift resources like tutorials, blog posts, GitHub projects or more.
+#+description: Introducing SwiftWatch, a place to share links to interesting Swift resources like tutorials, blog posts, GitHub projects or more.
+#+OPTIONS: toc:nil
+
+And now for something slightly different. I'm not sure how others perceive this, but I find it very difficult to keep on track of all the exciting developments in the Swift community. There're so many fascinating GitHub projects, valuable conference talks, educational blog posts, insightful Twitter discussions and fantastic newsletters that it is hard to keep yourself updated on recent developments. To make matters worse, the scope of Swift is also expanding from iOS/watchOS/tvOS/macOS development to Linux server development and now even Android development.
+
+There're several great [[https://twitter.com/SwiftSandbox][Swift]] & [[https://iosdevweekly.com/issues/245?#start][iOS]] newsletters that remedy this situation in part, but they only appear once a week and usually showcase a limited, curated selection of what happened during the week. There's also the [[https://www.reddit.com/r/swift/][reddit Swift]] community, but the myriad of subreddits (like iOS, Mac, programming, etc), again, requires the visiting of multiple different locations in order to get an overview [fn:: Alternatively, one can sign up on reddit and meticulously manage one's subreddit subscriptions, but not everybody does that].
+
+After feeling constantly overwhelmed and underinformed, I decided to try to do something about this. I'm an avid reader of [[http://news.ycombinator.com][Hacker News]], and, to me, it feels as if what's missing is a place like Hacker News [fn:: or LamerNews or Designer News or Product Hunt] but solely for everything Swift. A place to share interesting Swift tidbits and (maybe) discuss them. 
+
+So without further ado, let me introduce [[http://swiftwatch.net][*SwiftWatch*]]:
+
+#+BEGIN_HTML
+<div align="center">
+<a href="http://swiftwatch.net">
+<img src="/img-content/swiftwatch.png" srcset="/img-content/swiftwatch@2x.png 2x" style="box-shadow: 6px 6px 32px rgba(0, 0, 0, 0.5); border-radius: 4px;" /><br/>
+<br/>
+</a>
+<br/>
+<br/>
+</div>
+#+END_HTML
+
+[[http://swiftwatch.net][SwiftWatch]] tries to be this place. I'd not call it a community or a social network. Rather, it is a place to share interesting Swift news. You have to register with a Twitter or Github account, in order to (ever so slightly) decrease the likelihood of spam. Commenting is possible, but I don't envision this site to be a source of great discussions. Instead, I'd be more than happy if people start using it to post interesting Swift developments.
+
+If you have any feedback regarding Swiftwatch, feel free [[http://swiftwatch.net][to contact me on Twitter.]]
+
+As you can see, [[https://twitter.com/renelindhorst][@renelindhorst]] [fn:: Thanks Rene!] and I have already been feeding the page with a couple of links which we deemed interesting enough to post them. 
+
+The site is based on [[http://monocle.io][Monocle]], an open source link sharing platform. I'd have rather developed something in Swift but that'd have consumed too much time. If SwiftWatch survives (i.e. if it gains decent traction) then I'd seriously consider rewriting the guts in Swift3 + one of those nice Web Frameworks (like [[https://github.com/PerfectlySoft/Perfect][Perfect]]).
+
+Thanks for reading!
+
+PS: In case you're wondering "SwiftWatch" is named after the peculiar habbit of [[https://en.wikipedia.org/wiki/Birdwatching][birdwatching,]] "a form of wildlife observation in which the observation of birds is a recreational activity". I found this a particularly good fit as the core objective of this site is quite similar.
