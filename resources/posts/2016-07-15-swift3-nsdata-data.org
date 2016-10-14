@@ -4,6 +4,8 @@
 #+keywords: swift doom wad lumps data nsdata swift3 binary bytes
 #+summary: Swift 3 replaces NSData with the Data value type. Implement a Doom Wad file parser with the new Data type to understand the differences.
 #+description: Swift 3 replaces NSData with the Data value type. Implement a Doom Wad file parser with the new Data type to understand the differences.
+#+OPTIONS: ^:nil
+#+OPTIONS: _:nil
 #+OPTIONS: toc:nil
 
 * From NSData to Data in Swift 3
@@ -307,12 +309,12 @@ An ASCII string defining the lump's name. Only the characters A-Z (uppercase), 0
 
 Note the last sentence. In C, a String is terminated with the null character (=\0=). This signifies to the system that the memory for the string ends here. Doom saves space by having an optional null character. When the string is less than 8 bytes long, it will contain a null character, when it is of the max length (8 bytes) the 8th byte will be the final character, not the null character. 
 
-|       | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | | |
-|-------+---+---+---+---+---+---+---+---+---|
-| Short | I | M | P | 0 | 0 | 0 | 0 | 0 | | |
-| Long  | F | L | O | O | R | 4 | _ | 5 | | |
+|       | 0 | 1 | 2 | 3    | 4    |    5 | 6    |    7 |   |
+|-------+---+---+---+------+------+------+------+------+---|
+| Short | I | M | P | =\0= | =\0= | =\0= | =\0= | =\0= | # |
+| Long  | F | L | O | O    | R    |    4 | _    |    5 | # |
 
-See above for an example. The Short name has a null character after the last letter in position 3, the long name does not have a null character, instead the last letter is the *5* from the name *FLOOR4_5*. The =|= signifieds the beginning of the next item / piece of memory.
+See above for an example. The Short name has a null character after the last letter in position 3, the long name does not have a null character, instead the last letter is the *5* from the name *FLOOR4_5*. The =#= signifies the beginning of the next item / piece of memory.
 
 Before we venture into supporting this, lets first take care of the easier part, reading the start and size.
 
