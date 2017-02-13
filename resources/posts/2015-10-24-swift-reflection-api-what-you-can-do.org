@@ -104,7 +104,7 @@ There's also a =typealias= for the child elements of a =Mirror=:
 public typealias Child = (label: String?, value: Any)
 #+END_SRC
 
-So each child consists out of an optional *label* and a *value* of type =Any=. Why would the label be an =Optional=? If you think about it, it makes sense, not all of the structures that are supported by reflection have children with names. A =struct= has the property's name as the label, but a Collection only has indexes, not names. Tuples, also, may not have a name for their entries.
+So each child consists out of an optional *label* and a *value* of type =Any=. Why would the label be an =Optional=? If you think about it, it makes sense, not all of the structures that are supported by reflection have children with names. A =struct= has the property's name as the label, but a Collection only has indexes, not names. Tuples are a little bit special. In Swift values in tuple could have optional labels. Doesn't matter if value in tupple is labeled or not, in reflection tuple will have labels ".0", ".1" and so on.
 
 Next up is the =AncestorRepresentation= =enum= [fn:: I've shortened the documentation a bit]:
 
