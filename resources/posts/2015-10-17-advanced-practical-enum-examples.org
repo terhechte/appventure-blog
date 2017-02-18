@@ -290,7 +290,7 @@ typealias Config = (RAM: Int, CPU: String, GPU: String)
 // Each of these takes a config and returns an updated config
 func selectRAM(_ config: Config) -> Config {return (RAM: 32, CPU: config.CPU, GPU: config.GPU)}
 func selectCPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: "3.2GHZ", GPU: config.GPU)}
-func selectGPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: "3.2GHZ", GPU: "NVidia")}
+func selectGPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: config.CPU, GPU: "NVidia")}
 
 enum Desktop {
    case Cube(Config)
