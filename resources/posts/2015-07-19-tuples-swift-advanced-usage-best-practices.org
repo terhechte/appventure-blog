@@ -52,7 +52,7 @@ Swift's =switch= statement offers a really powerful yet easy way to define compl
 // These would be return values from various functions.
 let age = 23
 let job: String? = "Operator"
-let payload = ["cars": 1]
+let payload: Any = ["cars": 1]
 
 #+END_SRC
 
@@ -65,7 +65,8 @@ typealias AnyDictionary = Dictionary<AnyHashable, Any>
 switch (age, job, payload) {
 case (let age, _?, _ as AnyDictionary) where age < 30:
     print(age)
-    default: ()
+default:
+    break
 }
 
 #+END_SRC
