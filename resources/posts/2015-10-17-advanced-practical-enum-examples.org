@@ -290,7 +290,7 @@ typealias Config = (RAM: Int, CPU: String, GPU: String)
 // Each of these takes a config and returns an updated config
 func selectRAM(_ config: Config) -> Config {return (RAM: 32, CPU: config.CPU, GPU: config.GPU)}
 func selectCPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: "3.2GHZ", GPU: config.GPU)}
-func selectGPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: "3.2GHZ", GPU: "NVidia")}
+func selectGPU(_ config: Config) -> Config {return (RAM: config.RAM, CPU: config.CPU, GPU: "NVidia")}
 
 enum Desktop {
    case Cube(Config)
@@ -425,10 +425,10 @@ enum Device {
     case iPad, iPhone, AppleTV, AppleWatch 
     func introduced() -> String {
        switch self {
-         case AppleTV: return "\(self) was introduced 2006"
-         case iPhone: return "\(self) was introduced 2007"
-         case iPad: return "\(self) was introduced 2010"
-         case AppleWatch: return "\(self) was introduced 2014"
+         case .AppleTV: return "\(self) was introduced 2006"
+         case .iPhone: return "\(self) was introduced 2007"
+         case .iPad: return "\(self) was introduced 2010"
+         case .AppleWatch: return "\(self) was introduced 2014"
        }
     }
 }
@@ -445,8 +445,8 @@ enum Device {
   case iPad, iPhone
   var year: Int {
     switch self {
-        case iPhone: return 2007
-        case iPad: return 2010
+        case .iPhone: return 2007
+        case .iPad: return 2010
      }
   }
 }
@@ -468,7 +468,7 @@ enum Device {
       return nil
     }
 }
-print (Device.fromSlang("iWatch"))
+print (Device.fromSlang(term:"iWatch")!)
 #+END_SRC
 
 #+RESULTS:
@@ -483,12 +483,12 @@ enum TriStateSwitch {
     case Off, Low, High
     mutating func next() {
         switch self {
-        case Off:
-            self = Low
-        case Low:
-            self = High
+        case .Off:
+            self = .Low
+        case .Low:
+            self = .High
         case High:
-            self = Off
+            self = .Off
         }
     }
 }
@@ -535,7 +535,7 @@ func order(trade: Trade)
 enum Trade {
    case Buy
    case Sell
-   func order()
+   func order() {}
 }
 #+END_SRC
 
@@ -595,14 +595,14 @@ enum Account {
   case Empty
   case Funds(remaining: Int)
 
-  enum Error: ErrorType {
+  enum Error: Swift.Error {
     case Overdraft(amount: Int)
   }
 
   var remainingFunds: Int {
     switch self {
-    case Empty: return 0
-    case Funds(let remaining): return remaining
+    case .Empty: return 0
+    case .Funds(let remaining): return remaining
     }
   }
 }
@@ -636,9 +636,9 @@ extension Account: AccountCompatible {
 }
 
 var account = Account.Funds(remaining: 20)
-print("add: ", try? account.addFunds(10))
-print ("remove 1: ", try? account.removeFunds(15))
-print ("remove 2: ", try? account.removeFunds(55))
+print("add: ", try? account.addFunds(amount:10))
+print ("remove 1: ", try? account.removeFunds(amount:15))
+print ("remove 2: ", try? account.removeFunds(amount:55))
 // prints:
 // : add:  Optional(())
 // : remove 1:  Optional(())
@@ -669,7 +669,7 @@ enum Entities {
 
 Now, we can extend this =enum= with methods:
 
-#+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation"
+#+BEGIN_SRC swift :noweb strip-export :prologue "import CoreGraphics"
 <<entities>>
 extension Entities {
    mutating func move(dist: CGVector) {}
@@ -701,9 +701,9 @@ extension Entities: CustomStringConvertible {
 Enums can also be defined over generic parameters. You'd use them to adapt the associated values of an enum. The simplest example comes straight from the Swift standard library, namely the =Optional= type. You probably mostly use it with *optional chaining* (=?=), =if let=, =guard let=, or =switch=, but syntactically you can also use Optionals like so:
 
 #+BEGIN_SRC swift
-let aValue = Optional<Int>.Some(5)
-let noValue = Optional<Int>.None
-if noValue == Optional.None { print("No value") }
+let aValue = Optional<Int>.some(5)
+let noValue = Optional<Int>.none
+if noValue == Optional.none { print("No value") }
 #+END_SRC
 
 #+RESULTS:
@@ -737,9 +737,9 @@ Finally, all the type constraints that work on classes and structs in Swift also
 #+BEGIN_SRC swift
 // Totally nonsensical example. A bag that is either full (has an array with contents)
 // or empty.
-enum Bag<T: SequenceType where T.Generator.Element==Equatable> {
-  case Empty
-  case Full(contents: T)
+enum Bag<T: Sequence> where T.Iterator.Element==Equatable {
+    case Empty
+    case Full(contents: T)
 }
 #+END_SRC
 
@@ -781,7 +781,7 @@ If we neglect associated values, then the value of an enum can only be an Intege
 
 As an example, imagine you'd like to store the different screen sizes of iOS devices in an enum:
 
-#+BEGIN_SRC swift
+#+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation"
 enum Devices: CGSize {
    case iPhone3GS = CGSize(width: 320, height: 480)
    case iPhone5 = CGSize(width: 320, height: 568)
@@ -792,8 +792,8 @@ enum Devices: CGSize {
 
 However, this doesn't compile. CGSize is not a literal and can't be used as an enum value. Instead, what you need to do is add a type extension for the =StringLiteralConvertible= protocol. The protocol requires us to implement three *initializers* each of them is being called with a =String=, and we have to convert this string into our receiver type (=CGSize=)
 
-#+BEGIN_SRC swift :prologue "import Foundation; func CGSizeFromString(a: String) -> CGSize { return NSSizeFromString(a)}" :noweb-ref cgsizenum
-extension CGSize: StringLiteralConvertible {
+#+BEGIN_SRC swift :prologue "import Foundation; import UIKit" :noweb-ref cgsizenum
+extension CGSize: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         let size = CGSizeFromString(value)
         self.init(width: size.width, height: size.height)
@@ -934,7 +934,7 @@ Integer-based enums such as ~enum Bit: Int { case Zero = 0; case One = 1}~ can b
 
 You don't have to do it that way though. Add two methods to your =enum=, define a type replacement on the =@objc= side, and you can move =enums= back and forth just fine, without having to conform to private protocols:
 
-#+BEGIN_SRC swift
+#+BEGIN_SRC swift :prologue "import Foundation" 
 enum Trade {
     case Buy(stock: String, amount: Int)
     case Sell(stock: String, amount: Int)
@@ -1029,7 +1029,7 @@ As an example, have a look at the popular [[https://github.com/thoughtbot/Argo][
 In addition to that, Argo also includes a custom error for anything not fitting in these two categories above. Their =ErrorType enum= looks like this:
 
 #+BEGIN_SRC swift :noweb-ref argo
-enum DecodeError: ErrorType {
+enum DecodeError: Error {
   case TypeMismatch(expected: String, actual: String)
   case MissingKey(String)
   case Custom(String)
@@ -1042,7 +1042,7 @@ A more general =ErrorType= for complete HTTP / REST API handling could look like
 
 #+BEGIN_SRC swift :noweb strip-export :prologue "import Foundation"
 <<argo>>
-enum APIError : ErrorType {
+enum APIError : Error {
     // Can't connect to the server (maybe offline?)
     case ConnectionError(error: NSError)
     // The server responded with a non 200 status code
@@ -1050,7 +1050,7 @@ enum APIError : ErrorType {
     // We got no data (0 bytes) back from the server
     case NoDataError
     // The server response can't be converted from JSON to a Dictionary
-    case JSONSerializationError(error: ErrorType)
+    case JSONSerializationError(error: Error)
     // The Argo decoding Failed
     case JSONMappingError(converstionError: DecodeError)
 }
@@ -1132,7 +1132,7 @@ Units and unit conversion are another nice use case for enums. You can map the u
 enum Liquid: Float {
   case ml = 1.0
   case l = 1000.0
-  func convert(amount amount: Float, to: Liquid) -> Float {
+  func convert(amount: Float, to: Liquid) -> Float {
       if self.rawValue < to.rawValue {
          return (self.rawValue / to.rawValue) * amount
       } else {
