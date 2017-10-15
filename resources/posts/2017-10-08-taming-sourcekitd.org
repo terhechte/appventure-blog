@@ -5,6 +5,18 @@
 #+description: Taming SourceKitService for less Xcode memory consumption
 #+OPTIONS: toc:nil
 
+* Update [10/15/2017]
+
+It seems that Xcode 9.1 beta 2 fixes this issue:
+
+#+BEGIN_HTML
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Please try out Xcode 9.1 beta 2 and let us know if it does/doesn’t address big memory usage problems with SourceKit. <a href="https://t.co/aJc8ZZSm9c">https://t.co/aJc8ZZSm9c</a></p>&mdash; Ted Kremenek (@tkremenek) <a href="https://twitter.com/tkremenek/status/918354948487655424?ref_src=twsrc%5Etfw">October 12, 2017</a></blockquote> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+#+END_HTML
+
+In my preliminary testing, everything worked fine. This feels really good.
+
+* Original Article
+
 There were recently two popular Swift posts on Hacker News[fn:: Why many developers still prefer Objective-C https://news.ycombinator.com/item?id=15421073] [fn:: Dictionary and Set Improvements in Swift 4.0 https://news.ycombinator.com/item?id=15403882], and one issue I saw coming up multiple times was the memory consumption of the tooling nee Xcode. One particular problem is that for some codebases the Swift sourcecode process =SourceKitService= consumes a huge amount of memory. I've had it rise to 30GB and beyond - at which point my system usually stalls and I'm not able to continue working for a couple of minutes.
 
 Oftentimes memory issues like these can be solved by reviewing your sourcecode with the same tools you also use to reduce your compile times. See:
