@@ -95,7 +95,7 @@ You can also extend your Structs and Classes from a different file, to add addit
 
 #+BEGIN_SRC Javascript
 // Objects which are stored in the cloud
-protocol CloudStorabe {
+protocol CloudStorable {
 }
 extension DBStore {
     func store<T: CloudStorable> {
