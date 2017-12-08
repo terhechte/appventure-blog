@@ -30,7 +30,7 @@ struct Data: Equatable {
 }
 let oldData: [Data] = currentData()
 let newData: [Data] = retrieveNewData()
-guard oldData == newData else {
+guard oldData != newData else {
     return
 }
 updateData(with: newData)
