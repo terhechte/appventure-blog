@@ -561,8 +561,8 @@ enum Trade: CustomStringConvertible {
    case Buy, Sell
    var description: String {
        switch self {
-           case Buy: return "We're buying something"
-           case Sell: return "We're selling something"
+           case .Buy: return "We're buying something"
+           case .Sell: return "We're selling something"
        }
    }
 }
