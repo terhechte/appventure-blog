@@ -66,7 +66,7 @@ print(aMirror)
 // prints : Mirror for Bookmark
 #+END_SRC
 
-So this creates a ~Mirror for Bookmark~. As you can see, the type of the subject is =Any=. This is the most general type in Swift. Anything the Swift sun is at least of type =Any= [fn:: In particular, =Any= is an empty protocol and everything implicitly conforms to this protocol]. So this makes the mirror compatible with =struct=, =class=, =enum=, =Tuple=, =Array=, =Dictionary=, =set=, etc.
+So this creates a ~Mirror for Bookmark~. As you can see, the type of the subject is =Any=. This is the most general type in Swift. Anything under the Swift Sun is at least of type =Any= [fn:: In particular, =Any= is an empty protocol and everything implicitly conforms to this protocol]. So this makes the mirror compatible with =struct=, =class=, =enum=, =Tuple=, =Array=, =Dictionary=, =set=, etc.
 
 There are three additional initializers in the Mirror struct, however those are mostly used for circumstances where you'd want to provide your own, custom mirror. We [[#custommirrors][will explain those additional initializers below when we discuss custom mirrors]].
 
