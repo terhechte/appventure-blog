@@ -266,10 +266,10 @@ This is another variation on an existing Swift concept. The =zip= method on opti
 #+BEGIN_SRC swift
 // Lets start again with a normal Swift example
 func buildProduct() -> Product? {
-  if let var1 = machine1.makesomething(),
-    let var2 = machine2.makeanotherthing(),
-    let var3 = machine3.creatething() {
-    return finalmachine.produce(var1, var2, var3)
+  if let var1 = machine1.makeSomething(),
+    let var2 = machine2.makeAnotherThing(),
+    let var3 = machine3.createThing() {
+    return finalMachine.produce(var1, var2, var3)
   } else {
     return nil
   }
@@ -277,9 +277,9 @@ func buildProduct() -> Product? {
 
 // The alternative using our extensions
 func buildProduct() -> Product? {
-  return machine1.makesomething()
-     .zip3(machine2.makeanotherthing(), machine3.creatething())
-     .map { finalmachine.produce($0.1, $0.2, $0.3) }
+  return machine1.makeSomething()
+     .zip3(machine2.makeAnotherThing(), machine3.createThing())
+     .map { finalMachine.produce($0.1, $0.2, $0.3) }
 }
 #+END_SRC
 
