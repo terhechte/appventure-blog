@@ -7,7 +7,7 @@
 
 =Optionals= are a staple of Swift. I guess everybody will agree that they are a huge boon insofar as they force us to properly handle edge cases. The =Optional= language feature alone removes a whole category of bugs from the development process.
 
-However, the API surface of Swift's optional is rather limited. The [[https://developer.apple.com/documentation/swift/optional#topics][Swift documentation lists just a couple of methods]] on optionals just lists 3 methods / properties if we ignore =customMirror= and =debugDescription=:
+However, the API surface of Swift's optional is rather limited. The [[https://developer.apple.com/documentation/swift/optional#topics][Swift documentation lists just a couple]] of methods / properties on =Optional= - if we ignore =customMirror= and =debugDescription=:
 
 #+BEGIN_SRC swift
 var unsafelyUnwrapped: Wrapped { get } 
@@ -17,7 +17,7 @@ func flatMap<U>(_ transform: (Wrapped) throws -> U?) rethrows -> U?
 
 The reason why optionals are still very useful even though they have such a small amount of methods is that the Swift syntax makes up for it via features such as [[http://appventure.me/2014/06/13/swift-optionals-made-simple/][optional chaining]], [[http://appventure.me/2015/08/20/swift-pattern-matching-in-detail/][pattern matching]], =if let= or =guard let=. In some situations, though, this manifests itself in unnecessary line noise. Sometimes, a very succinct method will let you express a concept in one short line of code instead of multiple lines of combined =if let= statements.
 
-I've sifted through Swift Projects on Github as well as the optional implementations of other languages such as Rust, Scala, or C# in order to find a couple of useful additions to =Optional=. Below are 14 useful =Optional= extensions. I'll describe them by category and then give a couple of examples per category. Finally, in the end, I'll write a more involved example that uses several extensions at once.
+I've sifted through Swift Projects on Github as well as the optional implementations of other languages such as Rust, Scala, or C# in order to find a couple of useful additions to =Optional=. Below are 14 useful =Optional= extensions. I'll describe them by category and then give a couple of examples per category. Finally, I'll write a more involved example that uses several extensions at once.
 
 * Emptiness
 #+BEGIN_SRC swift
@@ -86,17 +86,17 @@ print(optional.or({ return 50 })) // Prints 50
 
 ** Throw an error
 
-This is a very useful addition as it allows to merge the chasm between Optionals and Error Handling in Swift. Depending on the code that you're using, a method or function may express invalid behaviour by returning an empty optional (imagine accessing a non-existing key in an array) or by throwing a =Error=. Combining these two oftentimes leads to a lot of unnecessary line noise:
+This is a very useful addition as it allows to merge the chasm between Optionals and Error Handling in Swift. Depending on the code that you're using, a method or function may express invalid behaviour by returning an empty optional (imagine accessing a non-existing key in a =Dictionary=) or by throwing an =Error=. Combining these two oftentimes leads to a lot of unnecessary line noise:
 
 #+BEGIN_SRC swift
-func build_car() throws -> Car {
-  let tires = try machine1.create_tires()
-  let windows = try machine2.create_windows()
-  guard let motor = external_machine.deliver_motor() else {
+func buildCar() throws -> Car {
+  let tires = try machine1.createTires()
+  let windows = try machine2.createWindows()
+  guard let motor = externalMachine.deliverMotor() else {
     throw MachineError.motor
   }
-  let trunk = try machine3.create_trunk()
-  if let car = manufacturer.build_car(tires, windows,  motor, trunk) {
+  let trunk = try machine3.createTrunk()
+  if let car = manufacturer.buildCar(tires, windows,  motor, trunk) {
     return car
   } else {
     throw MachineError.manufacturer
@@ -104,15 +104,15 @@ func build_car() throws -> Car {
 }
 #+END_SRC
 
-In this example, we're building a car by combining internal and external code. The external code (=external_machine= and =manufacturer=) chose to use optionals instead of error handling. This makes the code unnecessary complicated. Our =or(throw:)= function makes this much more readable:
+In this example, we're building a car by combining internal and external code. The external code (=external_machine= and =manufacturer=) choose to use optionals instead of error handling. This makes the code unnecessary complicated. Our =or(throw:)= function makes this much more readable:
 
 #+BEGIN_SRC swift
 func build_car() throws -> Car {
-  let tires = try machine1.create_tires()
-  let windows = try machine2.create_windows()
-  let motor = try external_machine.deliver_motor().or(throw: MachineError.motor)
-  let trunk = try machine3.create_trunk()
-  return try manufacturer.build_car(tires, windows,  motor, trunk).or(throw: MachineError.manufacturer)
+  let tires = try machine1.createTires()
+  let windows = try machine2.createWindows()
+  let motor = try externalMachine.deliverMotor().or(throw: MachineError.motor)
+  let trunk = try machine3.createTrunk()
+  return try manufacturer.buildCar(tires, windows,  motor, trunk).or(throw: MachineError.manufacturer)
 }
 #+END_SRC
 
@@ -201,7 +201,7 @@ This category contains four functions that allow you to define relations between
 
 These four functions all share that they take an additional optional as a parameter and return another optional value. However, they're all quite different in what they achieve.
 
-** Dependenciens
+** Dependencies
 
 =and<B>(_ optional)= is useful if the unpacking of an optional is only required as a invariant for
 unpacking another optional:
@@ -218,7 +218,7 @@ In the example above, we're not interested in the unwrapped contents of the =use
 
 ** Chaining
 
-=and<T>(then:)= is another very very useful functions. It allows to chain optionals together so that the output of unpacking optional A becomes the input of producing optional B. Lets start with a simple example:
+=and<T>(then:)= is another very useful function. It allows to chain optionals together so that the output of unpacking optional =A= becomes the input of producing optional =B=. Lets start with a simple example:
 
 #+BEGIN_SRC swift
 protocol UserDatabase {
@@ -253,7 +253,7 @@ let children = database.current().and(then: { database.spouse($0) })
      .or(0)
 #+END_SRC 
 
-There're a lot of improvements when using the version with =and(then)=. First of all, you don't have to come up with superflous temporary variable names (user, father1, father2, spouse, children). Second, we clearly have less code. Also, using the =or(0)= instead of a complicated =let childrenCount= is so much easier to read.
+There're a lot of improvements when using the version with =and(then)=. First of all, you don't have to come up with superfluous temporary variable names (user, father1, father2, spouse, children). Second, we clearly have less code. Also, using the =or(0)= instead of a complicated =let childrenCount= is so much easier to read.
 
 Finally, the original Swift example can easily lead to logic errors. You may not have noticed, but there's a bug in the example. When writing lines like that, copy paste errors can easily be introduced. Do you see the error?
 
@@ -283,7 +283,7 @@ func buildProduct() -> Product? {
 }
 #+END_SRC
 
-Less code, clearer code, more beautiful code. However, as a downside, this code is also more involved. The reader has to know and understand =zip= in order to easily grasp this code. 
+Less code, clearer code, more beautiful code. However, as a downside, this code is also more involved. The reader has to know and understand =zip= in order to easily grasp it. 
 
 ** On
 
@@ -299,7 +299,7 @@ Less code, clearer code, more beautiful code. However, as a downside, this code 
     }
 #+END_SRC
 
-These two short methods will allow you to perform side effects if an optional is empty or not. In contrast to the already-discussed methods, these ignore the contents of the optional. So =on(some:)= will only execute the closure =some= if the optional is not empty but the closure =some= will not get the unwrapped contents of the optional.
+These two short methods will allow you to perform side effects if an optional is empty or not. In contrast to the already discussed methods, these ignore the contents of the optional. So =on(some:)= will only execute the closure =some= if the optional is not empty but the closure =some= will not get the unwrapped contents of the optional.
 
 #+BEGIN_SRC swift
 /// Logout if there is no user anymore
