@@ -76,6 +76,14 @@ guard leftButton.isSome, rightButton.isSome else { fatalError("Missing Interface
         guard let unwrapped = self else { throw exception }
         return unwrapped
     }
+
+    extension Optional where Wrapped == Error {
+        /// Only perform `else` if the optional has a non-empty error value
+        func or(_ else: (Error) -> Void) {
+            guard let error = self else { return }
+            `else`(error)
+        }
+    }
 #+END_SRC
 
 Another abstraction on the =isNone / isSome= concept is being able to specify instructions to be performed when the invariant doesn't hold. This saves us from having to write out =if= or =guard= branches and instead codifies the logic into a simple-to-understand method. 
@@ -156,6 +164,39 @@ func build_car() throws -> Car {
   return try manufacturer.buildCar(tires, windows,  motor, trunk).or(throw: MachineError.manufacturer)
 }
 #+END_SRC
+
+** Handling Errors
+
+The code from the *Throw an error* section above becomes even more useful when you include the following free function that was proposed by [[https://github.com/doozMen][Stijn Willems on Github]]. Thanks for the suggestion!
+
+#+BEGIN_SRC swift
+func should(_ do: () throws -> Void) -> Error? {
+    do {
+        try `do`()
+        return nil
+    } catch let error {
+        return error
+    }
+}
+#+END_SRC
+
+This free function (alternatively, you could make it a class method on optional) will perform a =do {} catch {}= block and return an error if and only if the closure `do` resulted in an error. Take, the following Swift code as an example:
+
+#+BEGIN_SRC swift
+do {
+  try throwingFunction()
+} catch let error {
+  print(error)
+}
+#+END_SRC
+
+This is one of the basic tennets of error handling in Swift, and it introduces quite a lot of line noise. With the free function above, you can reduce it to this simple on-liner:
+
+#+BEGIN_SRC swift
+should { try throwingFunction) }.or(print($0))
+#+END_SRC
+
+I feel that there're many situations where such a one-liner for error handling would be very beneficient.
 
 ** Map
 
