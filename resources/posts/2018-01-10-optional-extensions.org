@@ -116,6 +116,55 @@ func build_car() throws -> Car {
 }
 #+END_SRC
 
+Usefull way to write `do {} catch {}` more descriptive
+
+```+BEGIN_SRC swift
+// Throw handling
+
+/// Returns an Optional Error if the function throws
+/// - parameter do: funtion that can throw to be performed. If the function throws it returns an Optional Error.
+func should(_ do: () throws -> Void) -> Error? {
+    do {
+        try `do`()
+        return nil
+    } catch {
+        return error
+    }
+}
+
+extension Optional where Wrapped == Error {
+    /// Performs else if self is nil
+    func or(_ else: (Error) -> Void) {
+        if let error = self {
+            `else`(error)
+        } else {
+            return
+        }
+    }
+}
+
+extension Optional where Wrapped == Error {
+    /// Performs else if self is nil
+    func or(_ else: (Error) -> Void) {
+        if let error = self {
+            `else`(error)
+        } else {
+            return
+        }
+    }
+}
+```+END_SRC
+
+You can write code like:
+
+```+BEGIN_SRC swift
+func throwingFunction() throws {
+  // do something
+}
+
+should { try throwingFunction()}.or(print($0))
+```+END_SRC
+
 ** Map
 
 As we saw above, =map= and =flatMap= are the only methods that Swift offers on Optionals. However, even those can be improved a bit to be more versatile in many situations. There're two additional variations on =map= that allow defining a default value similar to how the =or= variants above are implemented:
@@ -127,7 +176,7 @@ As we saw above, =map= and =flatMap= are the only methods that Swift offers on O
     func map<T>(_ fn: (Wrapped) throws -> T, or default: T) rethrows -> T {
         return try map(fn) ?? `default`
     }
-    
+
     /// Maps the output *or* returns the result of calling `else`
     /// - parameter fn: The function to map over the value
     /// - parameter else: The function to call if the optional is empty
