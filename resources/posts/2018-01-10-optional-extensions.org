@@ -23,15 +23,17 @@ I've sifted through Swift Projects on Github as well as the optional implementat
 #+BEGIN_SRC swift
     /// Returns true if the optional is empty
     var isNone: Bool {
-        return self == nil
+        return self == .none
     }
 
     /// Returns true if the optional is not empty
     var isSome: Bool {
-        return self != nil
+        return self != .none
     }
 
 #+END_SRC
+
+#+RESULTS:
 
 Those are the most basic additions to the optional type. The implementation could also use a =switch= pattern match instead, but the =nil= comparison is much shorter. What I like about these additions is that they move the concept of an empty optional being nil away from your code. This might just as well be an implementation detail. Using =optional.isSome= feels much cleaner and less noisy than =if optional = nil=:
 
@@ -53,7 +55,17 @@ guard leftButton.isSome, rightButton.isSome else { fatalError("Missing Interface
     }
     
     /// Returns the unwrapped value of the optional *or*
+    /// the result of an expression `else`
+    /// I.e. optional.or(else: print("Arrr"))
+    func or(else: @autoclosure () -> Wrapped) -> Wrapped {
+        return self ?? `else`()
+    }
+
+    /// Returns the unwrapped value of the optional *or*
     /// the result of calling the closure `else`
+    /// I.e. optional.or(else: { 
+    /// ... do a lot of stuff
+    /// })
     func or(else: () -> Wrapped) -> Wrapped {
         return self ?? `else`()
     }
@@ -70,7 +82,7 @@ Another abstraction on the =isNone / isSome= concept is being able to specify in
 
 This concept is so useful, that it is defined in three distinct functions.
 
-**  Default Value
+** Default Value
 The first one returns the wrapped value of the optional or a default value:
 #+BEGIN_SRC swift
 let optional: Int? = nil
@@ -78,10 +90,39 @@ print(optional.or(10)) // Prints 10
 #+END_SRC
 
 ** Default Closure
+
 The second one is very similar to the first one, however it allows to return a default value from a closure instead.
+
 #+BEGIN_SRC swift
 let optional: Int? = nil
-print(optional.or({ return 50 })) // Prints 50
+optional.or(else: secretValue * 32) 
+#+END_SRC
+
+Since this uses the =@autoclosure= parameter we could actually use just the second =or= implementation. Then, using a just a default value would automatically be converted into a closure returning the value. However, I prefer having two separate implementations as that allows users to also write closures with more complex logic.
+
+#+BEGIN_SRC swift
+let cachedUserCount: Int? = nil
+...
+return cachedUserCount.or(else: {
+   let db = database()
+   db.prefetch()
+   guard db.failures.isEmpty else { return 0 }
+   return db.amountOfUsers
+})
+#+END_SRC
+
+A really nice use case for =or= is code where you only want to set a value on an optional if it is empty:
+
+#+BEGIN_SRC swift
+if databaseController == nil {
+  databaseController = DatabaseController(config: config)
+}
+#+END_SRC
+
+This can be replaced with the much nicer:
+
+#+BEGIN_SRC swift
+databaseController = databaseController.or(DatabaseController(config: config)
 #+END_SRC
 
 ** Throw an error
@@ -124,14 +165,14 @@ As we saw above, =map= and =flatMap= are the only methods that Swift offers on O
     /// Maps the output *or* returns the default value if the optional is nil
     /// - parameter fn: The function to map over the value
     /// - parameter or: The value to use if the optional is empty
-    func map<T>(_ fn: (Wrapped) throws -> T, or default: T) rethrows -> T {
+    func map<T>(_ fn: (Wrapped) throws -> T, default: T) rethrows -> T {
         return try map(fn) ?? `default`
     }
     
     /// Maps the output *or* returns the result of calling `else`
     /// - parameter fn: The function to map over the value
     /// - parameter else: The function to call if the optional is empty
-    func map<T>(_ fn: (Wrapped) throws -> T, or else: () throws -> T) rethrows -> T {
+    func map<T>(_ fn: (Wrapped) throws -> T, else: () throws -> T) rethrows -> T {
         return try map(fn) ?? `else`()
     }
 #+END_SRC
@@ -147,17 +188,17 @@ print(optional1.map({ $0.count }) ?? 0)
 print(optional2.map({ $0.count }) ?? 0)
 
 // With 
-print(optional1.map({ $0.count }, or: 0)) // prints 10
-print(optional2.map({ $0.count }, or: 0)) // prints 0
+print(optional1.map({ $0.count }, default: 0)) // prints 10
+print(optional2.map({ $0.count }, default: 0)) // prints 0
 #+END_SRC
 
-The changes are minimal, but we're moving away from having to use the =??= operator and can instead express the operation more clearly with the =or= keyword.
+The changes are minimal, but we're moving away from having to use the =??= operator and can instead express the operation more clearly with the =default= keyword.
 
 The second variant is very similar. The main difference is that it accepts (again) a closure returning value =T= instead of value =T=. Here's a brief example:
 
 #+BEGIN_SRC swift
 let optional: String? = nil
-print(optional.map({ $0.count }, or: { "default".count })
+print(optional.map({ $0.count }, else: { "default".count })
 #+END_SRC
 
 * Combining Optionals
@@ -214,7 +255,7 @@ if user != nil, let account = userAccount() ...
 if let account = user.and(userAccount()) ...
 #+END_SRC
 
-In the example above, we're not interested in the unwrapped contents of the =user= optional. We just need to make sure that there *is* a valid user before we call the =userAccount= function. While this relationship is kinda codified in the =user != nil= line, I personally feel that the =and= makes it more clear.
+In the example above, we're not interested in the unwrapped contents of the =user= optional. We just need to make sure that there *is* a valid user before we call the =userAccount= function. While this relationship is kinda codified in the ~user != nil~ line, I personally feel that the =and= makes it more clear.
 
 ** Chaining
 
