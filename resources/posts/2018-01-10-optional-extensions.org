@@ -19,8 +19,10 @@ The reason why optionals are still very useful even though they have such a smal
 
 I've sifted through Swift Projects on Github as well as the optional implementations of other languages such as Rust, Scala, or C# in order to find a couple of useful additions to =Optional=. Below are 14 useful =Optional= extensions. I'll describe them by category and then give a couple of examples per category. Finally, I'll write a more involved example that uses several extensions at once.
 
+
 * Emptiness
 #+BEGIN_SRC swift
+extension Optional {
     /// Returns true if the optional is empty
     var isNone: Bool {
         return self == .none
@@ -30,12 +32,12 @@ I've sifted through Swift Projects on Github as well as the optional implementat
     var isSome: Bool {
         return self != .none
     }
-
+}
 #+END_SRC
 
 #+RESULTS:
 
-Those are the most basic additions to the optional type. The implementation could also use a =switch= pattern match instead, but the =nil= comparison is much shorter. What I like about these additions is that they move the concept of an empty optional being nil away from your code. This might just as well be an implementation detail. Using =optional.isSome= feels much cleaner and less noisy than =if optional = nil=:
+Those are the most basic additions to the optional type. The implementation could also use a =switch= pattern match instead, but the =nil= comparison is much shorter. What I like about these additions is that they move the concept of an empty optional being nil away from your code. This might just as well be an implementation detail. Using =optional.isSome= feels much cleaner and less noisy than ~if optional == nil~:
 
 #+BEGIN_SRC swift
 // Compare
@@ -48,6 +50,7 @@ guard leftButton.isSome, rightButton.isSome else { fatalError("Missing Interface
 * Or
 
 #+BEGIN_SRC swift
+extension Optional {
     /// Return the value of the Optional or the `default` parameter
     /// - param: The value to return if the optional is empty
     func or(_ default: Wrapped) -> Wrapped {
@@ -76,14 +79,15 @@ guard leftButton.isSome, rightButton.isSome else { fatalError("Missing Interface
         guard let unwrapped = self else { throw exception }
         return unwrapped
     }
+}
 
-    extension Optional where Wrapped == Error {
-        /// Only perform `else` if the optional has a non-empty error value
-        func or(_ else: (Error) -> Void) {
-            guard let error = self else { return }
-            `else`(error)
-        }
+extension Optional where Wrapped == Error {
+    /// Only perform `else` if the optional has a non-empty error value
+    func or(_ else: (Error) -> Void) {
+        guard let error = self else { return }
+        `else`(error)
     }
+}
 #+END_SRC
 
 Another abstraction on the =isNone / isSome= concept is being able to specify instructions to be performed when the invariant doesn't hold. This saves us from having to write out =if= or =guard= branches and instead codifies the logic into a simple-to-understand method. 
@@ -203,6 +207,7 @@ I feel that there're many situations where such a one-liner for error handling w
 As we saw above, =map= and =flatMap= are the only methods that Swift offers on Optionals. However, even those can be improved a bit to be more versatile in many situations. There're two additional variations on =map= that allow defining a default value similar to how the =or= variants above are implemented:
 
 #+BEGIN_SRC swift
+extension Optional {
     /// Maps the output *or* returns the default value if the optional is nil
     /// - parameter fn: The function to map over the value
     /// - parameter or: The value to use if the optional is empty
@@ -216,6 +221,7 @@ As we saw above, =map= and =flatMap= are the only methods that Swift offers on O
     func map<T>(_ fn: (Wrapped) throws -> T, else: () throws -> T) rethrows -> T {
         return try map(fn) ?? `else`()
     }
+}
 #+END_SRC
 
 The first one will allow you to =map= the contents of an optional to a new type =T=. If the optional is empty, you can define a =default= value that should be used instead:
@@ -248,7 +254,7 @@ This category contains four functions that allow you to define relations between
 
 #+NAME: feature-image
 #+BEGIN_SRC swift :export-image true :export-template template5
-
+extension Optional {
     /// Tries to unwrap `self` and if that succeeds continues to unwrap the parameter `optional`
     /// and returns the result of that.
     func and<B>(_ optional: B?) -> B? {
@@ -278,7 +284,7 @@ This category contains four functions that allow you to define relations between
               let third = another else { return nil }
         return (first, second, third)
     }
-
+}
 #+END_SRC
 
 These four functions all share that they take an additional optional as a parameter and return another optional value. However, they're all quite different in what they achieve.
@@ -370,6 +376,7 @@ Less code, clearer code, more beautiful code. However, as a downside, this code 
 ** On
 
 #+BEGIN_SRC swift
+extension Optional {
     /// Executes the closure `some` if and only if the optional has a value
     func on(some: () throws -> Void) rethrows {
         if self != nil { try some() }
@@ -379,6 +386,7 @@ Less code, clearer code, more beautiful code. However, as a downside, this code 
     func on(none: () throws -> Void) rethrows {
         if self == nil { try none() }
     }
+}
 #+END_SRC
 
 These two short methods will allow you to perform side effects if an optional is empty or not. In contrast to the already discussed methods, these ignore the contents of the optional. So =on(some:)= will only execute the closure =some= if the optional is not empty but the closure =some= will not get the unwrapped contents of the optional.
@@ -394,6 +402,7 @@ self.user.on(some: { AppCoordinator.shared.unlock() })
 ** Various
 
 #+BEGIN_SRC swift
+extension Optional {
     /// Returns the unwrapped value of the optional only if
     /// - The optional has a value
     /// - The value satisfies the predicate `predicate`
@@ -408,6 +417,7 @@ self.user.on(some: { AppCoordinator.shared.unlock() })
         guard let value = self else { fatalError(message) }
         return value
     }
+}
 #+END_SRC
 
 *** Filter
