@@ -1,5 +1,5 @@
 #+title: Expanding Swift's Reach
-#+tags: swift 
+#+tags: swift linux
 #+keywords: swift linux server opensource
 #+summary: How can we as a community help expanding the reach of Swift
 #+description: How can we as a community help expanding the reach of Swift
@@ -14,7 +14,7 @@ My goal for Swift has always been and still is total world domination. It’s a 
 
 [[https://swift.org/blog/swift-4-1-released/][With Swift 4.1's new generic features]] and the upcoming [[https://swift.org/abi-stability/][ABI stability in Swift 5]], it feels like Swift slowly reaches a point that would allow it to move beyond the Apple domain. In this post I'd like to discuss what I see as one of the issues holding it back from a broader adoption. Specifically, the one issue that can be solved by us as a community while most of the other issues are already being worked on.
 
-I'd also like have a brief look at Swift's *competition* in this space. I.e. other languages that also strive for ~total world domination~. By observing where they stand right now, we can see what we can do in order to expand Swift's reach.
+I'd also like have a brief look at Swift's *competition* in this space. I.e. other languages that also aspire to become a general purpose language for all the domains that C++ currently encompasses - and maybe more [fn:: I.e. WebAssembly]. By observing their take on the issue we can see where Swift stands in comparison, and what we can do.
 
 * System Packages
 
@@ -24,11 +24,11 @@ However, contrary to popular opinion, companies do a lot more on Linux than just
 
 In line with Swift's 4.1 release, [[https://news.ycombinator.com/item?id=16710895][there was a thread on Hacker News discussing the language]]. I've read the entire thread multiple times due to the fact that the answers were really interesting. What stood out to me was the following comment:
 
-#+BEGIN_SRC https://news.ycombinator.com/item?id=16710895
+#+BEGIN_QUOTE https://news.ycombinator.com/item?id=16710895
 The set of libraries and supported OSes is a tiny dot comparable with the Go and Rust.
 ...
 If we start listing the kind of libraries used in distributed applications, database backends, Swift has hardly none of them.
-#+END_SRC
+#+END_QUOTE
 
 So lets have a look at the others.
 
