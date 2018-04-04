@@ -22,9 +22,9 @@ Swift has a very healthy open source community with a good amount of fantastic, 
 
 However, contrary to popular opinion, companies do a lot more on Linux than just running webservers. As we will see in a brief moment, other languages offer a lot of system management, administration, or general development tools and libraries that make no sense for iOS or macOS app development but are tremendously important for systems- or web-development. I.e. databases and their administration, system file management, process management and administration, log and analytics collection, container administration, deployment tooling, or even blockchain tooling - just to name a few.
 
-In line with Swift's 4.1 release, [[https://news.ycombinator.com/item?id=16710895][there was a thread on Hacker News discussing the language]]. I've read the entire thread multiple times due to the fact that the answers were really interesting. What stood out to me was the following comment:
+In line with Swift's 4.1 release, [[https://news.ycombinator.com/item?id=16710895][there was a thread on Hacker News discussing the language]]. I've read the entire thread multiple times due to the fact that the answers were really interesting. What stood out to me was [[https://news.ycombinator.com/item?id=16710895][the following comment]]:
 
-#+BEGIN_QUOTE https://news.ycombinator.com/item?id=16710895
+#+BEGIN_QUOTE 
 The set of libraries and supported OSes is a tiny dot comparable with the Go and Rust.
 ...
 If we start listing the kind of libraries used in distributed applications, database backends, Swift has hardly none of them.
