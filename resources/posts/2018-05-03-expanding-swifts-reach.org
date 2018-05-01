@@ -114,7 +114,7 @@ For certain use cases, Swift does offer libraries but only via a small shism to 
 
 I recently wrote a small application in Vapor and for that I needed a couple of additional dependencies (i.e. for time calculations) and almost all existing libraries were iOS / macOS only. If you already work on something that could be cross platform (due to no UIKit / AppKit dependencies) try to go the extra step of testing it on Swift Linux.
 
-This might also be easier than it sounds. There's a readily-available docker image for Swift 4.1, so you can just run that in order to test your code. Alternatively, you can run Virtualbox if you'd rather have a full running VM.
+This might also be easier than it sounds. [[https://hub.docker.com/r/ibmcom/swift-ubuntu/tags/][There's a readily-available docker image for Swift 4.1]], so you can just run that in order to test your code.[fn:: I'm trying to write another blog post that explains this in much more detail]. Alternatively, you can run [[https://www.virtualbox.org/][Virtualbox]] if you'd rather have a full running VM.
 
 ** Support Swift Package Manager
 
