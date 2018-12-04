@@ -87,8 +87,7 @@ struct FileUploadHandler: NotificationListener {
     Implement the notification handling to move uploaded files to temporary folder
   */
   func handleNotification(notification: Notification) {
-    guard case .FileUploaded(let file, let location, _, let user) = notification
-    where user == self.currentUser
+    guard case .FileUploaded(let file, let location, _, let user) = notification, user == self.currentUser
     else { return }
     self.moveFile(file, atLocation: location)
   }
@@ -106,16 +105,16 @@ import Foundation
 func confirmPath(pathObject: AnyObject) -> Bool {
   guard let url = pathObject as? NSURL,
   let components = url.pathComponents
-    where components.count > 0,
+    , components.count > 0,
   let first = components.dropFirst().first
-    where first == "Applications",
+    , first == "Applications",
   let last = components.last
-    where last == "MyApp.app"
+    , last == "MyApp.app"
   else { return false }
   print("valid folder", last)
   return true
 }
-print(confirmPath(NSURL(fileURLWithPath: "/Applications/MyApp.app")))
+print(confirmPath(pathObject: NSURL(fileURLWithPath: "/Applications/MyApp.app")))
 // : valid folder MyApp.app
 // : true
 #+END_SRC
