@@ -14,12 +14,12 @@ Swift 3 encompasses many different small and big changes to the language. One of
 
 Even better, after going through the basics, we will write a small example application that will read and parse a Doom [fn:: Doom1, Doom2, Hexen, Heretic, or Ultimate Doom. Though I've only tested it with Doom1 Shareware] WAD file.
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <div align="center">
 <img src="/img-content/doom.png" srcset="/img-content/doom@2x.png 2x" /><br/>
 <br/>
 <br/>
-#+END_HTML
+#+END_EXPORT
 
 * Basic Differences
 
@@ -440,13 +440,13 @@ lumps.append(Lump(filepos: lumpStart, size: lumpSize, name: lumpName4))
 When you look into the source, you will see ominous references to =F_START= and =F_END=. Doom marks the beginning and end of special /lump regions/ with empty lumps with magic names. =F_START / F_END= enclose all the floor texture lumps. We will ignore this additional step in this tutorial.
 
 A screenshot from the final application:
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <div align="center">
 <img src="/img-content/doom-shot.png" srcset="/img-content/doom-shot@2x.png 2x" style="box-shadow: 6px 6px 32px rgba(0, 0, 0, 0.5); border-radius: 4px;" /><br/>
 <br/>
 <br/>
 </div>
-#+END_HTML
+#+END_EXPORT
 
 Not really impressive, I know. One of the next installments on this blog  might concentrate on how to display those textures.
 

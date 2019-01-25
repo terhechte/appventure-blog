@@ -5,9 +5,9 @@
 #+description: In this post I'll examine the Swift reflection API, see how fast it is, and will try to show use cases where it can be applied successfully.
 #+OPTIONS: toc:t 
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <h6><a href="http://swift.gg/2015/11/23/swift-reflection-api-what-you-can-do/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
-#+END_HTML
+#+END_EXPORT
 
 Even though Swift stresses strong types, compile time safety, static dispatch it still offers a Reflection mechanism as part of the standard library. You may already have seen it in various blog posts or projects like [[http://design.featherless.software/enumerating-tuple-values-swift/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][here (Tuples)]], [[http://design.featherless.software/enumerate-messages-midipacket-swift-reflection/][here (Midi Packets)]] or [[https://github.com/terhechte/corevalue][here (Core Data).]] Maybe you're interested in using in one of your projects, or you may want to better understand the problem domains on which reflection can be applied. This is an overview of the possibilities of the Swift Reflection API based a talk I held recently at the [[http://www.macoun.de][Macoun conference]] in Frankfurt, Germany.
 
@@ -393,7 +393,7 @@ That's it. We're converting our =struct= to =NSManagedObject=.
 
 So, how fast is this? Can this be used well in production? I did some testing:
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
         <style type="text/css">
          .linechart {
              border: 3px solid white;
@@ -432,7 +432,7 @@ font-weight: normal;
             <span>Reflection: 0.207 seconds</span>
         </div>
         </div>
-#+END_HTML
+#+END_EXPORT
 
 Native, here, means creating an =NSManagedObject= and setting the property values via =setValueForKey=. If you create a =NSManagedObject= subclass within Core Data and set the values directly on the properties (without the dynamic =setValueForKey= overhead) this is probably even faster.
 
@@ -490,7 +490,7 @@ extension Bookmark: CustomReflectable {
 
 If we do another performance measurement now, there's even a slight improvement:
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
         <div style="background-color: #ccc; padding: 20px; border-radius: 16px;">
 
         <h3 class="ggx">Create 2000 NSManagedObjects</h3>
@@ -505,7 +505,7 @@ If we do another performance measurement now, there's even a slight improvement:
             <span>Reflection: 0.203 seconds</span>
         </div>
 </div>
-#+END_HTML
+#+END_EXPORT
 
 But hardly worth the effort, as it defeats our initial purpose of reflecting over our =struct='s members. 
 

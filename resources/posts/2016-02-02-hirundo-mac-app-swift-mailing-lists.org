@@ -20,7 +20,7 @@ This bugged me. I wanted to be able to follow the discussions there, but I'd rat
 
 * Enter *Hirundo*
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <div align="center">
 <a href="https://stylemac.com/hirundo">
 <img src="/img-content/hirundo-title.png" srcset="/img-content/hirundo-title@2x.png 2x" /><br/>
@@ -31,7 +31,7 @@ This bugged me. I wanted to be able to follow the discussions there, but I'd rat
 <br/>
 <br/>
 </div>
-#+END_HTML
+#+END_EXPORT
 
 Hirundo is the result of this (Written in Swift, of course). The word is latin and means Sparrow or Swift, so I thought it'd be a nice fit and it sounds cool. There's also an accompanying website for the app under [[https://stylemac.com/hirundo][stylemac.com/hirundo]]. 
 

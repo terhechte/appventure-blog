@@ -4,9 +4,9 @@
 #+description: Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
 #+OPTIONS: toc:nil ^:{} 
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <h6><a href="http://swift.gg/2015/09/11/optional-throw-swift/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
-#+END_HTML
+#+END_EXPORT
 
 Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
 

@@ -13,7 +13,7 @@ After feeling constantly overwhelmed and underinformed, I decided to try to do s
 
 So without further ado, let me introduce [[http://swiftwatch.net][*SwiftWatch*]]:
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <div align="center">
 <a href="http://swiftwatch.net">
 <img src="/img-content/swiftwatch.png" srcset="/img-content/swiftwatch@2x.png 2x" style="box-shadow: 6px 6px 32px rgba(0, 0, 0, 0.5); border-radius: 4px;" /><br/>
@@ -22,7 +22,7 @@ So without further ado, let me introduce [[http://swiftwatch.net][*SwiftWatch*]]
 <br/>
 <br/>
 </div>
-#+END_HTML
+#+END_EXPORT
 
 [[http://swiftwatch.net][SwiftWatch]] tries to be this place. I'd not call it a community or a social network. Rather, it is a place to share interesting Swift news. You have to register with a Twitter or Github account, in order to (ever so slightly) decrease the likelihood of spam. Commenting is possible, but I don't envision this site to be a source of great discussions. Instead, I'd be more than happy if people start using it to post interesting Swift developments.
 

@@ -4,9 +4,9 @@
 #+summary: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 #+description: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 
-#+BEGIN_HTML
+#+BEGIN_EXPORT html
 <h6><a href="http://swift.gg/2015/11/20/advanced-practical-enum-examples/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
-#+END_HTML
+#+END_EXPORT
 
 When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 
