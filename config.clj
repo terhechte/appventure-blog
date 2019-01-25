@@ -21,7 +21,7 @@
  :date-format-archive "MMMM yyyy" ; the output dateformat for archive links
  :rss-description-char-limit 500
  :atomic-build true
- :emacs "/usr/local/Caskroom/emacs-mac/emacs-24.5-z-mac-5.13/Emacs.app/Contents/MacOS/Emacs"
+ :emacs "/usr/local/Cellar/emacs-plus/26.1/Emacs.app/Contents/MacOS/Emacs"
  :emacs-config " -nw -q "
  :emacs-custom-setup "(setup-org-image-gen)"
  :emacs-eval ['(setq user-emacs-directory "resources/emacs/")
