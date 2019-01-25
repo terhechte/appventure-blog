@@ -1,12 +1,8 @@
-#+title: Advanced & Practical Enum usage in Swift
+#+title: Advanced and Practical Enum usage in Swift
 #+tags: swift cocoa ios
 #+keywords: feature swift enum algebraic caseclass union case switch pattern simple practical advanced example
 #+summary: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 #+description: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
-
-#+BEGIN_EXPORT html
-<h6><a href="http://swift.gg/2015/11/20/advanced-practical-enum-examples/">This post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
-#+END_EXPORT
 
 When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 
@@ -1231,9 +1227,6 @@ Each =Node case= points to the next case, and by using an =enum= instead of some
 Airspeed Velocity also wrote a great post about the implementation of a red black tree with indirect Swift enums, so while you're already reading his blog, [[http://airspeedvelocity.net/2015/07/22/a-persistent-tree-using-indirect-enums-in-swift/][you may just as well also read this one.]]
 
 ** Settings Dictionaries
-:PROPERTIES:
-:CUSTOM_ID: settingsdics
-:END:
 
 
 [[http://ericasadun.com/2015/10/19/sets-vs-dictionaries-smackdown-in-swiftlang/?utm_campaign%3DSwift%252BSandbox&utm_medium%3Demail&utm_source%3DSwift_Sandbox_12][This is a very, very smart solution that Erica Sadun came up with]]. Basically whenever you'd use a dictionary of attribute keys as a way to configure an item,
@@ -1320,7 +1313,6 @@ You could still create new cases with different values, but the default settings
 * Changes
 **10/26/2015**
     - Added additional limitation examples (Equatable & Retrieving associated values)
-    - [[settingsdics][Added Erica Sadun's Set with Associated Enums example]] 
 **10/22/2015**
     - Incorporated PR [[https://github.com/terhechte/appventure-blog/pull/6][#6 from @mabidakun]].
     - Added internal links
