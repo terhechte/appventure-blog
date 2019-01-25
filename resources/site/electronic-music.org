@@ -15,12 +15,3 @@ After that, I concentrated on my own productions and released them on my web lab
 
 Now that I am a indie developer I have more free time again so I recently started producing music again, mostly as a way to have an alt hobby that has nothing to do with software development. I'm releasing my track on [[https://soundcloud.com/sarbatka][SoundCloud]].
 
-*** Sample Tracks
-
-#+BEGIN_HTML
-<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/121334079&amp;color=ff6600&amp;auto_play=false&amp;show_artwork=true"></iframe>
-#+END_HTML
-
-#+BEGIN_HTML
-<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/121227564&amp;color=ff6600&amp;auto_play=false&amp;show_artwork=true"></iframe>
-#+END_HTML
