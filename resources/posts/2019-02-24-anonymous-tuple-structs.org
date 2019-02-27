@@ -95,7 +95,7 @@ Since we're using one-time struct types we have to define them somewhere, (i.e. 
 
 ** Anonymous Structs nee Tuples
 
-Actually, there is such a type in Swift. It is our good old friend, the =tuple=Gkk. See for yourself:
+Actually, there is such a type in Swift. It is our good old friend, the =tuple=. See for yourself:
 
 #+BEGIN_SRC swift
   var displayOptions: (
