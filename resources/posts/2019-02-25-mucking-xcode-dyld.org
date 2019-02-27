@@ -1,0 +1,45 @@
+#+title: TBD
+#+tags: ios macos swift
+#+keywords: ios macos swift tuples classes structs
+#+summary: An easy way to add more structure to your classes by leveraging structs and enums
+#+description: An easy way to add more structure to your classes by leveraging structs and enums
+#+static-feature-image: http://appventure.me/img-content/2019-02-24-anonymous-tuple-structs.jpg
+#+inactive: true
+#+OPTIONS: toc:nil
+
+Unfinished article
+
+Source-Code for the example that overrides write comes from here:
+http://www.goldsborough.me/c/low-level/kernel/2016/08/29/16-48-53-the_-ld_preload-_trick/
+
+#+BEGIN_SRC c
+#include <string.h>
+
+ssize_t read(int fd, void *data, size_t size) {
+  strcpy(data, "I love cats");
+  return 12;
+}
+#+END_SRC
+
+Build this via
+
+#+BEGIN_SRC bash
+gcc -shared -fPIC -o inject.dylib inject.c
+#+END_SRC
+
+Then, create a new certificate and resign Xcode:
+https://github.com/XVimProject/XVim2/blob/master/SIGNING_Xcode.md
+
+Next, resign inject.dylib with said certificate
+
+#+BEGIN_SRC bash
+codesign -f -v -s XcodeSigner ./inject.dylib
+#+END_SRC
+
+Finally, run xcode with inject
+
+#+BEGIN_SRC bash
+DYLD_INSERT_LIBRARIES=$PWD/inject.dylib DYLD_FORCE_FLAT_NAMESPACE=1 /Applications/Xcode.app/Contents/MacOS/Xcode
+#+END_SRC
+
+Success! Xcode will complain it can't start because =Info.plist= is wrong. Which is obvious because read returns "I love cats" instead of anything useful ;)
