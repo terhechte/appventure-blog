@@ -3,7 +3,9 @@
 #+keywords: swift protocol optional optionals extensions
 #+summary: Several helpful extensions to the Optional type in order to simplify using it.
 #+description: Several helpful extensions to the Optional type in order to simplify using it.
+#+moved: https://appventure.me/guides/optionals/intro.html
 #+OPTIONS: toc:nil
+
 
 =Optionals= are a staple of Swift. I guess everybody will agree that they are a huge boon insofar as they force us to properly handle edge cases. The =Optional= language feature alone removes a whole category of bugs from the development process.
 

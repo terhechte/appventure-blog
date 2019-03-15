@@ -1,6 +1,7 @@
 #+title: Generic method overloading by protocol in Swift
 #+tags: swift ios cocoa
 #+keywords: swift optional simple overloading method protocol extensions generics feature
+#+moved: https://appventure.me/posts/2015-06-17-swift-method-overloading-by-protocol.html
 #+OPTIONS: toc:nil ^:{} 
 
 I just stumbled upon a very nice way of abstraction in Swift, which I previously did not know was possible. First a bit of background:

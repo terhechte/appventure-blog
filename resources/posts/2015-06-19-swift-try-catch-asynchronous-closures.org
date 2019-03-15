@@ -1,6 +1,7 @@
 #+title: Using try / catch in Swift with asynchronous closures
 #+tags: swift ios
 #+keywords: swift try catch errortype closure async result feature
+#+moved: https://appventure.me/posts/2015-06-19-swift-try-catch-asynchronous-closures.html
 #+OPTIONS: toc:nil ^:{} 
 
 With Swift 2.0, Apple introduced a new error handling model with the =try=, =throw=, and =catch= keywords. Given the sub par state of error handling in Swift 1.0, this was a welcome addition. It works basically as follows (simplified example):

@@ -3,6 +3,7 @@
 #+keywords: swift iphone6s iphone tsmc samsung gestalt private api foundation
 #+summary: This quickly explains how you use private apis from Swift in order to figure out the manufacturer of your fancy new iPhone 6S CPU
 #+description: This quickly explains how you use private apis from Swift in order to figure out the manufacturer of your fancy new iPhone 6S CPU
+#+moved: https://appventure.me/posts/2015-09-30-getting-iphone6s-foundry-from-swift.html
 #+OPTIONS: toc:nil ^:{} 
 
 [[https://github.com/WDUK/A9ChipSource][Here's a small Github project by WUD]] which uses the private [[https://gist.github.com/Cykey/5216992][libMobileGestalt]] to identify the manufacturer of the CPU in your fancy new iPhone 6S. Because, as you may not know, this year Apple is sourcing the chips from two different foundries: Samsung and TSMC. So which one did you get? You could, of course, just run the aforementioned GitHub project on your phone. However, that's all Objective-C and out of curiosity I wondered: How would you pull that off in Swift?

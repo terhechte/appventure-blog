@@ -3,6 +3,8 @@
 #+keywords: swift tuples generics feature
 #+summary: Tuples are one of Swift's less visible language features. They occupy a small space between Structs and Arrays. In addition, there's no comparable construct in Objective-C (or many other languages). Finally, the use of tuples in the standard library and in Apple's example code is sparse. The following guide tries to give a more comprehensive overview of tuples with best practices of when to use them, and when not to use them. I'll also try to list those things that you can't do with tuples, to spare you asking about them on stack overflow.
 
+#+moved: https://appventure.me/guides/tuples/introduction.html
+
 #+BEGIN_EXPORT html
 <h6><a href="http://swift.gg/2015/10/10/tuples-swift-advanced-usage-best-practices/">An older version of this post is also available in <b>🇨🇳Chinese</b></a><span> Thanks to </span><a href="http://swift.gg/tags/APPVENTURE/">SwiftGG</a></h6>
 #+END_EXPORT

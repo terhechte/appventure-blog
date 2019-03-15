@@ -3,6 +3,7 @@
 #+keywords: swift mac cocoa guard let enum pattern matching patterns
 #+summary: Three quick examples for how you can use guard to write shorter and simpler code
 #+description: Three quick examples for how you can use guard to write shorter and simpler code
+#+moved: https://appventure.me/posts/2016-03-29-three-tips-for-clean-swift-code.html
 #+OPTIONS: toc:nil
 
 This will be a shorter post compared to some of my previous ones, but I wanted to share three useful =guard= tips for structuring your functions in such a way that you end up with code that is more concise and also easier to understand[fn:: In my humble opinion, that is]. This is *not* a post about general coding styles or coding guidelines, but more about how =guard= can help you simplify your code.

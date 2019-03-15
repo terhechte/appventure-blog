@@ -3,6 +3,7 @@
 #+keywords: linux x11 swift libx11 xserver xorg
 #+summary: A tutorial on how to create a Swift Package for X11 on Linux and use it to write a simple X11 app
 #+description: A tutorial on how to create a Swift Package for X11 on Linux and use it to write a simple X11 app
+#+moved: https://appventure.me/posts/2015-12-08-swift-ubuntu-x11-window-app.html
 #+OPTIONS: toc:nil
 
 #+BEGIN_EXPORT html

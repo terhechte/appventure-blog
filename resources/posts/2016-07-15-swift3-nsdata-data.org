@@ -4,6 +4,7 @@
 #+keywords: swift doom wad lumps data nsdata swift3 binary bytes
 #+summary: Swift 3 replaces NSData with the Data value type. Implement a Doom Wad file parser with the new Data type to understand the differences.
 #+description: Swift 3 replaces NSData with the Data value type. Implement a Doom Wad file parser with the new Data type to understand the differences.
+#+moved: https://appventure.me/posts/2016-07-15-swift3-nsdata-data.html
 #+OPTIONS: ^:nil
 #+OPTIONS: _:nil
 #+OPTIONS: toc:nil

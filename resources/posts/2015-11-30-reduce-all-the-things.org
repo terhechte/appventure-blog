@@ -3,6 +3,7 @@
 #+keywords: feature swift reduce map filter group partition split interpose chunk functional programming flatMap
 #+summary: An introduction into the reduce function as an alternative to map, flatMap or filter for collection transformation
 #+description: An introduction into the reduce function as an alternative to map, flatMap or filter for collection transformation
+#+moved: https://appventure.me/guides/map_flatmap_reduce_more/intro.html
 #+OPTIONS: toc:nil
 
 #+BEGIN_EXPORT html

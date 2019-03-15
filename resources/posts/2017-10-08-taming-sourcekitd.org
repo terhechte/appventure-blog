@@ -3,6 +3,7 @@
 #+keywords: xcode sourcekit swift SourceKitService
 #+summary: Taming SourceKitService for less Xcode memory consumption
 #+description: Taming SourceKitService for less Xcode memory consumption
+#+moved: https://appventure.me/posts/2017-10-08-taming-sourcekitd.html
 #+OPTIONS: toc:nil
 
 * Update [10/15/2017]

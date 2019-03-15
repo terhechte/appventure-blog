@@ -2,6 +2,7 @@
 #+tags: swift
 #+keywords: swift error throw result either rethrow try syntax swift2
 #+description: Swift 2.0 b6 includes a new way of handling exceptions via the =try?= keyword. This is a quick post to explain the basics, and why this is cool.
+#+moved: https://appventure.me/posts/2015-08-25-optional-throw-swift.html
 #+OPTIONS: toc:nil ^:{} 
 
 #+BEGIN_EXPORT html

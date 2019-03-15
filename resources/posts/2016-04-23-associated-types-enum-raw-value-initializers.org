@@ -4,6 +4,7 @@
 #+keywords: swift optional enum raw value initializers associated type
 #+summary: Once you add associated types to an enum the task of creating instances quickly becomes very repetitive. See how a simple trick can greatly simplify this
 #+description: Once you add associated types to an enum the task of creating instances quickly becomes very repetitive. See how a simple trick can greatly simplify this
+#+moved: https://appventure.me/posts/2016-04-23-associated-types-enum-raw-value-initializers.html
 #+OPTIONS: toc:nil
 
 [[https://appventure.me/2015/10/17/advanced-practical-enum-examples/][Enums]] are a beautiful way of structuring information in Swift. Sometimes you find yourself initializing enums from raw values, maybe because the values were intermittendly stored somewhere else, say in the =NSUserDefaults=:

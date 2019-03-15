@@ -30,6 +30,8 @@
   [[:h2 (enlive/nth-of-type 1)]] (enlive/content headline)
   [:ul] (enlive/content (map #(template-tags-link-model %) content)))
 
+
+
 (enlive/defsnippet template-pager-model  base-template-file
   [:#pager]
   [{:keys [newer older]}]

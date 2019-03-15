@@ -2,6 +2,7 @@
 #+tags: swift ios cocoa
 #+keywords: lisp swift optional scala simple optionals switch chaining feature
 #+summary: With Swift, Apple introduced several new programming languages features to iOS and Mac developers. One of them are Optionals. This is a simple introduction into Optionals that glosses over details to make it more approachable.
+#+moved: https://appventure.me/guides/optionals/intro.html
 
 *Note*: This blog post has been edited to be compatible with Swift 2.0 b4
 

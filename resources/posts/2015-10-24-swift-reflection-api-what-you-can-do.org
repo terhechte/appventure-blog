@@ -3,6 +3,7 @@
 #+keywords: feature swift reflection struct class displayType mirror api reflecting any anyobject
 #+summary: In this post I'll examine the Swift reflection API, see how fast it is, and will try to show use cases where it can be applied successfully.
 #+description: In this post I'll examine the Swift reflection API, see how fast it is, and will try to show use cases where it can be applied successfully.
+#+moved: https://appventure.me/guides/swift_reflection/introduction.html
 #+OPTIONS: toc:t 
 
 #+BEGIN_EXPORT html
