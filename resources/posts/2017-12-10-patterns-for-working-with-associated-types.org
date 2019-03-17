@@ -1,9 +1,9 @@
 #+title: Patterns for Working With Associated Types
+#+moved: https://appventure.me/guides/associated-types/associated-types.html
 #+tags: swift cocoa ios
 #+keywords: swift protocol protocols associated associatedtype typealias pattern pat
 #+summary: Understand how to model your way around some of the issues that arise when introducing associated typed protocols into your codebase
 #+description: Understand how to model your way around some of the issues that arise when introducing associated typed protocols into your codebase
-#+moved: https://appventure.me/guides/associated_types/associated_types.html
 #+OPTIONS: toc:nil
 
 * Useful Patterns for Working Your Way Around Associated Types

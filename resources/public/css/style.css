@@ -1,0 +1,331 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+body, html {
+    background-color: #f9f9f9;
+}
+
+.image-is-150 {
+    width: 150px;
+    height: 150px;
+}
+
+.author {
+    margin: 25px;
+    margin-bottom: 0px;
+    padding-top: 20px;
+    margin-top: 5px;
+}
+
+.content blockquote, .content pre.sourceCode {
+    background-color: #fefefe;
+}
+
+.content blockquote cite {
+    display: block;
+}
+
+#brand {
+    font-weight: 800;
+    font-family: 'Open Sans';
+    font-size: 22px;
+}
+
+#brand a {
+    color: #888;
+}
+
+#subbrand {
+    font-family: 'Open Sans';
+    font-size: 22px;
+}
+
+#sidebar {
+}
+
+#main {
+}
+
+#container {
+}
+
+.title {
+    /*font-family: Bitter;*/
+    font-family: 'Open Sans';
+    font-weight: 800;
+}
+
+.article-box {
+  background: #fff;
+  position: relative;
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+  text-overflow: ellipsis;
+  border: 1px solid #eaeaea;
+  cursor: pointer;
+  box-shadow: 0px;
+  border: 1px solid #aaa;
+  border-radius: 16px;
+}
+
+.article-box pre {
+    background-color: rgb(9, 36, 78);
+}
+
+.article-box pre * {
+    font-family: Menlo !important;
+}
+
+.article-box > p.subtitle {
+    padding: 15px;
+    color: #777;
+    line-height: 1.4;
+    padding-top: 0px;
+}
+
+.article-box > p.subtitle a {
+    color: #777;
+}
+
+.article-box > h6, .article-box > h5, .article-box > h4 {
+    padding: 15px;
+    padding-bottom: 0px;
+    margin-bottom: 0xp;
+}
+
+.article-box > h6 > a, .article-box > h5 > a, .article-box > h4 > a {
+    color: #222;
+}
+
+.article-box:hover {
+    box-shadow: 1px 1px 16px 0px rgba(0, 0, 0, 0.3);
+}
+
+.blog-box {
+    margin-bottom: 20px;
+    border: 0px;
+    background-color: #f9f9f9;
+}
+
+.blog-box:hover {
+    background-color: white;
+}
+
+.blog-box > div.meta {
+    /*background-color: #fff;*/
+    padding: 15px;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    color: #333;
+}
+.blog-box > div.meta > a {
+    padding-left: 5px;
+}
+
+.blog-box > .media {
+    padding: 15px;
+}
+
+.blog-box .media-content h4 {
+    padding-bottom: 7px;
+    font-weight: bold !important;
+}
+
+.blog-box .media-content h4 a {
+    color: #222;
+}
+
+.section-header {
+    color: #111;
+}
+
+.blog-box .media-content p a {
+    color: #333;
+    line-height: 1.4;
+}
+
+#article-meta {
+    margin-bottom: 30px;
+}
+
+.guides {
+    padding-bottom: 50px;
+}
+
+span.is-link.tag a {
+    color: white;
+}
+
+article.article-post h4.subtitle {
+    margin-bottom: 50px;
+}
+
+h2.title.is-2 > span.syntax {
+    font-family: monospace;
+    background-color: #fff;
+    color: #555;
+    border-radius: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.footer {
+    background-color: white;
+}
+
+#head {
+    background-color: white;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.article-tile-meta-box {
+    margin-bottom: 0px !important;
+    padding-bottom: 5px !important;
+}
+
+.article-tile-meta-box span {
+    color: #999;
+}
+article > .content > pre  {
+	border-radius: 16px;
+  background-color: rgb(9, 36, 78);
+}
+
+article > .content > pre:hover  {
+    box-shadow: 2px 2px 24px 0px rgba(0, 0, 0, 0.6);
+}
+
+article > .content > pre * {
+    font-family: Menlo !important;
+}
+
+.book-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+/* Temporarily, until I've added a footnote-collector/parser */
+.footnote-definition {
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.1);
+    color: #4a4a4a;
+    display: block;
+    padding: 1.25rem;
+    margin-bottom: 20px;
+}
+.footnote-definition > sup.footnote-definition-label {
+    float: left;
+    padding: 0px;
+    padding-right: 10px;
+    margin: 0px;
+    font-size: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.footnote-definition > p {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+#searchresults span.teaser em {
+    background-color: yellow;
+}
+
+#search-wrapper.hidden {
+    display: none !important;
+}
+
+.guides, .article-box {
+    flex-grow: 0;
+}
+
+.in-this-post {
+    font-size: 13px;
+}
+
+.in-this-post > p {
+    font-weight: bold;
+}
+
+.content > p > code, .content li > code  {
+    color: rgb(9, 36, 78);
+    background-color: white;
+    border-radius: 6px;
+    font-weight: bold;
+    border: 1px solid #eee;
+}
+
+pre {
+ white-space: pre-wrap !important;       /* css-3 */
+ white-space: -moz-pre-wrap !iportant;  /* Mozilla, since 1999 */
+ word-wrap: break-word !important;       /* Internet Explorer 5.5+ */
+}
+
+.menu-list a {
+    font-size: 13px;
+}
+
+
+#head {
+ border-bottom: 1px solid #aaa;
+}
+.blog-box > div.meta {
+ padding-top: 5px;
+ color: #777;
+}
+.blog-box > .media {
+ padding-top: 5px;
+}
+.blog-box .media-content h4 a {
+ color: rgb(9, 36, 78);
+}
+.blog-box .media-content h4 {
+ padding-bottom: 0px;
+}
+.blog-box > div.meta > a {
+ font-weight: bold;
+}
+.title {
+ font-weight: 700;
+}
+.tag:not(body).is-primary {
+ background-color: #aaa;
+ font-weight: bold;
+}
+.input, .textarea {
+ border-color: #666;
+}
+
+.tag:not(body).is-link {
+ background-color: #009EF4;
+}
+.content blockquote:not(:last-child), .content dl:not(:last-child), .content ol:not(:last-child), .content p:not(:last-child), .content pre:not(:last-child), .content table:not(:last-child), .content ul:not(:last-child) {
+ margin-bottom: 1.5em;
+}
+
+.content p a , .content li a {
+    font-weight: bold;
+    border-bottom: 1px dashed #aaa;
+}
+
+.tag:not(body).is-primary {
+ background-color: #363636;
+}
+
+.sidebar-banner {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.profile-image {
+    border-radius: 32px;
+}

@@ -1,4 +1,5 @@
 #+title: An interactive Git Status client, written in C
+#+moved: https://terhech.de/posts/2019-01-24-interactive-git-status-written-in-c.html
 #+tags: c linux
 #+keywords: c linux macos ncurses git libgit
 #+summary: An interactive Git Status client, written in C

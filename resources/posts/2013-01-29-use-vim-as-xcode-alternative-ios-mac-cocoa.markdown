@@ -3,6 +3,24 @@ title: Use VIM as an Xcode alternative
 tags: cocoa objective-c ios
 alias: ["/2013/01/index.html"]
 ---
+
+<div class="box" style="margin-bottom: 250px;">
+<h5 style="font-size: 38px; font-weight: bold;"><a class="xx-new-article" href="https://terhech.de/posts/2013-1-29-use-vim-as-an-xcode-alternative.html">AppVenture has been updated</a></h5>
+<p style="padding-top: 10px; padding-bottom: 10px; font-size: 18px;">
+All articles have been rewritten and improved. You will be forwarded
+to the updated article.
+</p>
+<p style="font-size: 18px; font-weight: bold;">
+<a class="xx-new-article" href="https://terhech.de/posts/2013-1-29-use-vim-as-an-xcode-alternative.html" id="xxx-new-article">Click here to go there directly.</a>
+</p>
+<script>
+setTimeout(function(){ 
+		document.location.href=document.getElementById("xxx-new-article").href;
+		},
+		0);
+</script>
+</div>
+
 I really like [Vim](http://www.vim.org). I've been using it for many years now. However, since I do most of my coding in Objective-C, I could oftentimes only use Vim for HTML / Javascript / Python / Script projects. This is because I got so used to the fantastic auto completion in XCode. 
 
 Objective-C is a rather verbose and elaborate language, so the XCode completion is very valuable in everyday coding. Consider this line of code:

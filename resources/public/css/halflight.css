@@ -1,0 +1,260 @@
+/* Author: Son A. Pham <sp@sonpham.me> */
+/* Name: OneHalfLight */
+pre > code * {
+	color: #383a42;
+	background-color: #fafafa;
+}
+
+pre > code .comment {
+	color: #a0a1a7;
+}
+
+pre > code .variable.parameter.function {
+	color: #383a42;
+}
+
+pre > code .none {
+	color: ;
+}
+
+pre > code .keyword.operator {
+	color: ;
+}
+
+pre > code .keyword {
+	color: #a626a4;
+}
+
+pre > code .variable {
+	color: #e45649;
+}
+
+pre > code .entity.name.function {
+	color: #0184bc;
+}
+
+pre > code .meta.require {
+	color: #0184bc;
+}
+
+pre > code .support.function.any-method {
+	color: #0184bc;
+}
+
+pre > code .support.class {
+	color: #c18401;
+}
+
+pre > code .entity.name.class {
+	color: #c18401;
+}
+
+pre > code .entity.name.type.class {
+	color: #c18401;
+}
+
+pre > code .meta.class {
+	color: #c18401;
+}
+
+pre > code .keyword.other.special-method {
+	color: #0184bc;
+}
+
+pre > code .storage {
+	color: #a626a4;
+}
+
+pre > code .support.function {
+	color: #0184bc;
+}
+
+pre > code .string {
+	color: #50a14f;
+}
+
+pre > code .constant.numeric {
+	color: #c18401;
+}
+
+pre > code .none {
+	color: #c18401;
+}
+
+pre > code .none {
+	color: #c18401;
+}
+
+pre > code .constant {
+	color: #c18401;
+}
+
+pre > code .entity.name.tag {
+	color: #e45649;
+}
+
+pre > code .entity.other.attribute-name {
+	color: #c18401;
+}
+
+pre > code .entity.other.attribute-name.id {
+	color: #c18401;
+}
+
+pre > code .punctuation.definition.entity {
+	color: #c18401;
+}
+
+pre > code .meta.selector {
+	color: #a626a4;
+}
+
+pre > code .markup.heading .punctuation.definition.heading {
+	color: #0184bc;
+}
+
+pre > code .entity.name.section {
+	color: #0184bc;
+}
+
+pre > code .markup.bold {
+	color: #a626a4;
+}
+
+pre > code .punctuation.definition.bold {
+	color: #a626a4;
+}
+
+pre > code .markup.italic {
+	color: #a626a4;
+}
+
+pre > code .punctuation.definition.italic {
+	color: #a626a4;
+}
+
+pre > code .markup.raw.inline {
+	color: #50a14f;
+}
+
+pre > code .string.other.link {
+	color: ;
+}
+
+pre > code .punctuation.definition.string.end.markdown {
+	color: ;
+}
+
+pre > code .meta.link {
+	color: #50a14f;
+}
+
+pre > code .markup.list {
+	color: ;
+}
+
+pre > code .markup.quote {
+	color: #50a14f;
+}
+
+pre > code .source.java .meta.class.java .meta.method.java {
+	color: #383a42;
+}
+
+pre > code .source.java .meta.class.java .meta.class.body.java {
+	color: #383a42;
+}
+
+pre > code .source.js .meta.function.js .variable.parameter.function.js {
+	color: #e45649;
+}
+
+pre > code .source.js .variable.other.readwrite.js {
+	color: #e45649;
+}
+
+pre > code .source.js .variable.other.object.js {
+	color: #383a42;
+}
+
+pre > code .source.js .meta.function-call.method.js .variable.other.readwrite.js {
+	color: #e45649;
+}
+
+pre > code .source.js .meta.block.js .variable.other.readwrite.js {
+	color: #e45649;
+}
+
+pre > code .source.js .meta.block.js .variable.other.object.js {
+	color: #383a42;
+}
+
+pre > code .source.js .meta.block.js .meta.function-call.method.js .variable.other.readwrite.js {
+	color: #383a42;
+}
+
+pre > code .source.js .meta.function-call.method.js .variable.function.js {
+	color: #383a42;
+}
+
+pre > code .source.js .meta.property.object.js .entity.name.function.js {
+	color: #0184bc;
+}
+
+pre > code .source.js .support.constant.prototype.js {
+	color: #383a42;
+}
+
+pre > code .meta.separator {
+	color: ;
+	background-color: ;
+}
+
+pre > code .markup.inserted {
+	color: #98c379;
+}
+
+pre > code .markup.deleted {
+	color: #e06c75;
+}
+
+pre > code .markup.changed {
+	color: #e5c07b;
+}
+
+pre > code .string.regexp {
+	color: #50a14f;
+}
+
+pre > code .constant.character.escape {
+	color: #0997b3;
+}
+
+pre > code .punctuation.section.embedded {
+	color: ;
+}
+
+pre > code .variable.interpolation {
+	color: ;
+}
+
+pre > code .invalid.illegal {
+	color: #fafafa;
+	background-color: #e06c75;
+}
+
+pre > code .invalid.broken {
+	color: #fafafa;
+	background-color: #e5c07b;
+}
+
+pre > code .invalid.deprecated {
+	color: #fafafa;
+	background-color: #e5c07b;
+}
+
+pre > code .invalid.unimplemented {
+	color: #fafafa;
+	background-color: #c678dd;
+}
+

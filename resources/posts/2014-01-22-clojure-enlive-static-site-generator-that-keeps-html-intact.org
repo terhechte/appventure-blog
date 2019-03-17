@@ -2,6 +2,7 @@
 #+tags: blog clojure
 #+keywords: clojure static site generator jekyll html enlive
 #+OPTIONS: toc:nil
+#+moved: https://terhech.de/posts/2014-01-22-clojure-enlive-static-site-generator-that-keeps-html-intact.html
 
 Static is a Static Site Generator written in Clojure that I just released. It is a fork of the original static http://nakkaya.com/static.html from Nurullah Akkaya. I chose Nurullah's Static because it had lots of great i/o features, but had to fork it because it differed in a couple of ways from what I wanted my blog to be:
 

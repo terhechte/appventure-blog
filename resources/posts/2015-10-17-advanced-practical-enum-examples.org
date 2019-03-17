@@ -1,9 +1,9 @@
 #+title: Advanced and Practical Enum usage in Swift
+#+moved: https://appventure.me/guides/advanced_practical_enum_examples/introduction.html
 #+tags: swift cocoa ios
 #+keywords: feature swift enum algebraic caseclass union case switch pattern simple practical advanced example
 #+summary: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 #+description: When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
-#+moved: https://appventure.me/guides/advanced_practical_enum_examples/introduction.html
 
 When and how to use enums in Swift? This is a detailed practical overview of all the possibilities enums can offer you.
 

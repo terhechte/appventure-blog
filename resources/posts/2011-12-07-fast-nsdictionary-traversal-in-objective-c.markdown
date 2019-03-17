@@ -3,6 +3,24 @@ title: Fast NSDictionary traversal in Objective-C
 tags: objective-c ios cocoa
 alias: ["/2011/12/index.html"]
 ---
+
+<div class="box" style="margin-bottom: 250px;">
+<h5 style="font-size: 38px; font-weight: bold;"><a class="xx-new-article" href="https://terhech.de/posts/2011-12-7-fast-nsdictionary-traversal-in-objectivec.html">AppVenture has been updated</a></h5>
+<p style="padding-top: 10px; padding-bottom: 10px; font-size: 18px;">
+All articles have been rewritten and improved. You will be forwarded
+to the updated article.
+</p>
+<p style="font-size: 18px; font-weight: bold;">
+<a class="xx-new-article" href="https://terhech.de/posts/2011-12-7-fast-nsdictionary-traversal-in-objectivec.html" id="xxx-new-article">Click here to go there directly.</a>
+</p>
+<script>
+setTimeout(function(){ 
+		document.location.href=document.getElementById("xxx-new-article").href;
+		},
+		0);
+</script>
+</div>
+
 [Dictionaries](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/nsdictionary_Class/Reference/Reference.html) in Cocoa are really powerful objects that offer a solid base of useful methods, are easy to expand, and fast - especially due to the framework-wide distinction between mutable and immutable classes. One can really see the benefits of nurturing and enhancing a single API over the course of more than 18 years [^foot1].
 
 Nowadays, as soon as your application receives data from any of the various web APIs, you oftentimes and up with a huge JSON file that contains various properties and subproperties of an entity that you intend to display or process in a specific way.

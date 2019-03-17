@@ -2,8 +2,26 @@
 title: Blogstrapped.
 tags: entrepeneurship blog
 keywords: entrepeneurship videro fear unknown stylemac
-alias: ["/2011/12/index.html"]
+alias: ["https://terhech.de/posts/2011-12-1-blogstrapped.html"]
 ---
+
+<div class="box" style="margin-bottom: 250px;">
+    <h5 style="font-size: 38px; font-weight: bold;"><a class="xx-new-article" href="https://terhech.de/posts/2011-12-1-blogstrapped.html">AppVenture has been updated</a></h5>
+    <p style="padding-top: 10px; padding-bottom: 10px; font-size: 18px;">
+	All articles have been rewritten and improved. You will be forwarded
+	to the updated article.
+    </p>
+    <p style="font-size: 18px; font-weight: bold;">
+	<a class="xx-new-article" href="https://terhech.de/posts/2011-12-1-blogstrapped.html" id="xxx-new-article">Click here to go there directly.</a>
+    </p>
+    <script>
+	 setTimeout(function(){ 
+	    document.location.href=document.getElementById("xxx-new-article").href;
+	},
+	    0);
+    </script>
+</div>
+
 Finally. I started the adventure. As of this month I am an entrepeneur trying to work hard on bringing my ideas to life. I left a good paying job and the omnipresent feeling of security for uncertainty, adventure, and an unknown future. On top of that, I am unsure whether I am truly an entrepeneur by heart or if I accidentally fell for the unrealistic hope that founding, nurturing, and succeeding in a startup is easy. Nevertheless, here I am.
 
 Before I headed into the startup world, I worked as a Product Manager at [VIDERO LLC](http://www.videro.com), a fantastic company that is innovating in the digital display advertising and content space. They have a truly great product and a rad team. I had a blast there, but over the years, while I helped shape the product and innovate in ever new areas, I realized that there is so much more that I lounge for that can't be found in digital signage.

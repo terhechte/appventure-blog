@@ -1,0 +1,100 @@
+/* Name: Monokai */
+pre > code * {
+	color: #F8F8F2;
+}
+
+pre > code .apvcomment {
+	color: #75715E;
+}
+
+pre > code .apvstring {
+	color: #E6DB74;
+}
+
+pre > code .apvconstant.apvnumeric {
+	color: #AE81FF;
+}
+
+pre > code .apvconstant.apvlanguage {
+	color: #AE81FF;
+}
+
+pre > code .apvconstant.apvcharacter {
+	color: #AE81FF;
+}
+
+pre > code .apvconstant.apvother {
+	color: #AE81FF;
+}
+
+pre > code .apvvariable {
+}
+
+pre > code .apvkeyword {
+	color: #F92672;
+}
+
+pre > code .apvstorage {
+	color: #F92672;
+}
+
+pre > code .apvstorage.apvtype {
+	color: #66D9EF;
+	font-style: italic;
+}
+
+pre > code .apventity.apvname.apvclass {
+	color: #A6E22E;
+	font-decoration: underline;
+}
+
+pre > code .apventity.apvother.apvinherited-class {
+	color: #A6E22E;
+}
+
+pre > code .apventity.apvname.apvfunction {
+	color: #A6E22E;
+}
+
+pre > code .apvvariable.apvparameter {
+	color: #FD971F;
+	font-style: italic;
+}
+
+pre > code .apventity.apvname.apvtag {
+	color: #F92672;
+}
+
+pre > code .apventity.apvother.apvattribute-name {
+	color: #A6E22E;
+}
+
+pre > code .apvsupport.apvfunction {
+	color: #66D9EF;
+}
+
+pre > code .apvsupport.apvconstant {
+	color: #66D9EF;
+}
+
+pre > code .apvsupport.apvtype {
+	color: #66D9EF;
+	font-style: italic;
+}
+
+pre > code .apvsupport.apvclass {
+	color: #66D9EF;
+	font-style: italic;
+}
+
+pre > code .apvsupport.apvother.apvvariable {
+}
+
+pre > code .apvinvalid {
+	color: #F8F8F0;
+}
+
+pre > code .apvinvalid.apvdeprecated {
+	color: #F8F8F0;
+}
+

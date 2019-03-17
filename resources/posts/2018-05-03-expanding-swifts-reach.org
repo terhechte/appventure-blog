@@ -1,9 +1,9 @@
 #+title: Expanding Swift's Reach
+#+moved: https://appventure.me/posts/2018-05-03-expanding-swifts-reach.html
 #+tags: swift linux
 #+keywords: swift linux server opensource
 #+summary: How can we as a community help expanding the reach of Swift
 #+description: How can we as a community help expanding the reach of Swift
-#+moved: https://appventure.me/posts/2018-05-03-expanding-swifts-reach.html
 #+OPTIONS: toc:nil
 
 I guess we can all agree that Swift is a beautiful programming language that manages to hit the sweet spot in terms of simplicity and complexity. It could theoretically become one of the major languages of the future. Currently though, Swift's usage is more or less constrained to the Apple development domain (plus a few extensions such as server-side Swift or the [[https://www.tensorflow.org/community/swift][recently announced Swift for Tensorflow]]). 

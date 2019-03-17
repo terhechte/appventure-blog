@@ -1,9 +1,9 @@
 #+title: Useful Optional Extensions
+#+moved: https://appventure.me/guides/optionals/intro.html
 #+tags: swift cocoa ios
 #+keywords: swift protocol optional optionals extensions
 #+summary: Several helpful extensions to the Optional type in order to simplify using it.
 #+description: Several helpful extensions to the Optional type in order to simplify using it.
-#+moved: https://appventure.me/guides/optionals/intro.html
 #+OPTIONS: toc:nil
 
 

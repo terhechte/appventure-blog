@@ -1,4 +1,5 @@
 #+title: An Emacs Lisp tooling tutorial, writing a bulk mailer
+#+moved: https://terhech.de/posts/2014-1-29-emacs-lisp-bulk-mailer.html
 #+tags: emacs
 #+keywords: emacs lisp bulk mailer tutorial email vim vimscript evil
 #+OPTIONS: toc:nil ^:{} 

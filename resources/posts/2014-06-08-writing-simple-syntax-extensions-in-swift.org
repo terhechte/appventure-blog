@@ -1,7 +1,7 @@
 #+title: Creating a Swift syntax extension: the Lisp 'cond' function
+#+moved: https://appventure.me/posts/2014-06-08-writing-simple-syntax-extensions-in-swift.html
 #+tags: swift ios cocoa
 #+keywords: clojure lisp swift cond syntax macro extension cocoa ios feature
-#+moved: https://appventure.me/posts/2014-06-08-writing-simple-syntax-extensions-in-swift.html
 #+OPTIONS: toc:nil ^:{} 
 
 It has been less than a week since Apple announced Swift, and people are already writing libraries, snippet collections, or best practice posts. I suppose most did not even find the time to thouroughly read the Swift Book yet [fn:: I completely omitted the language reference. Impossible to work through something like that during a chronically sleep-deprived week like WWDC].

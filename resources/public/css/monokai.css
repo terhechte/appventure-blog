@@ -1,0 +1,100 @@
+/* Name: Monokai */
+pre > code * {
+	color: #F8F8F2;
+}
+
+pre > code .comment {
+	color: #75715E;
+}
+
+pre > code .string {
+	color: #E6DB74;
+}
+
+pre > code .constant.numeric {
+	color: #AE81FF;
+}
+
+pre > code .constant.language {
+	color: #AE81FF;
+}
+
+pre > code .constant.character {
+	color: #AE81FF;
+}
+
+pre > code .constant.other {
+	color: #AE81FF;
+}
+
+pre > code .variable {
+}
+
+pre > code .keyword {
+	color: #F92672;
+}
+
+pre > code .storage {
+	color: #F92672;
+}
+
+pre > code .storage.type {
+	color: #66D9EF;
+	font-style: italic;
+}
+
+pre > code .entity.name.class {
+	color: #A6E22E;
+	font-decoration: underline;
+}
+
+pre > code .entity.other.inherited-class {
+	color: #A6E22E;
+}
+
+pre > code .entity.name.function {
+	color: #A6E22E;
+}
+
+pre > code .variable.parameter {
+	color: #FD971F;
+	font-style: italic;
+}
+
+pre > code .entity.name.tag {
+	color: #F92672;
+}
+
+pre > code .entity.other.attribute-name {
+	color: #A6E22E;
+}
+
+pre > code .support.function {
+	color: #66D9EF;
+}
+
+pre > code .support.constant {
+	color: #66D9EF;
+}
+
+pre > code .support.type {
+	color: #66D9EF;
+	font-style: italic;
+}
+
+pre > code .support.class {
+	color: #66D9EF;
+	font-style: italic;
+}
+
+pre > code .support.other.variable {
+}
+
+pre > code .invalid {
+	color: #F8F8F0;
+}
+
+pre > code .invalid.deprecated {
+	color: #F8F8F0;
+}
+

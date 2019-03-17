@@ -1,4 +1,5 @@
 #+title: Hirundo: Comfortably follow Swift Mailing Lists on OSX
+#+moved: https://terhech.de/posts/2016-2-2-hirundo-comfortably-follow-swift-mailing-lists-on-osx.html
 #+tags: swift cocoa ios
 #+static-feature-image: http://appventure.me/img-content/hirundo-intro.png
 #+keywords: swift mac cocoa mailing list swift-dev swift-eveolution swift-users reading macosx

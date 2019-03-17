@@ -1,9 +1,9 @@
 #+title: Force optionals in multi-unwrapped "guard let" or "if let"
+#+moved: https://appventure.me/posts/2016-04-14-force-optionals-in-guard-or-let-optional-binding.html
 #+tags: swift cocoa ios
 #+keywords: swift guard let unwrap bind binding unwrapped optional some none optionals
 #+summary: Mixing optional and non-optional functions in a guard is impossible and requires breaking up the lines. Here's a neat solution on how to circumvent this.
 #+description: Mixing optional and non-optional functions in a guard is impossible and requires breaking up the lines. Here's a neat solution on how to circumvent this.
-#+moved: https://appventure.me/posts/2016-04-14-force-optionals-in-guard-or-let-optional-binding.html
 #+OPTIONS: toc:nil
 
 I really love unwrapping optionals in a multi- =guard= or =let= statement with additional =where= clauses added. [[https://appventure.me/2016/03/29/three-tips-for-clean-swift-code/][See my previous post on this here]]. However, sometimes I run into a situation where I have one function call (or a array subscript) in between my others that does not return an optional:

@@ -1,9 +1,9 @@
 #+title: Value Types for Simple Difference Detection
+#+moved: https://appventure.me/posts/2017-09-30-value-types-for-simple-difference-detection.html
 #+tags: swift cocoa ios
 #+keywords: swift value types uitableview uicollectionview valuetypes struct class equatable tuple
 #+summary: Utilize value types to quickly determine a differences between two sets of data
 #+description: Utilize value types to quickly determine a differences between two sets of data
-#+moved: https://appventure.me/posts/2017-09-30-value-types-for-simple-difference-detection.html
 #+OPTIONS: toc:nil
 
 Following sage advice I received from [[https://www.swiftbysundell.com/][John Sundell]] half a year ago (I am a slow learner) I will try to write about smaller pieces instead of focusing on longform content. This should make it easier to update appventure more often. Thanks John!.
