@@ -1,4 +1,5 @@
 #+title: Cleaner Classes with Structs and Tuples
+#+moved: https://appventure.me/posts/2019-02-24-anonymous-tuple-structs.html
 #+tags: ios macos swift
 #+keywords: ios macos swift tuples classes structs
 #+summary: An easy way to add more structure to your classes by leveraging structs and enums
